@@ -1,0 +1,14 @@
+{
+  "external_writes": [],
+  "local_writes": [
+    "Static site data and documentation under competitor-analysis-site",
+    "Archive copies of official CrewAI images under competitor-teardown/crewai/shots"
+  ],
+  "service_actions": [
+    "No existing service was stopped, restarted, or replaced.",
+    "The pre-existing port-7100 static server was only probed over IPv6 loopback."
+  ],
+  "third_party_actions": [
+    "No Linear data was created, edited, or deleted."
+  ]
+}

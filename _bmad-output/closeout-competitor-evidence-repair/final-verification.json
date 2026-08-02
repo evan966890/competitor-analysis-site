@@ -1,0 +1,41 @@
+{
+  "status": "PASS_WITH_REVIEW_DEBT",
+  "scope": "competitor evidence repair and CrewAI orchestration chain",
+  "checks": {
+    "node_syntax": "PASS",
+    "data_context": {
+      "status": "PASS",
+      "products": 22,
+      "lanes": 10,
+      "source_topics": 3,
+      "lane_image_references": 70,
+      "missing_references": 0,
+      "linear_image_references": 0,
+      "crewai_cards": 6,
+      "assets": 211
+    },
+    "http": {
+      "status": "PASS",
+      "command": "curl -6 --fail --head http://[::1]:7100/",
+      "result": "HTTP/1.1 200 OK",
+      "limitation": "Existing server binds IPv6 loopback; isolated reviewers could not independently reach it."
+    },
+    "browser_visual": {
+      "status": "NEEDS_MORE_EVIDENCE",
+      "reason": "Chrome control timed out/reset; no new browser-rendered screenshot is claimed."
+    }
+  },
+  "binding_reviews": {
+    "codex_initial": "BLOCKED_P1_FIXED",
+    "codex_post_fix": "PASS"
+  },
+  "review_debt": [
+    "Claude post-fix review timed out without required sentinel JSON.",
+    "Grok post-fix full JSON was terminal-wrapped; its re-emitted verdict was PASS_WITH_MINOR.",
+    "Antigravity ran Gemini 3.6 Flash high rather than the expected tier and produced no final JSON."
+  ],
+  "non_claims": [
+    "No valid Linear app evidence was captured.",
+    "No real CrewAI run or production Enterprise Studio data was observed."
+  ]
+}

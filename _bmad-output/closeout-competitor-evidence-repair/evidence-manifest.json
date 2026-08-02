@@ -1,0 +1,55 @@
+{
+  "captured_on": "2026-08-02",
+  "crewAI_official_materials": [
+    {
+      "role": "Flow overview",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/flows.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/01-flow-overview.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/01-flow-overview.png",
+      "sha256": "b572bc1a6a9b826154ef585ae16f02da8c04f35fe9ab8f495324913e58dcf97b"
+    },
+    {
+      "role": "Start and listen",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/crewai-flow-1.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/02-start-listen-flow.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/02-start-listen-flow.png",
+      "sha256": "17b8a6dc7cc3ee1b0d0133362a0e298b3eef81be20034be33f72166549a21999"
+    },
+    {
+      "role": "OR trigger",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/crewai-flow-4.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/03-branch-router-flow.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/03-branch-router-flow.png",
+      "sha256": "b030cbeaa1fd56a75efebc59135e72181cfd12c54a2a4f84e833320b6a708022"
+    },
+    {
+      "role": "AND trigger",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/crewai-flow-5.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/04-and-trigger-flow.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/04-and-trigger-flow.png",
+      "sha256": "798f19fd131bdf8f9f684cabec7c4c46ecaa22052bd48f9d3c503a4076cdfbd0"
+    },
+    {
+      "role": "Router",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/crewai-flow-6.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/05-router-flow.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/05-router-flow.png",
+      "sha256": "673b4bc36122657d5e8220c882ed09505fe77a177ec9233ebeb504e4e3dd72fa"
+    },
+    {
+      "role": "Enterprise Studio information architecture",
+      "source": "/Users/evan/All Agents/competitor-teardown/crewai/repo/docs/images/enterprise/crew-studio-interface.png",
+      "archive_copy": "/Users/evan/All Agents/competitor-teardown/crewai/shots/04-enterprise-studio.png",
+      "site_copy": "/Users/evan/code/Agent OS/competitor-analysis-site/assets/shots/crewai/04-enterprise-studio.png",
+      "sha256": "01f80900cbe43bb1c9025d0dd87118fcb173ab22286eb13e577420930c41cf87",
+      "restriction": "Official enterprise material; empty state only, not runtime evidence."
+    }
+  ],
+  "rejected": [
+    {
+      "product": "Linear",
+      "files": ["10-app-inbox.jpeg", "11-my-issues.jpeg", "13-agents.jpeg"],
+      "reason": "Empty state or 404, so not used in site capability cards."
+    }
+  ]
+}

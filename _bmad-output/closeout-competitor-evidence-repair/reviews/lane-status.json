@@ -1,0 +1,51 @@
+{
+  "generated_on": "2026-08-02",
+  "transport": "tmux TTY",
+  "lanes": [
+    {
+      "name": "codex_initial",
+      "tty": "/dev/ttys042",
+      "model_banner": "gpt-5.6-terra xhigh",
+      "result": "BLOCKED",
+      "binding": true,
+      "finding": "P1: crewai-flow-4 was an OR example but was labelled Router/AND.",
+      "resolution": "Corrected label; added separately verified AND and Router images."
+    },
+    {
+      "name": "codex_post_fix",
+      "tty": "/dev/ttys024",
+      "model_banner": "gpt-5.6-terra high",
+      "result": "PASS",
+      "binding": true,
+      "artifact": "replies/codex-p1-fix.transcript.txt",
+      "note": "Terminal JSON reported a generic GPT-5 API session; this record uses the observed TTY banner."
+    },
+    {
+      "name": "grok_post_fix",
+      "tty": "/dev/ttys026",
+      "model_banner": "Grok 4.5 high",
+      "result": "PASS_WITH_MINOR",
+      "binding": false,
+      "artifact": "replies/grok-p1-fix.transcript.txt",
+      "note": "Terminal wrapping prevented extraction of a complete parseable JSON object; the reviewer explicitly re-emitted this verdict."
+    },
+    {
+      "name": "claude_post_fix",
+      "tty": "/dev/ttys020",
+      "model_banner": "unrecorded",
+      "result": "TIMEOUT_NO_SENTINEL",
+      "binding": false,
+      "artifact": "replies/claude-p1-timeout.transcript.txt",
+      "note": "Stopped after 5m28s without the required final JSON."
+    },
+    {
+      "name": "antigravity_post_fix",
+      "tty": "/dev/ttys028",
+      "model_banner": "Gemini 3.6 Flash high",
+      "result": "MODEL_UNVERIFIED",
+      "binding": false,
+      "artifact": "replies/agy-p1-model-unverified.transcript.txt",
+      "note": "The actual model tier did not match the intended lane and no final JSON was emitted."
+    }
+  ]
+}

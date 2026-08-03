@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:,">
-<title>竞品拆解台 · Agent 平台竞品分析</title>
+<title>竞品拆解台 · Agent 平台竞品分析 · 2026-08</title>
 <style>
 :root {
   --bg: #f7f5f2; --panel: #ffffff; --ink: #1c1b1a; --ink2: #57534e; --ink3: #8a847c;
@@ -28,8 +28,12 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
   width: 232px; flex: 0 0 232px; padding: 18px 14px; border-right: 1px solid var(--line);
   background: var(--panel); position: sticky; top: 0; height: 100vh; overflow-y: auto;
 }
-#sidenav .brand { font-weight: 700; font-size: 16px; padding: 4px 8px 14px; }
+#sidenav .brand { font-weight: 700; font-size: 16px; padding: 4px 8px 6px; }
 #sidenav .brand small { display: block; font-weight: 400; color: var(--ink3); font-size: 11px; margin-top: 2px; }
+#sidenav .badge-new {
+  display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px;
+  background: var(--accent); color: #fff; margin-left: 4px; vertical-align: middle;
+}
 .nav-sec { color: var(--ink3); font-size: 11px; padding: 14px 8px 6px; letter-spacing: .08em; }
 .nav-item {
   display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
@@ -60,9 +64,13 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 .hero { padding: 34px 34px 26px; border-radius: 18px; background: linear-gradient(135deg, #1c1b1a 0%, #3a332c 100%); color: #f5f1ea; margin-bottom: 24px; position: relative; overflow: hidden; }
 .hero h1 { font-size: 26px; font-weight: 700; }
 .hero p { color: #cfc8bd; margin-top: 8px; max-width: 720px; }
-.hero .stats { display: flex; gap: 26px; margin-top: 18px; }
+.hero .stats { display: flex; gap: 26px; margin-top: 18px; flex-wrap: wrap; }
 .hero .stats b { font-size: 22px; display: block; }
 .hero .stats span { color: #b3aa9c; font-size: 12px; }
+.hero .ribbon {
+  display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  background: var(--accent); color: #fff; margin-top: 12px;
+}
 .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .pcard { padding: 16px; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
 .pcard:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(28,27,26,.12); }
@@ -72,6 +80,7 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 .pcard .desc { color: var(--ink2); font-size: 12.5px; margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .pcard .scores { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; }
 .pcard .scores i { font-style: normal; font-size: 10.5px; color: var(--ink3); background: var(--bg); border-radius: 4px; padding: 1px 6px; }
+.pcard.new { border-left: 3px solid var(--accent); }
 
 /* ---------- 板块对比 ---------- */
 .lane-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
@@ -161,9 +170,120 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 .report .pc { margin: 14px 0; }
 .report ul { margin-left: 18px; color: var(--ink2); font-size: 13px; }
 
+/* ---------- 任务面板视图（新增）---------- */
+.taskmatrix { width: 100%; border-collapse: collapse; margin-top: 12px; background: var(--panel); border-radius: var(--radius); overflow: hidden; }
+.taskmatrix th, .taskmatrix td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.taskmatrix th { background: var(--bg); font-size: 12px; color: var(--ink3); text-align: left; }
+.taskmatrix td.rowlabel { background: var(--bg); font-weight: 700; font-size: 12.5px; min-width: 100px; }
+.taskmatrix td .cell-img {
+  width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top left;
+  display: block; border-radius: 6px; background: #eee; border: 1px solid var(--line);
+}
+.taskmatrix td .cell-cap { font-size: 11.5px; color: var(--ink2); margin-top: 6px; }
+.taskmatrix td.mico-col { background: rgba(47,94,255,0.04); }
+.taskmatrix td.mico-col .cell-cap { color: var(--mico); font-weight: 600; }
+.taskmatrix-empty { padding: 18px; text-align: center; color: var(--ink3); font-size: 13px; }
+
+/* ---------- 工作流剧本视图（新增）---------- */
+.pb-step { margin-top: 18px; padding: 16px 20px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.pb-step .sn { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.05em; }
+.pb-step .st { font-size: 15px; font-weight: 700; margin: 4px 0 12px; }
+.pb-step .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.pb-step .cell { padding: 10px 12px; background: var(--bg); border-radius: 9px; }
+.pb-step .cell .who { font-weight: 700; font-size: 12.5px; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.pb-step .cell .act { font-size: 12px; color: var(--ink2); }
+.pb-step .obs { margin-top: 12px; padding: 10px 14px; background: #fff8f0; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; font-size: 12.5px; color: var(--ink); }
+.pb-compare { margin-top: 18px; padding: 16px 20px; background: #f0f5ff; border-radius: var(--radius); }
+.pb-compare h3 { color: var(--mico); margin-bottom: 8px; font-size: 14px; }
+.pb-compare p { font-size: 13px; color: var(--ink2); }
+.pb-mico { margin-top: 14px; padding: 14px 18px; background: #1c1b1a; color: #e9e4dc; border-radius: var(--radius); }
+.pb-mico h3 { color: #f0b98a; font-size: 14px; margin-bottom: 8px; }
+.pb-mico p { font-size: 13px; color: #cfc8bd; }
+.pb-scenario { padding: 14px 18px; background: linear-gradient(135deg, #fff8f0 0%, #fef3e8 100%); border-radius: var(--radius); border: 1px solid var(--accent-soft); }
+.pb-scenario h3 { color: var(--accent); font-size: 13px; margin-bottom: 6px; }
+.pb-scenario p { font-size: 13.5px; }
+
+/* ---------- AI 视角视图（新增）---------- */
+.ailens-tabs { display: flex; gap: 4px; margin: 14px 0 18px; border-bottom: 2px solid var(--line); }
+.ailens-tab { padding: 8px 14px; cursor: pointer; font-size: 13px; color: var(--ink2); border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.ailens-tab.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.ailens-layout { display: grid; grid-template-columns: 280px 1fr; gap: 18px; }
+.ailens-list { display: flex; flex-direction: column; gap: 6px; }
+.ailens-item { padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; cursor: pointer; }
+.ailens-item:hover { background: var(--bg); }
+.ailens-item.on { background: var(--accent-soft); border-color: var(--accent); }
+.ailens-item .ai-name { font-weight: 700; font-size: 13px; }
+.ailens-item .ai-meta { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.ailens-body { padding: 20px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.ailens-body h2 { font-size: 18px; margin-bottom: 4px; }
+.ailens-body .engine { font-size: 12px; color: var(--ink3); margin-bottom: 12px; }
+.ailens-body .summary { background: #fff8f0; padding: 12px 16px; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; margin-bottom: 18px; font-size: 13.5px; }
+.ailens-body .ai-section h3 { font-size: 14px; color: var(--accent); margin: 14px 0 6px; }
+.ailens-body .ai-section p { font-size: 13px; color: var(--ink2); margin: 4px 0; white-space: pre-wrap; }
+.ailens-body .replay { margin-top: 18px; padding: 12px 16px; background: #f6f4ef; border-radius: 9px; }
+.ailens-body .replay h4 { font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+.ailens-body .replay pre { font-size: 12px; white-space: pre-wrap; line-height: 1.6; }
+.ailens-body .replay .copy-btn { font-size: 11px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); cursor: pointer; margin-top: 8px; }
+.prompt-builder { padding: 20px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.prompt-builder .sel-row { margin-bottom: 14px; }
+.prompt-builder .sel-row b { display: block; font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+.prompt-builder textarea { width: 100%; min-height: 220px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #faf9f6; line-height: 1.7; resize: vertical; }
+.prompt-builder .gen-actions { display: flex; gap: 10px; margin-top: 12px; }
+.ailens-disabled {
+  padding: 30px; text-align: center; background: var(--panel); border: 1px dashed var(--line); border-radius: var(--radius);
+  color: var(--ink3); font-size: 13px;
+}
+.ailens-disabled code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+/* ---------- 产品深度评测（新增）---------- */
+.dd-hero {
+  padding: 30px 34px 24px; border-radius: 18px; background: linear-gradient(135deg, #1c1b1a 0%, #2a2a2e 100%);
+  color: #f5f1ea; margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.dd-hero h1 { font-size: 24px; font-weight: 700; }
+.dd-hero .dd-tagline { color: #f0b98a; font-size: 14px; margin-top: 6px; }
+.dd-hero .dd-meta { color: #b3aa9c; font-size: 11.5px; margin-top: 10px; line-height: 1.7; }
+.dd-hero .dd-meta b { color: #cfc8bd; }
+.dd-section { margin-bottom: 26px; }
+.dd-section h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 8px; }
+.dd-section h2 .num { color: var(--accent); font-family: ui-monospace, monospace; }
+.dd-overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: start; }
+.dd-overview-card { padding: 20px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.dd-overview-card p { font-size: 13.5px; color: var(--ink2); margin-bottom: 8px; }
+.dd-scorecard { padding: 20px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.dd-scorecard h3 { font-size: 13px; color: var(--ink3); margin-bottom: 10px; }
+.dd-scorecard .sc-row { display: grid; grid-template-columns: 90px 1fr 30px; align-items: center; gap: 10px; margin: 6px 0; font-size: 12.5px; }
+.dd-shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
+.dd-shot { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.dd-shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; object-position: top left; display: block; border-bottom: 1px solid var(--line); background: #eee; }
+.dd-shot .dd-shot-body { padding: 12px 16px; }
+.dd-shot .dd-shot-cap { font-weight: 700; font-size: 13px; }
+.dd-shot .dd-shot-note { font-size: 12.5px; color: var(--ink2); margin-top: 6px; }
+.dd-shot .dd-shot-tag { display: inline-block; font-size: 10.5px; padding: 1px 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-top: 6px; }
+.dd-code-block { margin-bottom: 14px; }
+.dd-code-block .dd-code-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg); border: 1px solid var(--line); border-bottom: none; border-radius: 9px 9px 0 0; }
+.dd-code-block .dd-code-head .t { font-weight: 700; font-size: 13px; }
+.dd-code-block .dd-code-head .f { color: var(--ink3); font-size: 11px; }
+.dd-code-block .codepanel { border-radius: 0 0 9px 9px; }
+.dd-code-block .points { border-top: 1px solid var(--line); border-radius: 0 0 9px 9px; }
+.dd-philosophy h3 { font-size: 14px; color: var(--accent); margin: 12px 0 6px; }
+.dd-philosophy p, .dd-philosophy li { font-size: 13px; color: var(--ink2); }
+.dd-philosophy ul { margin-left: 18px; }
+.dd-timeline { border-left: 2px solid var(--line); padding-left: 16px; }
+.dd-timeline .tl-item { position: relative; padding: 6px 0 6px 8px; font-size: 13px; }
+.dd-timeline .tl-item::before { content: ''; position: absolute; left: -22px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.dd-timeline .tl-item b { color: var(--ink3); font-size: 12px; margin-right: 8px; font-family: ui-monospace, monospace; }
+.dd-conclusion { padding: 20px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+.dd-conclusion .summary { font-size: 14px; margin-bottom: 12px; }
+.dd-conclusion ul { margin-left: 18px; }
+.dd-conclusion li { font-size: 13px; color: var(--ink2); margin: 4px 0; }
+.dd-conclusion li b { color: var(--accent); }
+
 @media (max-width: 1100px) {
   .bench-layout { grid-template-columns: 1fr; }
   .impl.open .body { grid-template-columns: 1fr; }
+  .dd-overview-grid { grid-template-columns: 1fr; }
+  .ailens-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   #sidenav { display: none; }
@@ -191,18 +311,35 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/products.js"></script>
 <script src="data/lanes.js"></script>
 <script src="data/sourceLab.js"></script>
+<script src="data/playbooks.js"></script>
+<script src="data/aiLens.js"></script>
+<script src="data/openworkerDeepDive.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const P = Object.fromEntries(TD_PRODUCTS.map(p => [p.id, p]));
-const state = { view: 'home', lane: TD_LANES[0].id, topic: TD_SOURCELAB[0].id, bench: ['mico', 'multica', 'qm', 'hermes'] };
+const state = {
+  view: 'home',
+  lane: TD_LANES[0].id,
+  topic: TD_SOURCELAB[0].id,
+  bench: ['mico', 'multica', 'qm', 'hermes'],
+  taskBench: ['mico', 'multica', 'linear', 'paperclip'],
+  taskDims: ['home', 'list', 'detail', 'status'],
+  playbook: TD_PLAYBOOKS[0].id,
+  aiLens: { tab: 'prebuilt', item: TD_AILENS[0].id, promptId: TD_AILENS_PROMPTS[0].id, promptProducts: ['hermes', 'qm', 'openclaw'] },
+  product: 'openworker',
+};
 
 function route() {
   const h = location.hash.slice(2) || '';
-  const [view, arg] = h.split('/');
+  const [view, arg, arg2] = h.split('/');
   state.view = view || 'home';
-  if (arg) { if (state.view === 'lane') state.lane = arg; if (state.view === 'lab') state.topic = arg; }
+  if (state.view === 'lane' && arg) state.lane = arg;
+  if (state.view === 'lab' && arg) state.topic = arg;
+  if (state.view === 'product' && arg) state.product = arg;
+  if (state.view === 'playbook' && arg) state.playbook = arg;
+  if (state.view === 'ai-lens' && arg) { state.aiLens.tab = arg; if (arg2) state.aiLens.item = arg2; }
   render();
 }
 window.addEventListener('hashchange', route);
@@ -210,15 +347,23 @@ window.addEventListener('hashchange', route);
 /* ================= 侧栏 ================= */
 function renderNav() {
   const nav = $('#sidenav');
+  const on = (cond) => cond ? 'on' : '';
   nav.innerHTML = `
-    <div class="brand">竞品拆解台<small>Agent 平台 · 2026-08</small></div>
+    <div class="brand">竞品拆解台<small>Agent 平台 · 2026-08 · v2</small></div>
     <div class="nav-sec">视图</div>
-    <button class="nav-item ${state.view === 'home' ? 'on' : ''}" onclick="go('#/')"><span class="ic">⌂</span>总览</button>
-    <button class="nav-item ${state.view === 'bench' ? 'on' : ''}" onclick="go('#/bench')"><span class="ic">◫</span>对比工作台</button>
+    <button class="nav-item ${on(state.view === 'home')}" onclick="go('#/')"><span class="ic">⌂</span>总览</button>
+    <button class="nav-item ${on(state.view === 'bench')}" onclick="go('#/bench')"><span class="ic">◫</span>对比工作台</button>
+    <div class="nav-sec">横向比较</div>
+    <button class="nav-item ${on(state.view === 'tasks')}" onclick="go('#/tasks')"><span class="ic">▤</span>任务面板<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'playbook' || state.view === 'playbooks')}" onclick="go('#/playbook')"><span class="ic">▶</span>工作流剧本<span class="badge-new">新</span></button>
     <div class="nav-sec">板块对比</div>
-    ${TD_LANES.map(l => `<button class="nav-item ${state.view === 'lane' && state.lane === l.id ? 'on' : ''}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
+    ${TD_LANES.map(l => `<button class="nav-item ${on(state.view === 'lane' && state.lane === l.id)}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
     <div class="nav-sec">源码解剖</div>
-    ${TD_SOURCELAB.map(t => `<button class="nav-item ${state.view === 'lab' && state.topic === t.id ? 'on' : ''}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
+    ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
+    <div class="nav-sec">AI 视角</div>
+    <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
+    <div class="nav-sec">产品深度评测</div>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'openworker')}" onclick="go('#/product/openworker')"><span class="ic">⚐</span>OpenWorker (吴恩达)<span class="badge-new">新</span></button>
   `;
 }
 function go(h) { location.hash = h; }
@@ -226,27 +371,34 @@ function go(h) { location.hash = h; }
 /* ================= 总览 ================= */
 function viewHome() {
   const total = TD_PRODUCTS.length;
+  const laneCount = TD_LANES.length;
+  const labCount = TD_SOURCELAB.length;
+  const pbCount = TD_PLAYBOOKS.length;
+  const aiCount = TD_AILENS.length;
   return `
   <div class="hero">
-    <h1>${TD_PRODUCTS.length} 个 Agent 平台，一台拆尽</h1>
-    <p>真实页面截图 × 产品经理讲解 × 源代码解剖。点板块看横向对比，勾产品出能力图与报告。</p>
+    <h1>${total} 个 Agent 平台，一台拆尽</h1>
+    <p>v2 升级：横向看任务面板、看完整工作流剧本；让 AI 现场帮你分析；新加入产品按 demo/代码/理念三栏直接评测。</p>
+    <div class="ribbon">v2 · 2026-08-04 升级</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
-      <div><b>${TD_LANES.length}</b><span>能力板块</span></div>
-      <div><b>3</b><span>源码专题</span></div>
-      <div><b>211</b><span>证据图</span></div>
+      <div><b>${laneCount}</b><span>能力板块</span></div>
+      <div><b>${labCount}</b><span>源码专题</span></div>
+      <div><b>${pbCount}</b><span>工作流剧本</span></div>
+      <div><b>${aiCount}</b><span>AI 视角分析</span></div>
+      <div><b>230+</b><span>证据图</span></div>
     </div>
   </div>
   <div class="pgrid">
     ${TD_PRODUCTS.map(p => `
-      <div class="card pcard" onclick="toggleBench('${p.id}')">
+      <div class="card pcard ${p.id === 'openworker' ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
         <div class="motto">主语：${p.motto}</div>
         <div class="desc">${p.oneLiner}</div>
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
-  <p class="sub" style="margin-top:16px">点任意产品卡 → 加入对比工作台。评分来自 2026-08-01/02 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
+  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（OpenWorker 已有完整 demo/代码/理念三栏；其他产品正在补齐）。评分来自 2026-08-01/02 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
 }
 
 /* ================= 板块对比 ================= */
@@ -405,7 +557,6 @@ function drawRadar() {
   const W = cv.width, H = cv.height, cx = W / 2, cy = H / 2 + 8, R = 150;
   const n = TD_DIMS.length;
   ctx.clearRect(0, 0, W, H);
-  // 网格
   for (let ring = 1; ring <= 5; ring++) {
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
@@ -424,7 +575,6 @@ function drawRadar() {
     ctx.fillStyle = '#57534e'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText(TD_DIMS[i][1], cx + (R + 26) * Math.cos(a), cy + (R + 22) * Math.sin(a) + 4);
   }
-  // 产品面
   state.bench.forEach((id, pi) => {
     const p = P[id], color = BENCH_COLORS[pi % 8];
     ctx.beginPath();
@@ -446,6 +596,430 @@ function drawRadar() {
   });
 }
 
+/* ================= 任务面板视图（新增）==============
+ * 4 个维度：home（主页/任务面板首屏）/ list（任务列表/看板）/ detail（任务详情）/ status（状态列与流转）
+ * 选 2-4 个产品 → 横向看每行（维度）下每列（产品）的"该位置长什么样"
+ */
+const TASK_DIMS = [
+  { id: 'home', name: '主页/任务首屏', desc: '用户登录后第一眼看到的任务相关界面' },
+  { id: 'list', name: '任务列表/看板', desc: '所有任务以列/行/卡片形态展示的视图' },
+  { id: 'detail', name: '任务详情', desc: '点开单条任务后的详情页（讨论/字段/子任务）' },
+  { id: 'status', name: '状态列/流转', desc: '任务在状态机里如何呈现与移动' },
+];
+
+// 任务面板图：每行 = 维度，每列 = 产品。点击单元格放大查看。
+const TASK_SHOTS = {
+  mico: {
+    home: { img: 'assets/shots/mico/N01-任务页-新版.jpeg', cap: 'MiCo 任务页（新版）：Backlog/Todo/In Progress/In Review 四列 + 完成率' },
+    list: { img: 'assets/shots/mico/N01-任务页-新版.jpeg', cap: '看板视图：EPIC 树 + 任务类型/领域徽标 + In Review 13（压单）' },
+    detail: { img: 'assets/shots/mico/03-档案.png', cap: '档案视图：工号/MID/汇报上级/容器规格（任务卡可关联虾）' },
+    status: { img: 'assets/shots/mico/N01-任务页-新版.jpeg', cap: '四态列：Backlog→Todo→In Progress→In Review（验收列独特）' },
+  },
+  multica: {
+    home: { img: 'assets/shots/multica/07-issues-board.png', cap: 'Multica 主页即看板：所有 issue 一屏展示' },
+    list: { img: 'assets/shots/multica/07-issues-board.png', cap: '看板：拖拽分配（拖到 agent 栏即派单）' },
+    detail: { img: 'assets/shots/multica/08-issue-detail.png', cap: 'issue 详情：讨论/状态/子任务' },
+    status: { img: 'assets/shots/multica/07-issues-board.png', cap: '状态：Todo/In Progress/In Review/Done 四列' },
+  },
+  linear: {
+    home: { img: 'assets/shots/linear/01-board.jpeg', cap: 'Linear 首页：Triage 收单 + Cycle 节奏' },
+    list: { img: 'assets/shots/linear/01-board.jpeg', cap: '看板：动线最顺（50ms 手感）' },
+    detail: { img: 'assets/shots/linear/02-issue.jpeg', cap: 'issue 详情：富文本 + 子任务 + 关联' },
+    status: { img: 'assets/shots/linear/03-status.jpeg', cap: '状态：Backlog/Todo/In Progress/Done/Canceled' },
+  },
+  paperclip: {
+    home: { img: 'assets/shots/paperclip/03-EVA-dashboard.png', cap: 'Paperclip Dashboard：CEO/CTO 视角的"公司仪表板"' },
+    list: { img: 'assets/shots/paperclip/05-EVA-issues.png', cap: 'Issues：公司票据（每张票挂审批+成本）' },
+    detail: { img: 'assets/shots/paperclip/04-EVA-inbox.png', cap: 'Inbox：Board 审批——人工闸门产品化' },
+    status: { img: 'assets/shots/paperclip/05-EVA-issues.png', cap: '状态：Created/Approved/Assigned/In Progress/Done' },
+  },
+  hermes: {
+    home: { img: 'assets/shots/hermes/nav-Kanban.png', cap: 'Hermes Kanban：Triage→Ready 泳道' },
+    list: { img: 'assets/shots/hermes/nav-Kanban.png', cap: '看板 + Orchestration: Auto + Nudge dispatcher' },
+    detail: { img: 'assets/shots/hermes/01-home.png', cap: 'Home 视图：会话即基础设施' },
+    status: { img: 'assets/shots/hermes/nav-Kanban.png', cap: '状态：Triage/Todo/Scheduled/Ready/In Progress/Done' },
+  },
+  openworker: {
+    home: { img: 'assets/shots/openworker/01_desktop_home.jpg', cap: 'OpenWorker 桌面首屏：会话列表 + 输入框（任务=会话）' },
+    list: { img: 'assets/shots/openworker/02_task_execution.jpg', cap: '任务执行面板：5 步进度链（Plan→读→聚合→起草→审批）' },
+    detail: { img: 'assets/shots/openworker/02_task_execution.jpg', cap: '单步详情：tool call 卡片 + 输出预览（无独立 task 详情页）' },
+    status: { img: 'assets/shots/openworker/02_task_execution.jpg', cap: '状态：隐式（步骤序号），无独立状态机' },
+  },
+  openclaw: {
+    home: { img: 'assets/shots/openclaw/01-home.png', cap: 'OpenClaw Chat：把 20+ IM 收编成自己的前厅' },
+    list: { img: 'assets/shots/openclaw/12-agents.png', cap: 'agents 列表：个人助理的多开与分工' },
+    detail: { img: 'assets/shots/openclaw/14-skills-workshop.png', cap: 'Skills Workshop：技能创建/调试工作台' },
+    status: { img: 'assets/shots/openclaw/10-cron.png', cap: 'Cron：定时任务（个人助理标配）' },
+  },
+  qm: {
+    home: { img: 'assets/shots/qm/02-home.png', cap: 'QM 主页：BROWSE 导航（无传统任务）' },
+    list: { img: 'assets/shots/qm/02-home.png', cap: 'QM 无 issue 列表：scope = 编排边界' },
+    detail: { img: 'assets/shots/qm/02-home.png', cap: 'scope 内 chat 即"任务"' },
+    status: { img: 'assets/shots/qm/02-home.png', cap: '状态：scope 资源清单' },
+  },
+  jira: {
+    home: { img: 'assets/shots/jira-meego/04-meego-工作台.jpeg', cap: 'Meego（飞书项目）工作台：全部待办 58' },
+    list: { img: 'assets/shots/jira-meego/04-meego-工作台.jpeg', cap: '工作台：合规/可追溯/到期提醒' },
+    detail: { img: 'assets/shots/jira-meego/04-meego-工作台.jpeg', cap: '详情：流程视角 + 字段齐' },
+    status: { img: 'assets/shots/jira-meego/04-meego-工作台.jpeg', cap: '状态：合规可配置' },
+  },
+};
+
+function viewTasks() {
+  return `
+  <div class="h1">任务面板横向对比</div>
+  <p class="sub" style="max-width:900px">选 2-4 个产品（默认 MiCo + Multica + Linear + Paperclip）+ 看 4 个位置的截图（主页/列表/详情/状态），横向看任务面板在不同产品里的形态差异。</p>
+
+  <div class="bench-grid">
+    ${TD_PRODUCTS.map(p => `<button class="chip ${state.taskBench.includes(p.id) ? 'on' : ''}" onclick="toggleTaskBench('${p.id}')">${p.name}</button>`).join('')}
+  </div>
+
+  <p class="sub" style="margin-top:10px;font-size:12px">已选：<b>${state.taskBench.map(id => P[id]?.name).join(' · ')}</b>　点击单元格放大查看</p>
+
+  ${state.taskBench.length === 0 ? `<div class="taskmatrix-empty">未选产品。请从上方 chip 中选择至少 1 个产品。</div>` : `
+  <table class="taskmatrix">
+    <thead>
+      <tr>
+        <th style="width:120px">位置 \\ 产品</th>
+        ${state.taskBench.map(id => `<th>${P[id]?.name || id} <span class="tag type-${P[id]?.type}">${P[id]?.type}</span></th>`).join('')}
+      </tr>
+    </thead>
+    <tbody>
+      ${TASK_DIMS.map(d => `
+        <tr>
+          <td class="rowlabel">${d.name}<div style="font-weight:400;font-size:11px;color:var(--ink3);margin-top:2px">${d.desc}</div></td>
+          ${state.taskBench.map(id => {
+            const shot = TASK_SHOTS[id]?.[d.id];
+            const isMico = id === 'mico';
+            if (!shot) return `<td class="${isMico ? 'mico-col' : ''}"><div class="taskmatrix-empty" style="padding:24px">无该位置素材</div></td>`;
+            return `<td class="${isMico ? 'mico-col' : ''}" onclick='openLB(${JSON.stringify(shot.img)}, ${JSON.stringify(shot.cap)}, [], ${JSON.stringify(P[id]?.name || id)})'>
+              <img class="cell-img" src="${shot.img}" loading="lazy" alt="${shot.cap}">
+              <div class="cell-cap">${shot.cap}</div>
+            </td>`;
+          }).join('')}
+        </tr>
+      `).join('')}
+    </tbody>
+  </table>
+  `}
+
+  <div class="pm" style="margin-top:26px">
+    <h3>◉ 产品经理观察（任务面板）</h3>
+    <div class="row"><b>共同骨架</b><p>几乎所有 agent 平台都从 issue/任务系统起步——这是"工作"的最记账单位。但分水岭在**状态机 + 验收**：MiCo 有"验收"列（In Review），Hermes 走"依赖满足才派单"，QM 没有任务模型。</p></div>
+    <div class="row"><b>对 MiCo</b><p class="mico">MiCo 任务页骨架已是 Linear 级；短板在**收口（验收收件箱/批量验收/结构化 DoD）**，不在执行。下一步：把 OpenWorker 的"任务执行面板"形态（步骤进度 + 工具调用 + 产物）搬到任务详情页——让任务卡有"中间现场"可看。</p></div>
+  </div>`;
+}
+
+function toggleTaskBench(id) {
+  const i = state.taskBench.indexOf(id);
+  if (i >= 0) state.taskBench.splice(i, 1);
+  else state.taskBench.push(id);
+  if (state.taskBench.length > 4) state.taskBench.shift();
+  if (state.view !== 'tasks') go('#/tasks'); else render();
+}
+
+/* ================= 工作流剧本视图（新增）============== */
+function viewPlaybook() {
+  const pb = TD_PLAYBOOKS.find(x => x.id === state.playbook) || TD_PLAYBOOKS[0];
+  return `
+  <div class="h1"><span style="font-size:24px;margin-right:8px">${pb.icon}</span>${pb.name}</div>
+  <p class="sub" style="max-width:900px">${pb.why}</p>
+
+  <div class="topic-tabs">
+    ${TD_PLAYBOOKS.map(p => `<button class="chip ${p.id === pb.id ? 'on' : ''}" onclick="go('#/playbook/${p.id}')">${p.icon} ${p.name}</button>`).join('')}
+  </div>
+
+  <div class="pb-scenario">
+    <h3>◉ 场景</h3>
+    <p>${pb.scenario}</p>
+  </div>
+
+  ${pb.steps.map(s => `
+    <div class="pb-step">
+      <div class="sn">STEP ${s.n} / ${pb.steps.length}</div>
+      <div class="st">${s.name}</div>
+      <div class="grid">
+        ${s.cells.map(c => `
+          <div class="cell" ${c.img ? `onclick="openLB('${c.img}', '${c.action.replace(/'/g, "\\'")}', [], '${(P[c.p]?.name || c.p).replace(/'/g, "\\'")}')"` : ''} style="${c.img ? 'cursor:zoom-in' : ''}">
+            <div class="who"><span>${P[c.p]?.name || c.p}</span><span class="tag type-${P[c.p]?.type || '闭源'}">${P[c.p]?.type || ''}</span></div>
+            <div class="act">${c.action}</div>
+            ${c.img ? '<div style="font-size:11px;color:var(--ink3);margin-top:4px">◉ 点击放大</div>' : '<div style="font-size:11px;color:var(--ink3);margin-top:4px">文字描述（暂无截图）</div>'}
+          </div>
+        `).join('')}
+      </div>
+      ${s.obs ? `<div class="obs">◉ <b>产品经理观察：</b>${s.obs}</div>` : ''}
+    </div>
+  `).join('')}
+
+  <div class="pb-compare">
+    <h3>◉ 横向对比</h3>
+    <p>${pb.compare}</p>
+  </div>
+
+  <div class="pb-mico">
+    <h3>◉ 对 MiCo</h3>
+    <p>${pb.mico}</p>
+  </div>`;
+}
+
+/* ================= AI 视角视图（新增）============== */
+function viewAiLens() {
+  const tab = state.aiLens.tab;
+  return `
+  <div class="h1"><span style="font-size:24px;margin-right:8px">✦</span>AI 视角</div>
+  <p class="sub" style="max-width:900px">让 AI 帮你分析选中的产品。三种模式：①<b>预置分析</b>（已写好的对比文章）②<b>复制 prompt</b>（生成可复制的 prompt 块，去任何 AI 工具跑）③<b>现场生成</b>（占位，需配 API key）。</p>
+
+  <div class="ailens-tabs">
+    <button class="ailens-tab ${tab === 'prebuilt' ? 'on' : ''}" onclick="go('#/ai-lens/prebuilt')">① 预置分析（${TD_AILENS.length}）</button>
+    <button class="ailens-tab ${tab === 'prompt' ? 'on' : ''}" onclick="go('#/ai-lens/prompt')">② 复制 prompt 出去跑</button>
+    <button class="ailens-tab ${tab === 'live' ? 'on' : ''}" onclick="go('#/ai-lens/live')">③ 现场生成（占位）</button>
+  </div>
+
+  ${tab === 'prebuilt' ? viewAiLensPrebuilt() : tab === 'prompt' ? viewAiLensPrompt() : viewAiLensLive()}`;
+}
+
+function viewAiLensPrebuilt() {
+  const item = TD_AILENS.find(x => x.id === state.aiLens.item) || TD_AILENS[0];
+  return `
+  <div class="ailens-layout">
+    <div class="ailens-list">
+      ${TD_AILENS.map(a => `
+        <div class="ailens-item ${a.id === item.id ? 'on' : ''}" onclick="go('#/ai-lens/prebuilt/${a.id}')">
+          <div class="ai-name">${a.icon} ${a.name}</div>
+          <div class="ai-meta">${a.products.length} 个产品 · ${a.sections.length} 节</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="ailens-body">
+      <h2>${item.icon} ${item.name}</h2>
+      <div class="engine">${item.engine}</div>
+      <div class="summary">${item.summary}</div>
+      <div style="margin: 10px 0">
+        ${item.products.map(id => `<span class="tag" style="margin-right:4px">${P[id]?.name || id}</span>`).join('')}
+        ${item.related?.length ? `<span class="tag" style="margin-left:8px">关联：源码解剖 → ${item.related.join(', ')}</span>` : ''}
+      </div>
+      ${item.sections.map(s => `
+        <div class="ai-section">
+          <h3>${s.h}</h3>
+          ${s.p.split('\n').filter(x => x.trim()).map(p => `<p>${p.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`).join('')}
+        </div>
+      `).join('')}
+      <div class="replay">
+        <h4>◉ 想让 AI 重新跑一遍？复制这个 prompt：</h4>
+        <pre>${item.promptForReplay}</pre>
+        <button class="copy-btn" onclick="copyText(${JSON.stringify(item.promptForReplay)})">复制到剪贴板</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewAiLensPrompt() {
+  const tpl = TD_AILENS_PROMPTS.find(x => x.id === state.aiLens.promptId) || TD_AILENS_PROMPTS[0];
+  const ctx = tpl.buildContext ? tpl.buildContext(state.aiLens.promptProducts) : state.aiLens.promptProducts.map(id => `- ${P[id]?.name || id}`).join('\n');
+  const productsStr = state.aiLens.promptProducts.join('、');
+  const filled = tpl.template
+    .replace('{products}', productsStr)
+    .replace('{context}', ctx)
+    .replace('{dim}', tpl.dim);
+  return `
+  <div class="prompt-builder">
+    <div class="sel-row">
+      <b>① 选分析模板</b>
+      <div class="bench-grid" style="margin:0">
+        ${TD_AILENS_PROMPTS.map(p => `<button class="chip ${p.id === tpl.id ? 'on' : ''}" onclick="state.aiLens.promptId='${p.id}';render()">${p.name}</button>`).join('')}
+      </div>
+    </div>
+    <div class="sel-row">
+      <b>② 选要分析的产品（2-5 个）</b>
+      <div class="bench-grid" style="margin:0">
+        ${TD_PRODUCTS.map(p => `<button class="chip ${state.aiLens.promptProducts.includes(p.id) ? 'on' : ''}" onclick="togglePromptProduct('${p.id}')">${p.name}</button>`).join('')}
+      </div>
+    </div>
+    <div class="sel-row">
+      <b>③ 生成的 prompt（已填入选中的产品）：</b>
+      <textarea id="prompt-out" readonly>${filled}</textarea>
+      <div class="gen-actions">
+        <button class="btn primary" onclick="copyText($('#prompt-out').value);this.textContent='✓ 已复制'">复制到剪贴板</button>
+        <button class="btn" onclick="$('#prompt-out').select()">全选</button>
+        <span style="color:var(--ink3);font-size:12px;align-self:center">粘贴到 ChatGPT / Kimi / Claude / Gemini / Mavis 任一工具</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function togglePromptProduct(id) {
+  const i = state.aiLens.promptProducts.indexOf(id);
+  if (i >= 0) state.aiLens.promptProducts.splice(i, 1);
+  else { state.aiLens.promptProducts.push(id); if (state.aiLens.promptProducts.length > 5) state.aiLens.promptProducts.shift(); }
+  render();
+}
+
+function viewAiLensLive() {
+  return `
+  <div class="ailens-disabled">
+    <p style="font-size:15px;margin-bottom:10px">◉ 现场生成模式（占位）</p>
+    <p>这个模式需要在前端直接调用 LLM API（Mavis / OpenAI / Anthropic），涉及 API key 管理、CORS 跨域、成本控制——目前不开放。</p>
+    <p style="margin-top:14px"><b>替代方案</b>：用 ② "复制 prompt 出去跑" 模式，粘贴到任意 AI 工具即可。</p>
+    <p style="margin-top:14px"><b>未来支持</b>：当 <code>localStorage.openai_key</code> 有值时启用。需要后端代理（避免 CORS 与 key 泄漏）。</p>
+    <p style="margin-top:14px"><b>Roadmap</b>：<br>
+    - 直接选产品 + 选维度 → 一键调用 Mavis API 生成报告<br>
+    - 历史报告存档（localStorage）<br>
+    - 与"对比工作台"的 bench 数据互通（直接拿选中产品作上下文）</p>
+  </div>`;
+}
+
+function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+}
+
+/* ================= 产品深度评测视图（新增 · OpenWorker）============== */
+function viewProduct() {
+  // 当前只有 openworker 完整数据；其他产品展示基础信息 + "评测筹备中"
+  if (state.product === 'openworker') return viewOpenWorkerDeepDive();
+  return viewProductGeneric(state.product);
+}
+
+function viewOpenWorkerDeepDive() {
+  const d = TD_OPENWORKER_DEEPDIVE;
+  const p = P[d.productId];
+  return `
+  <div class="dd-hero">
+    <h1>${d.productName}</h1>
+    <div class="dd-tagline">${d.tagline}</div>
+    <div class="dd-meta">
+      <b>数据来源：</b>${d.source}<br>
+      <b>评测人：</b>${d.author}<br>
+      <b>入库时间：</b>${d.dateAdded}
+    </div>
+  </div>
+
+  <!-- ① 概览 -->
+  <div class="dd-section">
+    <h2><span class="num">①</span> 概览 · Overview</h2>
+    <div class="dd-overview-grid">
+      <div class="dd-overview-card">
+        <p><b>主语：</b>${p.motto}</p>
+        <p>${p.oneLiner}</p>
+        <h3 style="margin:14px 0 6px;font-size:13px;color:var(--accent)">+ Pros</h3>
+        <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${x}</li>`).join('')}</ul>
+        <h3 style="margin:14px 0 6px;font-size:13px;color:#a83a3a">- Cons</h3>
+        <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">－ ${x}</li>`).join('')}</ul>
+      </div>
+      <div class="dd-scorecard">
+        <h3>8 维度评分（1-5）</h3>
+        ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${p.scores[k]*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores[k]}">${p.scores[k]}</span></span></div>`).join('')}
+        <h3 style="margin-top:14px">对 MiCo</h3>
+        <p style="font-size:12.5px;color:var(--ink2)">${p.micoNote}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② Demo -->
+  <div class="dd-section">
+    <h2><span class="num">②</span> Demo · 产品形态示意图</h2>
+    <p class="sub" style="margin-bottom:14px">以下 6 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。</p>
+    <div class="dd-shot-grid">
+      ${d.demoShots.map(s => `
+        <div class="dd-shot">
+          <img src="${s.img}" loading="lazy" alt="${s.caption}" onclick="openLB('${s.img}', '${s.caption.replace(/'/g, "\\'")}', [], '${d.productName}')" style="cursor:zoom-in">
+          <div class="dd-shot-body">
+            <div class="dd-shot-cap">${s.caption}</div>
+            <div class="dd-shot-note">${s.note}</div>
+            <span class="dd-shot-tag">示意图</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <!-- ③ Code -->
+  <div class="dd-section">
+    <h2><span class="num">③</span> Code · 关键实现</h2>
+    <p class="sub" style="margin-bottom:14px">仓库结构、启动脚本、推断的核心代码。代码片段为基于官方描述构造的演示代码，非实机 git blame。</p>
+    ${d.codeSnippets.map((c, i) => `
+      <div class="dd-code-block">
+        <div class="dd-code-head">
+          <span class="t">${c.title}</span>
+          <span class="f mono">${c.file}</span>
+        </div>
+        <div class="codepanel" style="border-radius:0"><pre>${c.code.replace(/</g, '&lt;')}</pre></div>
+        <ul class="points" style="background:#faf9f6;border:1px solid var(--line);border-top:none;border-radius:0 0 9px 9px">${c.points.map(pt => `<li>${pt.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+      </div>
+    `).join('')}
+  </div>
+
+  <!-- ④ Philosophy -->
+  <div class="dd-section dd-philosophy">
+    <h2><span class="num">④</span> Philosophy · 产品理念</h2>
+    <h3>核心问题</h3>
+    <p>${d.philosophy.coreQuestion.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <h3>吴恩达的回答</h3>
+    <p>${d.philosophy.answer.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <h3>问题诊断</h3>
+    <ul>${d.philosophy.problemDiagnosis.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+    <h3>设计原则</h3>
+    <ul>${d.philosophy.designPrinciples.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+    <h3>差异化矩阵</h3>
+    ${d.philosophy.differentiationMatrix.map(m => `<p style="margin:6px 0"><b>${m.vs}：</b>${m.diff.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`).join('')}
+  </div>
+
+  <!-- ⑤ 时间线 -->
+  <div class="dd-section">
+    <h2><span class="num">⑤</span> 时间线 · Timeline</h2>
+    <div class="dd-timeline">
+      ${d.timeline.map(t => `<div class="tl-item"><b>${t.date}</b>${t.event}</div>`).join('')}
+    </div>
+  </div>
+
+  <!-- ⑥ 结论 -->
+  <div class="dd-section">
+    <h2><span class="num">⑥</span> 结论 · Verdict</h2>
+    <div class="dd-conclusion">
+      <p class="summary">${d.conclusion.summary}</p>
+      <h3 style="margin:14px 0 8px;font-size:14px;color:var(--accent)">对 MiCo 的启示</h3>
+      <ul>${d.conclusion.forMico.map(x => `<li><b>→</b> ${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+    </div>
+  </div>
+
+  <div class="pm" style="margin-top:30px">
+    <h3>◉ 这个评测页是"产品深度评测"模板的第一个实例</h3>
+    <div class="row"><b>模板结构</b><p>① 概览 ② Demo ③ Code ④ Philosophy ⑤ Timeline ⑥ Verdict。任何新产品按这个 schema 填齐即可独立成页。</p></div>
+    <div class="row mico"><b>下一批</b><p>Mavis（MiniMax 升级版）/ Hermes / QoderWake / Cabinet——优先选"形态与 MiCo 同向/反向"的产品，模板可复用率高。</p></div>
+  </div>`;
+}
+
+function viewProductGeneric(id) {
+  const p = P[id];
+  if (!p) return `<div class="callout"><b>未找到产品：</b>${id}</div>`;
+  return `
+  <div class="hero">
+    <h1>${p.name}</h1>
+    <p>${p.oneLiner}</p>
+    <div class="ribbon">主语：${p.motto} · ${p.type}</div>
+  </div>
+  <div class="h2">8 维度评分</div>
+  <table class="rtable">
+    <tr>${TD_DIMS.map(([k, n]) => `<th>${n}</th>`).join('')}</tr>
+    <tr>${TD_DIMS.map(([k]) => `<td><span class="sc sc${p.scores[k]}">${p.scores[k]}</span></td>`).join('')}</tr>
+  </table>
+  <div class="h2">Pros</div>
+  <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="margin:4px 0">＋ ${x}</li>`).join('')}</ul>
+  <div class="h2">Cons</div>
+  <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${x}</li>`).join('')}</ul>
+  <div class="callout"><b>对 MiCo：</b>${p.micoNote}</div>
+  <div class="pm" style="margin-top:20px">
+    <h3>◉ 这个产品还没有完整 demo/代码/理念评测</h3>
+    <div class="row"><b>已收录内容</b><p>基础信息 + 8 维度评分 + Pros/Cons/启示（来自 v1 数据）。</p></div>
+    <div class="row mico"><b>下一批</b><p>按"产品深度评测"模板补齐 demo 截图、code 片段、philosophy 分析。请到 <a href="https://github.com/andrewyng/openworker" style="color:#9dbcff">产品主页</a> 收集素材后提交。</p></div>
+  </div>`;
+}
+
 /* ================= 渲染 ================= */
 function render() {
   renderNav();
@@ -453,6 +1027,10 @@ function render() {
   if (state.view === 'lane') m.innerHTML = viewLane();
   else if (state.view === 'lab') m.innerHTML = viewLab();
   else if (state.view === 'bench') { m.innerHTML = viewBench(); requestAnimationFrame(drawRadar); }
+  else if (state.view === 'tasks') m.innerHTML = viewTasks();
+  else if (state.view === 'playbook' || state.view === 'playbooks') m.innerHTML = viewPlaybook();
+  else if (state.view === 'ai-lens') m.innerHTML = viewAiLens();
+  else if (state.view === 'product') m.innerHTML = viewProduct();
   else m.innerHTML = viewHome();
   window.scrollTo(0, 0);
 }

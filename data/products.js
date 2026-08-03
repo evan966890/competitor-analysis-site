@@ -133,6 +133,12 @@ window.TD_PRODUCTS = [
     pros: ['在手负荷可见的成品答案', 'planning 前置审批', '滞死检测/自报步骤/自动重启'],
     cons: ['已下架（npm 404）', '绑定单一 pi 生态', '无公司级面'],
     micoNote: 'P0 条目最大贡献者（缺口版 8 条里 5 条来自它）。' },
+  { id: 'openworker', name: 'OpenWorker (吴恩达)', type: '开源', motto: '桌面 AI 同事',
+    oneLiner: '吴恩达 7/24 开源的桌面 agent harness：React+Tauri 壳 + Python 引擎（基于 aisuite）+ 25+ 工具连接器 + 本地优先。',
+    scores: { orch: 3, task: 3, im: 5, roster: 1, cron: 4, memory: 3, skills: 3, gov: 3 },
+    pros: ['桌面原生体验 + Slack 双向（@OpenWorker 触发）', '25+ 工具连接器（Slack/GitHub/Jira/Notion/Linear/HubSpot...）', '审批门禁内建（每次写操作前弹窗）', '本地优先 + SQLite 记忆（离线可用）', '基于 aisuite：5 档商用模型 + Ollama 本地模型零成本切换', '5 天 12.4k stars，社区势能极强'],
+    cons: ['完全个人向，无团队/公司级编制与治理', '任务=会话（无 issue/无验收/无父子任务）', '记忆=本地 SQLite（无公司共享/无离职移交）', '审批门禁是单步弹窗，无分级自主度（试用/转正分档）', '早期项目（7/24 首发 8/4），稳定性与边界条件待验', '无画布/无公司级任务看板'],
+    micoNote: '印证"个人虾"形态的硬需求（Mavis 多 harness 之一）；25+ 集成清单是上游值得复制的目录；审批弹窗的 UX 值得搬到虾审批流（每次外发前确认）；本地 SQLite 记忆是"无公司治理"的硬伤，恰好是 MiCo Assets 的差异点。缺公司级是 MiCo 的护城河，别把优势耗在补齐"个人向"。' },
 ];
 window.TD_DIMS = [
   ['orch', '编排'], ['task', '任务'], ['im', '会话入口'], ['roster', '编制管理'],

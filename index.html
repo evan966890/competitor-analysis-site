@@ -336,6 +336,7 @@ const state = {
   product: 'openworker',
   matrixDim: 'state',
   matrixProduct: null,
+  profile: 'multica',
 };
 
 function route() {
@@ -348,6 +349,7 @@ function route() {
   if (state.view === 'playbook' && arg) state.playbook = arg;
   if (state.view === 'ai-lens' && arg) { state.aiLens.tab = arg; if (arg2) state.aiLens.item = arg2; }
   if (state.view === 'source-matrix' && arg) state.matrixDim = arg;
+  if (state.view === 'profile' && arg) state.profile = arg;
   render();
 }
 window.addEventListener('hashchange', route);
@@ -369,6 +371,10 @@ function renderNav() {
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
     <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 9 家矩阵<span class="badge-new">新</span></button>
+    <div class="nav-sec">产品画像（9 家）</div>
+    ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker'].map(pid => `
+      <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
+    `).join('')}
     <div class="nav-sec">AI 视角</div>
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
@@ -1232,6 +1238,183 @@ function viewProductGeneric(id) {
   </div>`;
 }
 
+/* ================= 产品画像页（v3 模块 2 · 全息图）============= */
+function viewProductProfile(id) {
+  const p = P[id];
+  if (!p) return `<div class="callout"><b>未找到产品：</b>${id}</div>`;
+
+  // 1) 找 deep-dive（如果存在）
+  const DEEPDIVES = {
+    'openworker': TD_OPENWORKER_DEEPDIVE,
+    'vibe-kanban': TD_VIBE_KANBAN_DEEPDIVE,
+    'raft': TD_RAFT_DEEPDIVE,
+    'ruflo': TD_RUFLO_DEEPDIVE,
+    'openagents': TD_OPENAGENTS_DEEPDIVE,
+  };
+  const deepDive = DEEPDIVES[id];
+
+  // 2) 找 8 维 source matrix cell（如果存在）
+  const matrix = TD_SOURCE_MATRIX;
+  const hasMatrix = matrix && matrix.cells[id];
+  const matrixDims = hasMatrix ? matrix.dimensions : [];
+  const matrixCells = hasMatrix ? matrix.cells[id] : {};
+
+  // 3) 找所有 lane items for this product
+  const laneItems = [];
+  for (const lane of TD_LANES) {
+    for (const item of (lane.items || [])) {
+      if (item.p === id) {
+        laneItems.push({ lane, item });
+      }
+    }
+  }
+
+  // 4) 计算"对 MiCo 启示"综合（来自 8 维 cell）
+  const micoInsights = hasMatrix
+    ? matrixDims.map(d => {
+        const c = matrixCells[d.id];
+        return c ? `<li><b>${d.name}：</b>${c.forMico}</li>` : '';
+      }).join('')
+    : `<li>${p.micoNote}</li>`;
+
+  return `
+  <div class="dd-hero">
+    <h1>${p.name} · 产品画像</h1>
+    <div class="dd-tagline">${p.oneLiner}</div>
+    <div class="dd-meta">
+      <b>主语：</b>${p.motto}<br>
+      <b>类型：</b>${p.type}<br>
+      ${deepDive ? `<a href="#/product/${id}" style="color:var(--accent)">→ 查看完整深度评测（demo / 代码 / 哲学）</a><br>` : ''}
+    </div>
+  </div>
+
+  <!-- ① 8 维评分卡 -->
+  <div class="dd-section">
+    <h2><span class="num">①</span> 8 维评分（总览）</h2>
+    <div class="dd-overview-grid">
+      <div class="dd-scorecard">
+        <h3>能力维度</h3>
+        ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${p.scores[k]*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores[k]}">${p.scores[k]}</span></span></div>`).join('')}
+        <p style="font-size:12px;color:var(--ink2);margin-top:8px">基于 v1 拆解（1-5 分）</p>
+      </div>
+      <div class="dd-overview-card">
+        <h3 style="margin:0 0 8px;font-size:13px;color:var(--accent)">+ Pros</h3>
+        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.pros.slice(0, 4).map(x => `<li style="margin:3px 0">＋ ${x}</li>`).join('')}</ul>
+        <h3 style="margin:14px 0 8px;font-size:13px;color:#a83a3a">- Cons</h3>
+        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.cons.slice(0, 3).map(x => `<li style="margin:3px 0">－ ${x}</li>`).join('')}</ul>
+      </div>
+    </div>
+  </div>
+
+  ${hasMatrix ? `
+  <!-- ② 8 维源码横截面 -->
+  <div class="dd-section">
+    <h2><span class="num">②</span> 8 维源码横截面</h2>
+    <p class="sub" style="margin-bottom:14px">该产品在 8 个源码维度上的实现细节（与 9 家矩阵同源数据）。点 cell 看完整内容（代码/截图/启示）。</p>
+    <div class="matrix-wrap" style="overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)">
+      <table class="matrix" style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:var(--bg2)">
+            <th style="text-align:left;padding:10px 12px;min-width:120px">维度</th>
+            <th style="padding:10px 8px;min-width:60px">评分</th>
+            <th style="text-align:left;padding:10px 12px;min-width:300px">实现摘要</th>
+            <th style="padding:10px 8px;min-width:80px">代码/截图</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${matrixDims.map((d, i) => {
+            const c = matrixCells[d.id];
+            if (!c) return '';
+            const hasCode = !!c.codeSnippet;
+            const hasEvidence = !!c.evidence;
+            return `<tr style="background:${i % 2 === 0 ? 'var(--panel)' : 'var(--bg)'};">
+              <td style="text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)">
+                <b>${d.name}</b>
+                <div style="font-size:10px;color:var(--ink2)">${d.decisionLayer}</div>
+              </td>
+              <td style="padding:10px 8px;text-align:center;border-bottom:1px solid var(--line)">
+                <span class="sc sc${c.score}" style="font-weight:600;font-size:15px">${c.score}</span>
+              </td>
+              <td style="text-align:left;padding:10px 12px;font-size:12.5px;line-height:1.5;border-bottom:1px solid var(--line)">${c.summary}</td>
+              <td style="padding:10px 8px;text-align:center;font-size:11px;color:var(--ink2);border-bottom:1px solid var(--line)">
+                ${hasCode ? '<span title="有代码片段">▤</span>' : ''}${hasEvidence ? ' <span title="有截图证据">◉</span>' : ''}
+                <div style="margin-top:4px"><a href="javascript:void(0)" onclick="openMatrixCell('${id}', '${d.id}')" style="font-size:11px;color:var(--accent)">查看 →</a></div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  ` : ''}
+
+  <!-- ③ 在 9 个 lane 上的位置 -->
+  ${laneItems.length > 0 ? `
+  <div class="dd-section">
+    <h2><span class="num">③</span> 在 ${laneItems.length} 个能力板块上的位置</h2>
+    <p class="sub" style="margin-bottom:14px">该产品在不同能力维度（编排/任务/IM/编制/...）上的具体形态和定位。点 lane 名可看整个 lane 横向对比。</p>
+    <div class="lane-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px">
+      ${laneItems.map(({ lane, item }) => `
+        <div class="lane-card" style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;cursor:pointer" onclick="go('#/lane/${lane.id}')">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <b>${lane.name}</b>
+            <span style="font-size:11px;color:var(--ink2)">${lane.id}</span>
+          </div>
+          <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${item.caption}</div>
+          ${item.evidence ? `<div style="font-size:11px;color:var(--ink2);margin-bottom:6px"><b>证据：</b>${item.evidence}</div>` : ''}
+          ${item.hot?.length ? `<div style="font-size:10.5px;color:var(--ink2);padding-top:6px;border-top:1px dashed var(--line)">
+            <b>热点标注：</b>${item.hot.length} 处
+          </div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  </div>
+  ` : `
+  <div class="callout" style="margin-bottom:18px">
+    该产品在 9 个能力板块（lane）上暂无直接对照（属于背景参考类，不进入横切对比）。
+  </div>
+  `}
+
+  <!-- ④ 对 MiCo 的综合启示 -->
+  <div class="dd-section">
+    <h2><span class="num">④</span> 对 MiCo 的综合启示</h2>
+    <div class="dd-conclusion">
+      ${hasMatrix ? `
+        <p class="summary" style="font-size:13.5px;line-height:1.6">综合 8 维源码分析，${p.name} 对 MiCo 的核心启示：</p>
+        <ul style="margin-top:10px;padding-left:24px">${micoInsights}</ul>
+        <p style="margin-top:14px;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:12.5px;line-height:1.55">
+          <b style="color:var(--accent)">原 micoNote：</b>${p.micoNote}
+        </p>
+      ` : `
+        <p class="summary" style="font-size:13.5px;line-height:1.6">${p.micoNote}</p>
+      `}
+    </div>
+  </div>
+
+  ${deepDive ? `
+  <!-- ⑤ deep-dive 入口 -->
+  <div class="pm" style="margin-top:30px">
+    <h3>◉ 想看完整评测？</h3>
+    <div class="row">
+      <b>深度评测（含 6 段完整结构）</b>
+      <p>这个产品的完整 demo（6 张图）/ 关键代码（3 段）/ 产品理念 / 时间线 / 结论，全在
+        <a href="#/product/${id}" style="color:var(--accent)">→ 深度评测页</a>。</p>
+    </div>
+    <div class="row">
+      <b>8 维源码对比</b>
+      <p>想看它跟其他 8 家在源码层面的对比？
+        <a href="#/source-matrix" style="color:var(--accent)">→ 8 维 × 9 家矩阵</a>（这个产品是第 N 行）。</p>
+    </div>
+  </div>
+  ` : `
+  <div class="pm" style="margin-top:30px">
+    <h3>◉ 这个产品还没有深度评测</h3>
+    <div class="row"><b>画像 vs 深度评测</b><p>本页（画像）是"看完能拍板的快速视图"。深度评测是"完整长文（demo/代码/哲学/时间线/结论）"——按"产品深度评测"模板补齐即可。</p></div>
+  </div>
+  `}
+  `;
+}
+
 /* ================= 渲染 ================= */
 function render() {
   renderNav();
@@ -1244,6 +1427,7 @@ function render() {
   else if (state.view === 'ai-lens') m.innerHTML = viewAiLens();
   else if (state.view === 'product') m.innerHTML = viewProduct();
   else if (state.view === 'source-matrix') m.innerHTML = viewSourceMatrix();
+  else if (state.view === 'profile') m.innerHTML = viewProductProfile(state.profile);
   else m.innerHTML = viewHome();
   window.scrollTo(0, 0);
 }

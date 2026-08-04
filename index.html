@@ -423,17 +423,56 @@ function viewHome() {
 /* ================= 板块对比 ================= */
 function viewLane() {
   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
+  // 9 家重点产品（按 deep 9 顺序）
+  const DEEP9 = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker'];
+  const deepItems = l.items.filter(it => DEEP9.includes(it.p));
+  const otherItems = l.items.filter(it => !DEEP9.includes(it.p));
+  const hasDecisions = l.decisions && l.decisions.length > 0;
+
   return `
   <div class="lane-head"><span class="icon">${l.icon}</span><span class="h1">${l.name}</span></div>
   <p class="lane-idea">${l.idea}</p>
+
+  ${hasDecisions ? `
+  <!-- 顶部：3 条产品决策（核心新增）-->
+  <div class="lane-decisions" style="background:linear-gradient(135deg,var(--panel) 0%,var(--bg) 100%);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:9px;padding:18px 20px;margin:18px 0">
+    <h3 style="margin:0 0 10px;font-size:15px;color:var(--accent)">◉ 看完本 lane 后的 3 条产品决策</h3>
+    <ol style="margin:0;padding-left:22px;font-size:13px;line-height:1.65">
+      ${l.decisions.map(d => `<li style="margin:6px 0"><b style="color:var(--ink)">${d.verdict}</b> —— ${d.why}</li>`).join('')}
+    </ol>
+  </div>
+  ` : ''}
+
+  <!-- 中部：9 家深度产品对比（按 deep 9 顺序）-->
+  <div class="h2">9 家深度产品横向对比</div>
   <div class="rail">
-    ${l.items.map((it, i) => `
+    ${deepItems.map((it, i) => `
       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
         <div class="who"><b>${P[it.p]?.name || it.p}</b><span>${it.evidence ? `<span class="tag">${it.evidence}</span> ` : ''}<span class="tag type-${P[it.p]?.type || '闭源'}">${P[it.p]?.type || ''}</span></span></div>
         <img src="${it.img}" loading="lazy" alt="${it.caption}">
         <div class="cap">${it.caption}${(it.hot && it.hot.length) ? ` <span class="tag">◉ ${it.hot.length} 处讲解</span>` : ''}</div>
+        <div style="margin-top:6px;font-size:11.5px;padding:6px 8px;background:var(--bg);border-radius:4px;border-left:2px solid var(--accent)">
+          <b style="color:var(--accent)">→ MiCo：</b>${P[it.p]?.micoNote ? P[it.p].micoNote.slice(0, 60) + (P[it.p].micoNote.length > 60 ? '…' : '') : '查看产品画像'}
+          <a href="#/profile/${it.p}" style="margin-left:6px;color:var(--accent);font-size:11px">画像 →</a>
+        </div>
       </div>`).join('')}
   </div>
+
+  ${otherItems.length > 0 ? `
+  <!-- 其他产品（背景参考）-->
+  <details style="margin-top:18px">
+    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 9 家深度）</summary>
+    <div class="rail" style="margin-top:8px">
+      ${otherItems.map(it => `
+        <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
+          <div class="who"><b>${P[it.p]?.name || it.p}</b><span class="tag type-${P[it.p]?.type || '闭源'}">${P[it.p]?.type || ''}</span></span></div>
+          <img src="${it.img}" loading="lazy" alt="${it.caption}">
+          <div class="cap">${it.caption}</div>
+        </div>`).join('')}
+    </div>
+  </details>
+  ` : ''}
+
   <div class="pm">
     <h3>◉ 产品经理怎么看「${l.name.split(' ')[0]}」</h3>
     <div class="row"><b>页面逻辑</b><p>${l.logic}</p></div>

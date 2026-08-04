@@ -311,6 +311,7 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/products.js"></script>
 <script src="data/lanes.js"></script>
 <script src="data/sourceLab.js"></script>
+<script src="data/sourceMatrix.js"></script>
 <script src="data/playbooks.js"></script>
 <script src="data/aiLens.js"></script>
 <script src="data/openworkerDeepDive.js"></script>
@@ -333,6 +334,8 @@ const state = {
   playbook: TD_PLAYBOOKS[0].id,
   aiLens: { tab: 'prebuilt', item: TD_AILENS[0].id, promptId: TD_AILENS_PROMPTS[0].id, promptProducts: ['hermes', 'qm', 'openclaw'] },
   product: 'openworker',
+  matrixDim: 'state',
+  matrixProduct: null,
 };
 
 function route() {
@@ -344,6 +347,7 @@ function route() {
   if (state.view === 'product' && arg) state.product = arg;
   if (state.view === 'playbook' && arg) state.playbook = arg;
   if (state.view === 'ai-lens' && arg) { state.aiLens.tab = arg; if (arg2) state.aiLens.item = arg2; }
+  if (state.view === 'source-matrix' && arg) state.matrixDim = arg;
   render();
 }
 window.addEventListener('hashchange', route);
@@ -364,6 +368,7 @@ function renderNav() {
     ${TD_LANES.map(l => `<button class="nav-item ${on(state.view === 'lane' && state.lane === l.id)}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
+    <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 9 家矩阵<span class="badge-new">新</span></button>
     <div class="nav-sec">AI 视角</div>
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
@@ -487,6 +492,174 @@ function viewLab() {
   </table>
   <div class="callout"><b>结论 · </b>${t.verdict}</div>`;
 }
+
+/* ================= 8 维源码对比矩阵（v3 新增）================= */
+const matrixScoreClass = s => `sc sc${s}`;
+const matrixScoreColor = s => s >= 4 ? '#1d6b3a' : s >= 3 ? '#c69215' : s >= 2 ? '#c2571b' : '#a83a3a';
+
+function viewSourceMatrix() {
+  const m = TD_SOURCE_MATRIX;
+  const productName = id => P[id]?.name || id;
+  const productMotto = id => P[id]?.motto || '';
+
+  return `
+  <div class="hero" style="padding-bottom:18px">
+    <h1>8 维 × 9 家源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>8 个维度 × 9 家深度产品 = 72 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <div class="ribbon">72 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
+  </div>
+
+  <div class="callout" style="margin-bottom:18px">
+    <b>怎么看：</b>行 = 9 家深度产品，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
+    评分越高 = 该维度做得越深。${m.meta.note}
+  </div>
+
+  <!-- 维度切换器 -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding:10px;background:var(--panel);border-radius:9px;border:1px solid var(--line)">
+    <span style="font-size:12px;color:var(--ink2);align-self:center;margin-right:6px">按维度：</span>
+    ${m.dimensions.map(d => `
+      <button class="chip ${state.matrixDim === d.id ? 'on' : ''}" onclick="go('#/source-matrix/${d.id}')" title="${d.desc}">
+        ${d.name} <span style="color:var(--ink2);font-size:11px">(${d.decisionLayer})</span>
+      </button>
+    `).join('')}
+  </div>
+
+  <!-- 横向矩阵（按维度主序 / 按产品次序） -->
+  <div class="matrix-wrap" style="overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)">
+    <table class="matrix" style="width:100%;border-collapse:collapse;font-size:13px;min-width:1100px">
+      <thead>
+        <tr style="background:var(--bg2)">
+          <th style="text-align:left;padding:10px 12px;position:sticky;left:0;background:var(--bg2);z-index:2;min-width:160px">产品 \\ 维度</th>
+          ${m.dimensions.map(d => `
+            <th style="padding:10px 8px;min-width:130px;text-align:center;border-left:1px solid var(--line)">
+              <div style="font-weight:600">${d.name}</div>
+              <div style="font-size:10px;color:var(--ink2);margin-top:2px;font-weight:400">${d.decisionLayer}</div>
+            </th>
+          `).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${m.products.map((p, pi) => `
+          <tr style="background:${pi % 2 === 0 ? 'var(--panel)' : 'var(--bg)'};">
+            <td style="text-align:left;padding:10px 12px;position:sticky;left:0;background:${pi % 2 === 0 ? 'var(--panel)' : 'var(--bg)'};z-index:1;border-right:2px solid var(--line)">
+              <div style="font-weight:600">${productName(p)}</div>
+              <div style="font-size:10px;color:var(--ink2)">${productMotto(p)}</div>
+            </td>
+            ${m.dimensions.map(d => {
+              const cell = m.cells[p]?.[d.id];
+              if (!cell) return `<td style="padding:8px;text-align:center;border-left:1px solid var(--line);color:var(--ink2)">—</td>`;
+              return `<td style="padding:8px;text-align:center;border-left:1px solid var(--line);cursor:pointer" onclick="openMatrixCell('${p}', '${d.id}')">
+                <div style="display:inline-flex;align-items:center;gap:5px">
+                  <span class="${matrixScoreClass(cell.score)}" style="font-weight:600">${cell.score}</span>
+                </div>
+                <div style="font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.35;max-width:160px;text-align:left">${cell.summary.slice(0, 50)}${cell.summary.length > 50 ? '…' : ''}</div>
+              </td>`;
+            }).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 单一维度深入视图（按当前选中维度展开 9 家） -->
+  <div style="margin-top:24px">
+    ${viewMatrixDimDetail()}
+  </div>
+
+  <div class="pm" style="margin-top:30px">
+    <h3>◉ v3 模块 1 完成度</h3>
+    <div class="row"><b>数据底座</b><p>72 cells 全部填齐（8 维 × 9 家），每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
+    <div class="row"><b>下一批</b><p>① 给部分 cell 补 code snippet（当前 5/72，目标 24/72）② 给部分 cell 补 evidence 截图（当前 0/72，目标 36/72）③ 加"按产品切片"视图（产品画像的前置）</p></div>
+  </div>
+  `;
+}
+
+function viewMatrixDimDetail() {
+  const m = TD_SOURCE_MATRIX;
+  const dim = m.dimensions.find(d => d.id === state.matrixDim) || m.dimensions[0];
+  return `
+  <div class="h2">${dim.name} · 9 家详细对比</div>
+  <p class="sub" style="margin-bottom:14px">${dim.desc}</p>
+  <p style="font-size:12px;color:var(--ink2);margin-bottom:14px"><b>关键问题：</b>${dim.keyQuestion}</p>
+
+  <div class="dim-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px">
+    ${m.products.map(p => {
+      const cell = m.cells[p]?.[dim.id];
+      if (!cell) return '';
+      const productName = P[p]?.name || p;
+      return `
+      <div class="dim-card" style="background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;cursor:pointer" onclick="openMatrixCell('${p}', '${dim.id}')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <b>${productName}</b>
+          <span class="${matrixScoreClass(cell.score)}" style="font-weight:600;font-size:14px;padding:1px 8px">${cell.score}</span>
+        </div>
+        <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${cell.summary}</div>
+        <div style="font-size:11.5px;color:var(--ink2);line-height:1.45;padding-top:6px;border-top:1px dashed var(--line)">
+          <b style="color:var(--accent)">→ MiCo：</b>${cell.forMico}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  `;
+}
+
+function openMatrixCell(p, d) {
+  const m = TD_SOURCE_MATRIX;
+  const cell = m.cells[p]?.[d];
+  const dim = m.dimensions.find(x => x.id === d);
+  const product = P[p];
+  if (!cell) return;
+  state.matrixProduct = p;
+  state.matrixDim = d;
+  const detail = `
+    <div style="background:var(--bg);padding:24px;max-width:780px;width:92vw;border-radius:14px;max-height:90vh;overflow-y:auto;position:relative">
+      <button onclick="closeMatrixCell()" style="position:absolute;right:14px;top:14px;background:transparent;border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer">✕ 关闭</button>
+      <div style="margin-bottom:6px;font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:0.5px">${dim.name} · ${dim.decisionLayer}</div>
+      <h2 style="margin:0 0 6px;font-size:22px">${product?.name || p}</h2>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span class="${matrixScoreClass(cell.score)}" style="font-size:18px;padding:2px 12px;font-weight:600">${cell.score} / 5</span>
+        <span style="color:var(--ink2);font-size:13px">${product?.motto || ''}</span>
+      </div>
+
+      <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">实现摘要</h3>
+      <p style="margin:0;font-size:13.5px;line-height:1.6">${cell.summary}</p>
+
+      ${cell.codeSnippet ? `
+        <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">代码片段</h3>
+        <div style="font-size:11.5px;color:var(--ink2);margin-bottom:6px">${cell.codeSnippet.file}</div>
+        <div class="codepanel" style="border-radius:6px"><pre style="margin:0;font-size:11.5px;line-height:1.5">${cell.codeSnippet.code.replace(/</g, '&lt;')}</pre></div>
+      ` : ''}
+
+      <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">对 MiCo 启示</h3>
+      <p style="margin:0;font-size:13.5px;line-height:1.6;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">${cell.forMico}</p>
+
+      ${product ? `
+        <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">关联</h3>
+        <p style="font-size:12.5px;color:var(--ink2)">${product.oneLiner}</p>
+        <p style="font-size:12px;margin-top:8px">
+          ${TD_OPENWORKER_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_VIBE_KANBAN_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_RAFT_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_RUFLO_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_OPENAGENTS_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          <a href="#/lane/orch" style="color:var(--accent)">→ 板块对比</a>
+        </p>
+      ` : ''}
+    </div>
+  `;
+  const overlay = document.createElement('div');
+  overlay.id = 'matrix-cell-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML = detail;
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeMatrixCell(); });
+  document.body.appendChild(overlay);
+}
+function closeMatrixCell() {
+  const o = document.getElementById('matrix-cell-overlay');
+  if (o) o.remove();
+}
+window.openMatrixCell = openMatrixCell;
+window.closeMatrixCell = closeMatrixCell;
 
 /* ================= 对比工作台 ================= */
 const BENCH_COLORS = ['#c2571b', '#2f5eff', '#20703a', '#7a4fb0', '#b03a3a', '#0e7a7a', '#96730f', '#555'];
@@ -1070,6 +1243,7 @@ function render() {
   else if (state.view === 'playbook' || state.view === 'playbooks') m.innerHTML = viewPlaybook();
   else if (state.view === 'ai-lens') m.innerHTML = viewAiLens();
   else if (state.view === 'product') m.innerHTML = viewProduct();
+  else if (state.view === 'source-matrix') m.innerHTML = viewSourceMatrix();
   else m.innerHTML = viewHome();
   window.scrollTo(0, 0);
 }

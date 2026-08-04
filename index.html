@@ -319,6 +319,10 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/raftDeepDive.js"></script>
 <script src="data/rufloDeepDive.js"></script>
 <script src="data/openagentsDeepDive.js"></script>
+<script src="data/multicaDeepDive.js"></script>
+<script src="data/qmDeepDive.js"></script>
+<script src="data/jiraMeegoDeepDive.js"></script>
+<script src="data/linearDeepDive.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
 const $ = (s, el = document) => el.querySelector(s);
@@ -383,6 +387,10 @@ function renderNav() {
     <button class="nav-item ${on(state.view === 'product' && state.product === 'raft')}" onclick="go('#/product/raft')"><span class="ic">⚏</span>Raft (Slock)<span class="badge-new">新</span></button>
     <button class="nav-item ${on(state.view === 'product' && state.product === 'ruflo')}" onclick="go('#/product/ruflo')"><span class="ic">◉</span>Ruflo (ruvnet)<span class="badge-new">新</span></button>
     <button class="nav-item ${on(state.view === 'product' && state.product === 'openagents')}" onclick="go('#/product/openagents')"><span class="ic">⌬</span>OpenAgents<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'multica')}" onclick="go('#/product/multica')"><span class="ic">▤</span>Multica<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'qm')}" onclick="go('#/product/qm')"><span class="ic">◐</span>QM (公司治理)<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'jira-meego')}" onclick="go('#/product/jira-meego')"><span class="ic">▣</span>Jira / Meego<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'linear')}" onclick="go('#/product/linear')"><span class="ic">◇</span>Linear<span class="badge-new">新</span></button>
   `;
 }
 function go(h) { location.hash = h; }
@@ -410,7 +418,7 @@ function viewHome() {
   </div>
   <div class="pgrid">
     ${TD_PRODUCTS.map(p => `
-      <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
+      <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
         <div class="motto">主语：${p.motto}</div>
         <div class="desc">${p.oneLiner}</div>
@@ -687,6 +695,10 @@ function openMatrixCell(p, d) {
           ${TD_RAFT_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           ${TD_RUFLO_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           ${TD_OPENAGENTS_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_MULTICA_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_QM_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_JIRA_MEEGO_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_LINEAR_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           <a href="#/lane/orch" style="color:var(--accent)">→ 板块对比</a>
         </p>
       ` : ''}
@@ -1128,15 +1140,19 @@ function copyText(text) {
   }
 }
 
-/* ================= 产品深度评测视图（通用模板 · 5 个产品共用）============== */
+/* ================= 产品深度评测视图（通用模板 · 9 个产品共用）============== */
 function viewProduct() {
-  // 5 个产品都走通用模板（vibe-kanban / raft / ruflo / openagents / openworker）
+  // 9 个产品都走通用模板（v3 module 4 补齐：multica/qm/jira-meego/linear）
   const map = {
     'openworker': TD_OPENWORKER_DEEPDIVE,
     'vibe-kanban': TD_VIBE_KANBAN_DEEPDIVE,
     'raft': TD_RAFT_DEEPDIVE,
     'ruflo': TD_RUFLO_DEEPDIVE,
     'openagents': TD_OPENAGENTS_DEEPDIVE,
+    'multica': TD_MULTICA_DEEPDIVE,
+    'qm': TD_QM_DEEPDIVE,
+    'jira-meego': TD_JIRA_MEEGO_DEEPDIVE,
+    'linear': TD_LINEAR_DEEPDIVE,
   };
   const d = map[state.product];
   if (d) return viewDeepDive(d);
@@ -1179,8 +1195,8 @@ function viewDeepDive(d) {
 
   <!-- ② Demo -->
   <div class="dd-section">
-    <h2><span class="num">②</span> Demo · 产品形态示意图</h2>
-    <p class="sub" style="margin-bottom:14px">以下 6 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。</p>
+    <h2><span class="num">②</span> Demo · ${d.isRealScreenshot ? '实机截图' : '产品形态示意图'}</h2>
+    <p class="sub" style="margin-bottom:14px">${d.isRealScreenshot ? '以下 6 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。' : '以下 6 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。'}</p>
     <div class="dd-shot-grid">
       ${d.demoShots.map(s => `
         <div class="dd-shot">
@@ -1188,7 +1204,7 @@ function viewDeepDive(d) {
           <div class="dd-shot-body">
             <div class="dd-shot-cap">${s.caption}</div>
             <div class="dd-shot-note">${s.note}</div>
-            <span class="dd-shot-tag">示意图</span>
+            <span class="dd-shot-tag">${d.isRealScreenshot ? '实机截图' : '示意图'}</span>
           </div>
         </div>
       `).join('')}
@@ -1289,6 +1305,10 @@ function viewProductProfile(id) {
     'raft': TD_RAFT_DEEPDIVE,
     'ruflo': TD_RUFLO_DEEPDIVE,
     'openagents': TD_OPENAGENTS_DEEPDIVE,
+    'multica': TD_MULTICA_DEEPDIVE,
+    'qm': TD_QM_DEEPDIVE,
+    'jira-meego': TD_JIRA_MEEGO_DEEPDIVE,
+    'linear': TD_LINEAR_DEEPDIVE,
   };
   const deepDive = DEEPDIVES[id];
 

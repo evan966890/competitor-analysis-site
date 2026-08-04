@@ -7,46 +7,47 @@ window.TD_QM_DEEPDIVE = {
   productName: 'QM (公司级多 agent 平台)',
   tagline: '用"scope 隔离"把多 agent 协作做成公司级——YC 内部已 50+ 部门用',
   dateAdded: '2026-08-04',
-  isRealScreenshot: true,
+  isRealScreenshot: false,
   source: 'qmapp.ai · GitHub 公开仓库 · Apache 2.0 · YC W26 内部孵化',
-  author: '本台研究团队（基于官网+GitHub+SECURITY.md+实机截图合成）',
+  author: '本台研究团队（基于官网+GitHub+SECURITY.md 合成的"示意图"——QM 公开实机截图均为 dev mode 空页面，无产品功能可参考）',
 
-  // ============ ① DEMO（实机截图）============
+  // ============ ① DEMO（示意图）============
+  // 标注：所有 demo 截图均为基于 QM 公开产品形态合成的"示意图"——QM 公开实机截图均为 dev mode 空页面，无产品功能可参考
   demoShots: [
     {
-      id: 'home',
+      id: 'browse',
       caption: 'BROWSE 资源导航：scope=project/room，无 formal issue 列表',
-      img: 'assets/shots/qm/02-home.png',
+      img: 'assets/shots/qm/schematic-browse.png',
       note: '首页不是"任务列表"——是"scope 资源导航"。每个 scope（project/room）聚合 chats/files/crons/keychain。**这是"公司级"思路**：先分"部门/项目"，再分"工作项"。',
     },
     {
-      id: 'projects',
-      caption: 'Projects 视图：每个 scope 是独立的小型 agent 团队',
-      img: 'assets/shots/qm/03-projects.png',
-      note: 'Project 卡片 = 一个 scope + 一组成员 + 一组 chats + 自己的 keychain 权限。**与 Multica 的 Squad 不同**：Squad 是技术分组，Project 是业务分组。',
-    },
-    {
-      id: 'chats',
+      id: 'chat',
       caption: 'Chats：与 AI teammate 对话的轻量入口（每个 chat 关联 scope）',
-      img: 'assets/shots/qm/04-chats.png',
+      img: 'assets/shots/qm/schematic-chat.png',
       note: 'Chat 列表按 scope 分组。**每次开新 chat 都自动继承 scope 的上下文+权限+memory**。这是"scope 隔离"在 UI 层的体现。',
     },
     {
       id: 'files',
       caption: 'Files：scope 级别的文档/产物仓库，agent 可直接读写',
-      img: 'assets/shots/qm/05-files.png',
+      img: 'assets/shots/qm/schematic-files.png',
       note: 'Files 是 scope 维度的文件存储。**agent 在 scope 内有完整读写权限，跨 scope 隔离**。**比 Linear 的 Document 概念更系统**。',
     },
     {
       id: 'crons',
       caption: 'Crons：scope 级别的定时任务，每个 scope 自己的 cron list',
-      img: 'assets/shots/qm/06-crons.png',
+      img: 'assets/shots/qm/schematic-crons.png',
       note: 'Cron 不是"全平台一个 cron list"——**每个 scope 自己的 cron，agent 在自己 scope 内定时执行**。这是"权限收敛"的关键。',
+    },
+    {
+      id: 'memory',
+      caption: 'Memory：scope 级别的 HNSW 记忆 + 120k 硬上限 + Security 污点',
+      img: 'assets/shots/qm/schematic-memory.png',
+      note: 'Memory 按 scope 隔离（user/project/rule/person 四种 scope chip），120k token / 400 条硬上限，逼着做压缩。**Security 污点传递是 QM 最强创新**。',
     },
     {
       id: 'keychain',
       caption: 'Keychain：Strict/Auto/Dangerous 三姿态——行业最佳实践',
-      img: 'assets/shots/qm/07-keychain.png',
+      img: 'assets/shots/qm/schematic-keychain.png',
       note: 'Keychain 是 QM 的"安全金标准"：每个 scope 配一个 posture，决定 agent 在该 scope 的"自主度"。**MiCo 必须做到同等水平**。',
     },
   ],

@@ -34,14 +34,14 @@ window.TD_PRODUCT_DEMOS = {
     'qm': {
       productId: 'qm',
       productName: 'qm',  // 由 view 端用 P[id].name 覆盖
-      isSchematic: false,
+      isSchematic: true,
       states: [
-        { id: "s1", label: "登录", img: "assets/shots/qm/01-signin.png", note: "点击放大查看原图。" },
-        { id: "s2", label: "App 首页", img: "assets/shots/qm/02-app-home.png", note: "点击放大查看原图。" },
-        { id: "s3", label: "首页", img: "assets/shots/qm/02-home.png", note: "点击放大查看原图。" },
-        { id: "s4", label: "Projects", img: "assets/shots/qm/03-projects.png", note: "点击放大查看原图。" },
-        { id: "s5", label: "Chats", img: "assets/shots/qm/04-chats.png", note: "点击放大查看原图。" },
-        { id: "s6", label: "Files", img: "assets/shots/qm/05-files.png", note: "点击放大查看原图。" }
+        { id: "s1", label: "BROWSE 资源", img: "assets/shots/qm/schematic-browse.png", note: "QM 公开实机截图均为 dev mode 空页面，这是基于公开 docs 合成的\"示意图\"。" },
+        { id: "s2", label: "Chat", img: "assets/shots/qm/schematic-chat.png", note: "QM Chat 示意图——scope 隔离 + 上下文自动继承。" },
+        { id: "s3", label: "Files", img: "assets/shots/qm/schematic-files.png", note: "QM Files per-scope 示意图。" },
+        { id: "s4", label: "Crons", img: "assets/shots/qm/schematic-crons.png", note: "QM Crons per-scope 示意图。" },
+        { id: "s5", label: "Memory", img: "assets/shots/qm/schematic-memory.png", note: "QM Memory 120k 硬上限 + 4 种 scope chip 示意图。" },
+        { id: "s6", label: "Keychain（3 姿态）", img: "assets/shots/qm/schematic-keychain.png", note: "QM Keychain Strict/Auto/Dangerous 三姿态——行业金标准。" }
       ]
     },
     'openclaw': {
@@ -107,14 +107,14 @@ window.TD_PRODUCT_DEMOS = {
     'linear': {
       productId: 'linear',
       productName: 'linear',  // 由 view 端用 P[id].name 覆盖
-      isSchematic: false,
+      isSchematic: true,
       states: [
-        { id: "s1", label: "首页（Cycle+Status）", img: "assets/shots/linear/01-home.jpeg", note: "点击放大查看原图。" },
-        { id: "s2", label: "Features", img: "assets/shots/linear/02-features.jpeg", note: "点击放大查看原图。" },
-        { id: "s3", label: "Linear Method", img: "assets/shots/linear/03-method.jpeg", note: "点击放大查看原图。" },
-        { id: "s4", label: "客户", img: "assets/shots/linear/04-customers.jpeg", note: "点击放大查看原图。" },
-        { id: "s5", label: "定价", img: "assets/shots/linear/05-pricing.jpeg", note: "点击放大查看原图。" },
-        { id: "s6", label: "Linear Agents", img: "assets/shots/linear/06-agents.jpeg", note: "点击放大查看原图。" }
+        { id: "s1", label: "Cycle + Status 看板", img: "assets/shots/linear/schematic-kanban.png", note: "Linear 公开截图均为空登录页，这是基于公开 docs 合成的\"示意图\"——6 列 Cycle 看板。" },
+        { id: "s2", label: "Issue 详情", img: "assets/shots/linear/schematic-issue.png", note: "Issue 详情页示意图——左内容 + 右属性 + Activity feed。" },
+        { id: "s3", label: "Triage 收单", img: "assets/shots/linear/schematic-triage.png", note: "Triage 收单示意图——AI 评估 + 自动 assign。" },
+        { id: "s4", label: "Cycle 节奏", img: "assets/shots/linear/schematic-cycle.png", note: "Cycle 节奏示意图——2 周时间盒 + 团队负载网格。" },
+        { id: "s5", label: "Roadmap", img: "assets/shots/linear/schematic-roadmap.png", note: "Project Roadmap 示意图——Gantt 时间线 + 风险标注。" },
+        { id: "s6", label: "Linear Agents", img: "assets/shots/linear/schematic-agents.png", note: "Linear Agents 示意图——Triage/Cycle Planner/Doc Sync。" }
       ]
     },
     'jira-meego': {

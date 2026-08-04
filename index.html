@@ -347,6 +347,10 @@ const state = {
   profile: 'multica',
   demoIdx: 0,    // 当前 demo state 索引
   demoFilter: 'all',  // 全部 / deep / 浅
+  lastView: null,     // 上一帧的 view，用于判断是否需要滚顶部
+  lastProfile: null,  // 上一帧的 profile
+  lastProduct: null,  // 上一帧的 product
+  lastDemosFilter: null,  // 上一帧的 demos filter
 };
 
 function route() {
@@ -386,7 +390,7 @@ function renderNav() {
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
-    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>27 家 demo 总览<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>27 家视觉导览<span class="badge-new">新</span></button>
     <div class="nav-sec">AI 视角</div>
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
@@ -413,17 +417,24 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v2 升级：横向看任务面板、看完整工作流剧本；让 AI 现场帮你分析；新加入产品按 demo/代码/理念三栏直接评测。</p>
-    <div class="ribbon">v2 · 2026-08-04 升级</div>
+    <p>v3 · 4 层决策支持系统：广度 27 + 深度 9 + 横切 8 维 × 9 家 + 纵切 9 个 lane + 27 家 demo tour</p>
+    <div class="ribbon">v3 · 2026-08-04 收官</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
-      <div><b>${labCount}</b><span>源码专题</span></div>
-      <div><b>${pbCount}</b><span>工作流剧本</span></div>
-      <div><b>${aiCount}</b><span>AI 视角分析</span></div>
-      <div><b>230+</b><span>证据图</span></div>
+      <div><b>9</b><span>深度评测</span></div>
+      <div><b>72</b><span>源码 cell</span></div>
+      <div><b>125</b><span>截图</span></div>
+      <div><b>27</b><span>demo 导览</span></div>
     </div>
   </div>
+
+  <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
+    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 27 个产品，每个带 motto/oneLiner/4 维评分
+    &nbsp;·&nbsp;
+    <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 125 张截图 + 3 家文字 placeholder）
+  </div>
+
   <div class="pgrid">
     ${TD_PRODUCTS.map(p => `
       <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
@@ -433,7 +444,7 @@ function viewHome() {
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
-  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（OpenWorker 已有完整 demo/代码/理念三栏；其他产品正在补齐）。评分来自 2026-08-01/02 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
+  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：8 维评分 + 27 家 demo 缩略图 / 画像页：8 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
 }
 
 /* ================= 板块对比 ================= */
@@ -1284,6 +1295,13 @@ function viewProductGeneric(id) {
     <p>${p.oneLiner}</p>
     <div class="ribbon">主语：${p.motto} · ${p.type}</div>
   </div>
+
+  <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
+    <b>📄 本视图：</b>产品基本页（基础信息 + 8 维评分 + 27 家 demo 缩略图）
+    &nbsp;·&nbsp;
+    <a href="#/profile/${id}" style="color:var(--accent)">→ 切到「产品画像」</a>（8 维源码横切 + lane 摘要）
+  </div>
+
   <div class="h2">8 维度评分</div>
   <table class="rtable">
     <tr>${TD_DIMS.map(([k, n]) => `<th>${n}</th>`).join('')}</tr>
@@ -1398,10 +1416,17 @@ function viewDemosOverview() {
 
   return `
   <div class="hero">
-    <h1>27 家产品 demo 总览</h1>
-    <p>v3 module 5 · 每个产品 3-6 张关键界面截图，点击切 tab 浏览</p>
+    <h1>27 家产品视觉导览</h1>
+    <p>每个产品 3-6 张关键界面截图，点击卡片进产品页切 tab 浏览</p>
     <div class="ribbon">${ids.length} 个产品 · 共 ${ids.reduce((s,id) => s + TD_PRODUCT_DEMOS.demos[id].states.filter(x => x.img).length, 0)} 张截图</div>
   </div>
+
+  <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
+    <b>🖼 本视图：</b>产品视觉导览（带截图）—— 看 UI 形态，4 个 filter 分类浏览
+    &nbsp;·&nbsp;
+    <a href="#/" style="color:var(--accent)">→ 切到「产品索引」</a>（带 4 维评分）
+  </div>
+
   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
     <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 27 家</button>
     <button class="chip ${filter==='deep'?'on':''}" onclick="go('#/demos/deep')">9 深度（已配 deep-dive）</button>
@@ -1420,6 +1445,7 @@ function viewDemosOverview() {
             <b style="font-size:14px">${prod?.name || id}</b>
             <span style="font-size:10px;color:var(--ink2);background:var(--panel);padding:1px 6px;border-radius:8px">${imgCount} 张</span>
             ${DEEP_DIVE_IDS.includes(id) ? '<span class="badge-new" style="font-size:10px">深度</span>' : ''}
+            ${d.isSchematic ? '<span style="font-size:9px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:8px">示意图</span>' : ''}
           </div>
           ${firstImg ? `<img src="${firstImg.img}" loading="lazy" alt="${id}" style="width:100%;border-radius:6px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top">` : `<div style="padding:40px;background:var(--panel);border-radius:6px;color:var(--ink2);text-align:center;font-size:12px">无截图</div>`}
           <div style="font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5">${prod?.oneLiner || ''}</div>
@@ -1479,8 +1505,12 @@ function viewProductProfile(id) {
     <div class="dd-meta">
       <b>主语：</b>${p.motto}<br>
       <b>类型：</b>${p.type}<br>
-      ${deepDive ? `<a href="#/product/${id}" style="color:var(--accent)">→ 查看完整深度评测（demo / 代码 / 哲学）</a><br>` : ''}
     </div>
+  </div>
+
+  <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
+    <b>📋 本视图：</b>产品画像（数据透视）—— 8 维评分 + 8 维源码横切 + lane 摘要 + 综合启示
+    ${deepDive ? `&nbsp;·&nbsp;<a href="#/product/${id}" style="color:var(--accent)">→ 切到「深度评测」</a>（6 张 demo + 3 段 code + philosophy）` : ''}
   </div>
 
   <!-- ① 8 维评分卡 -->
@@ -1614,6 +1644,12 @@ function viewProductProfile(id) {
 function render() {
   renderNav();
   const m = $('#main');
+  // 判断 view 是否真的变化（避免切 demo/prev/next 跳顶部）
+  const viewChanged = state.lastView !== state.view
+    || state.lastProfile !== state.profile
+    || state.lastProduct !== state.product
+    || state.lastDemosFilter !== state.demoFilter;
+
   if (state.view === 'lane') m.innerHTML = viewLane();
   else if (state.view === 'lab') m.innerHTML = viewLab();
   else if (state.view === 'bench') { m.innerHTML = viewBench(); requestAnimationFrame(drawRadar); }
@@ -1625,7 +1661,14 @@ function render() {
   else if (state.view === 'profile') m.innerHTML = viewProductProfile(state.profile);
   else if (state.view === 'demos') m.innerHTML = viewDemosOverview();
   else m.innerHTML = viewHome();
-  window.scrollTo(0, 0);
+
+  if (viewChanged) {
+    window.scrollTo(0, 0);
+    state.lastView = state.view;
+    state.lastProfile = state.profile;
+    state.lastProduct = state.product;
+    state.lastDemosFilter = state.demoFilter;
+  }
 }
 route();
 </script>

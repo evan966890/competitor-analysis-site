@@ -35,6 +35,9 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
   background: var(--accent); color: #fff; margin-left: 4px; vertical-align: middle;
 }
 .nav-sec { color: var(--ink3); font-size: 11px; padding: 14px 8px 6px; letter-spacing: .08em; }
+.btn-mini { padding: 4px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); cursor: pointer; font-size: 12px; }
+.btn-mini:hover { background: var(--accent); color: #fff; }
+.btn-mini:disabled { opacity: 0.4; cursor: not-allowed; }
 .nav-item {
   display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
   color: var(--ink2); cursor: pointer; font-size: 13px; border: none; background: none; width: 100%; text-align: left;
@@ -323,6 +326,7 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/qmDeepDive.js"></script>
 <script src="data/jiraMeegoDeepDive.js"></script>
 <script src="data/linearDeepDive.js"></script>
+<script src="data/productDemos.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
 const $ = (s, el = document) => el.querySelector(s);
@@ -341,6 +345,8 @@ const state = {
   matrixDim: 'state',
   matrixProduct: null,
   profile: 'multica',
+  demoIdx: 0,    // 当前 demo state 索引
+  demoFilter: 'all',  // 全部 / deep / 浅
 };
 
 function route() {
@@ -354,6 +360,7 @@ function route() {
   if (state.view === 'ai-lens' && arg) { state.aiLens.tab = arg; if (arg2) state.aiLens.item = arg2; }
   if (state.view === 'source-matrix' && arg) state.matrixDim = arg;
   if (state.view === 'profile' && arg) state.profile = arg;
+  if (state.view === 'demos') { state.demoIdx = 0; state.demoFilter = arg || 'all'; }
   render();
 }
 window.addEventListener('hashchange', route);
@@ -379,6 +386,7 @@ function renderNav() {
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
+    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>27 家 demo 总览<span class="badge-new">新</span></button>
     <div class="nav-sec">AI 视角</div>
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
@@ -1286,10 +1294,138 @@ function viewProductGeneric(id) {
   <div class="h2">Cons</div>
   <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${x}</li>`).join('')}</ul>
   <div class="callout"><b>对 MiCo：</b>${p.micoNote}</div>
+  ${viewProductDemoSection(id)}
   <div class="pm" style="margin-top:20px">
-    <h3>◉ 这个产品还没有完整 demo/代码/理念评测</h3>
-    <div class="row"><b>已收录内容</b><p>基础信息 + 8 维度评分 + Pros/Cons/启示（来自 v1 数据）。</p></div>
-    <div class="row mico"><b>下一批</b><p>按"产品深度评测"模板补齐 demo 截图、code 片段、philosophy 分析。请到 <a href="https://github.com/andrewyng/openworker" style="color:#9dbcff">产品主页</a> 收集素材后提交。</p></div>
+    <h3>◉ 深度评测</h3>
+    <div class="row"><b>已收录内容</b><p>基础信息 + 8 维度评分 + Pros/Cons/启示（来自 v1 数据）+ 上面 demo 截图总览。</p></div>
+    <div class="row mico"><b>下一批</b><p>若该产品进入"9 深度"队列，会按"产品深度评测"模板补齐 6 段结构（demo×6 / code×3 / philosophy / timeline / verdict）。</p></div>
+  </div>`;
+}
+
+/* ================= 产品 demo section（v3 module 5）============== */
+// 嵌入在 viewProductGeneric 内部。9 deep-dive 优先走 deep-dive 数据；其他走 productDemos。
+function viewProductDemoSection(id) {
+  // 9 deep-dive 优先
+  const DEEPDIVE_DEMOS = {
+    'openworker': TD_OPENWORKER_DEEPDIVE,
+    'vibe-kanban': TD_VIBE_KANBAN_DEEPDIVE,
+    'raft': TD_RAFT_DEEPDIVE,
+    'ruflo': TD_RUFLO_DEEPDIVE,
+    'openagents': TD_OPENAGENTS_DEEPDIVE,
+    'multica': TD_MULTICA_DEEPDIVE,
+    'qm': TD_QM_DEEPDIVE,
+    'jira-meego': TD_JIRA_MEEGO_DEEPDIVE,
+    'linear': TD_LINEAR_DEEPDIVE,
+  };
+
+  let states = [];
+  let isSchematic = false;
+  let source = '';
+
+  if (DEEPDIVE_DEMOS[id]) {
+    // 9 deep-dive 走精细 demo（带 note）
+    const dd = DEEPDIVE_DEMOS[id];
+    states = dd.demoShots.map((s, i) => ({
+      id: s.id,
+      label: s.caption.split('：')[0] || s.caption,
+      img: s.img,
+      note: s.note,
+    }));
+    isSchematic = !dd.isRealScreenshot;
+    source = '深度评测';
+  } else {
+    // 其他 18 家走 productDemos
+    const demo = TD_PRODUCT_DEMOS?.demos?.[id];
+    if (demo && demo.states && demo.states.length > 0) {
+      states = demo.states;
+      isSchematic = demo.isSchematic;
+      source = '总览 demo';
+    }
+  }
+
+  if (states.length === 0) {
+    return `
+    <div class="h2">Demo 截图</div>
+    <div class="callout">该产品暂无实机截图，研究主要基于官网+公开 docs。详见<a href="https://github.com/${id}" style="color:#9dbcff">产品主页</a>。</div>`;
+  }
+
+  // 当前激活 state（每个产品一个 state 索引）
+  if (state.demoIdx >= states.length) state.demoIdx = 0;
+  const cur = states[state.demoIdx];
+  const imgCount = states.filter(s => s.img).length;
+
+  return `
+  <div class="h2">Demo 截图 · ${isSchematic ? '示意图' : '实机截图'} · ${imgCount} 张</div>
+  <p class="sub" style="margin:0 0 10px;font-size:12.5px;color:var(--ink2)">来源：${source}。点 tab 切换不同界面/状态。</p>
+  <div class="demo-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+    ${states.map((s, i) => `
+      <button class="demo-tab ${i === state.demoIdx ? 'on' : ''}" onclick="setDemoIdx(${i})" style="padding:5px 12px;border:1px solid var(--line);border-radius:14px;background:${i === state.demoIdx ? 'var(--accent)' : 'var(--bg)'};color:${i === state.demoIdx ? '#fff' : 'var(--ink)'};cursor:pointer;font-size:12px">
+        ${i + 1}. ${s.label}
+      </button>
+    `).join('')}
+  </div>
+  <div class="demo-current" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px">
+    ${cur.img ? `
+      <img src="${cur.img}" loading="lazy" alt="${cur.label}" onclick="openLB('${cur.img}', '${cur.label.replace(/'/g, "\\'")}', [], '${P[id]?.name || id}')" style="cursor:zoom-in;width:100%;max-width:100%;border-radius:6px;border:1px solid var(--line)">
+    ` : `
+      <div style="padding:60px;text-align:center;background:var(--bg);border-radius:6px;color:var(--ink2)">无截图</div>
+    `}
+    <div style="margin-top:10px;font-size:13px;color:var(--ink)">${cur.note || ''}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:12px">
+      <button class="btn-mini" onclick="demoPrev()" ${state.demoIdx === 0 ? 'disabled' : ''}>← 上一张</button>
+      <span style="color:var(--ink2);align-self:center">${state.demoIdx + 1} / ${states.length}</span>
+      <button class="btn-mini" onclick="demoNext()" ${state.demoIdx === states.length - 1 ? 'disabled' : ''}>下一张 →</button>
+    </div>
+  </div>
+  <div style="text-align:right;margin-top:-8px"><a href="#/demos/all" style="font-size:12px;color:var(--accent)">→ 27 家 demo 总览</a></div>`;
+}
+
+window.setDemoIdx = (i) => { state.demoIdx = i; render(); };
+window.demoPrev = () => { if (state.demoIdx > 0) { state.demoIdx--; render(); } };
+window.demoNext = () => { state.demoIdx++; render(); };
+
+/* ================= 27 家 demo 总览（v3 module 5）============== */
+function viewDemosOverview() {
+  const filter = state.demoFilter || 'all';
+  const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear'];
+  let ids = Object.keys(TD_PRODUCT_DEMOS.demos);
+  if (filter === 'deep') ids = ids.filter(id => DEEP_DIVE_IDS.includes(id));
+  else if (filter === 'shallow') ids = ids.filter(id => !DEEP_DIVE_IDS.includes(id));
+  else if (filter === 'no-shot') ids = ids.filter(id => {
+    const d = TD_PRODUCT_DEMOS.demos[id];
+    return d.states.filter(s => s.img).length === 0;
+  });
+
+  return `
+  <div class="hero">
+    <h1>27 家产品 demo 总览</h1>
+    <p>v3 module 5 · 每个产品 3-6 张关键界面截图，点击切 tab 浏览</p>
+    <div class="ribbon">${ids.length} 个产品 · 共 ${ids.reduce((s,id) => s + TD_PRODUCT_DEMOS.demos[id].states.filter(x => x.img).length, 0)} 张截图</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+    <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 27 家</button>
+    <button class="chip ${filter==='deep'?'on':''}" onclick="go('#/demos/deep')">9 深度（已配 deep-dive）</button>
+    <button class="chip ${filter==='shallow'?'on':''}" onclick="go('#/demos/shallow')">18 浅度（仅 demo）</button>
+    <button class="chip ${filter==='no-shot'?'on':''}" onclick="go('#/demos/no-shot')">3 无截图</button>
+  </div>
+  <div class="demo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+    ${ids.map(id => {
+      const d = TD_PRODUCT_DEMOS.demos[id];
+      const prod = P[id];
+      const imgCount = d.states.filter(s => s.img).length;
+      const firstImg = d.states.find(s => s.img);
+      return `
+        <div class="demo-card" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer" onclick="go('#/product/${id}')">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <b style="font-size:14px">${prod?.name || id}</b>
+            <span style="font-size:10px;color:var(--ink2);background:var(--panel);padding:1px 6px;border-radius:8px">${imgCount} 张</span>
+            ${DEEP_DIVE_IDS.includes(id) ? '<span class="badge-new" style="font-size:10px">深度</span>' : ''}
+          </div>
+          ${firstImg ? `<img src="${firstImg.img}" loading="lazy" alt="${id}" style="width:100%;border-radius:6px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top">` : `<div style="padding:40px;background:var(--panel);border-radius:6px;color:var(--ink2);text-align:center;font-size:12px">无截图</div>`}
+          <div style="font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5">${prod?.oneLiner || ''}</div>
+        </div>
+      `;
+    }).join('')}
   </div>`;
 }
 
@@ -1487,6 +1623,7 @@ function render() {
   else if (state.view === 'product') m.innerHTML = viewProduct();
   else if (state.view === 'source-matrix') m.innerHTML = viewSourceMatrix();
   else if (state.view === 'profile') m.innerHTML = viewProductProfile(state.profile);
+  else if (state.view === 'demos') m.innerHTML = viewDemosOverview();
   else m.innerHTML = viewHome();
   window.scrollTo(0, 0);
 }

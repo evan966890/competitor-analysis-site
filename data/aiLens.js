@@ -132,6 +132,44 @@ window.TD_AILENS = [
     ],
     promptForReplay: '你是企业 AI 产品经理。请对比"个人向 agent 产品"（OpenWorker/OpenClaw/Hermes）和"公司向 agent 产品"（QM/MiCo/Paperclip）。从信任模型、记忆归属、计费方式、治理对象四个维度，列出 3 条最重要的"分水岭"指标。说明"对一家做企业级 agent 平台（如 MiCo），这三个分水岭意味着什么样的护城河与负担"。',
   },
+  {
+    id: 'multi-agent-coding-4way',
+    name: '多 agent 编程的 4 种解法',
+    icon: '◫',
+    mode: 'prebuilt',
+    engine: 'Mavis (MiniMax) · 2026-08-04 基于 Vibe Kanban / Raft / Ruflo / OpenAgents 4 家产品对比',
+    products: ['vibe-kanban', 'raft', 'ruflo', 'openagents'],
+    related: ['orchestration', 'task', 'memory'],
+    summary: '把"多个 AI 程序员同时开工"这件事拆开：隔离（worktree/IM/protocol/agent 边界）、路由（按 task.kind 映射 / @mentions / 5 拓扑 / capability 注册）、记忆（无 / 私有 SQLite / HNSW+SONA / 外部 RAG）、合并（人工 PR / 外部 git / Queen 自动合码 / 无）。4 家走出了 4 条互不重叠的路。',
+    sections: [
+      {
+        h: '一、4 种"开箱就组队"路线',
+        p: '**Vibe Kanban**：Web/TUI 双端 + 6 个 coding agent 预集成 + Git Worktree 物理隔离。最直白，专做"编程"一件事。14.2k stars 印证"多 agent 同时干"是 2025-2026 硬需求。',
+        p: '**Raft**：Slack 体感 + 外部 agent 通过 webhook 挂进 channel。不预制 agent，runtime 留给用户。最易上手，5 行命令挂进你已经跑着的 Claude/Codex。',
+        p: '**Ruflo**：`npx ruflo init` 一行命令 + Claude Code 自动获得 100+ specialist + 5 swarm 拓扑 + HNSW 记忆 + SONA 自学习。能力最满，但 CLI + 314 工具 = 配置爆炸。',
+        p: '**OpenAgents**：自研 Network 协议 + 3 内置 agent (data/plugin/web) + 200+ 第三方插件。HKU 学术派严谨，Apache 2.0 + 自部署。',
+      },
+      {
+        h: '二、隔离机制的本质差别',
+        p: '**VK = 物理隔离**（每个 task 一个 worktree，6 个 agent 改同一 repo 不打架）\n\n**Raft = 频道隔离**（不同 thread 跑不同事，channel 级权限）\n\n**Ruflo = 拓扑隔离**（hierarchical/mesh/ring/star/adaptive 5 种 swarm 模式）\n\n**OpenAgents = 协议隔离**（agent-to-agent 消息 + 注册 + 路由）',
+        p: '**取舍**：物理隔离 = 最强 + 最浪费资源；频道隔离 = 最自然 + 容易 context 泄漏；拓扑隔离 = 最灵活 + 配置复杂；协议隔离 = 最标准 + 学术味重。',
+      },
+      {
+        h: '三、记忆与合并——4 家做了 4 件事',
+        p: '**记忆**：VK 无（fresh start）/ Raft 私有 SQLite（agent 各自记住自己的）/ Ruflo HNSW+SONA（共享 + 自学）/ OpenAgents 无（靠外部 RAG 插件）',
+        p: '**合并**：VK 人工 PR（worktree 各自分支）/ Raft 外部 git（thread close 后续靠 git）/ Ruflo Queen 自动合码（hierarchical 拓扑）/ OpenAgents 无内置',
+        p: '**结论**：Ruflo 在"记忆+合并"两栏都领先，是 4 家里"工程化最完整"的；其他 3 家各有所长但都把这两件事留给人或外部工具。',
+      },
+      {
+        h: '四、对 MiCo 的 4 条启示',
+        p: '**① 隔离 = 必学 VK**：每虾=独立工作目录（worktree 范式），保证多虾并行改同一资产不冲突。这是最便宜的护城河，1 周可落地。',
+        p: '**② 路由 = 学 Ruflo 部分**：5 拓扑全做没必要，做 2-3 种（hierarchical + mesh + adaptive）够用。避免配置爆炸。',
+        p: '**③ 记忆 = 必须达 Ruflo 水平**：HNSW 索引 + SONA 自学习（成功轨迹→下次直接抄）。这是 2026 最低标准，MiCo Assets（1067 节点图谱）应升级为 HNSW + 自学习回路。',
+        p: '**④ 合并 = 必学 Ruflo Queen**：MiCo 应有"Queen 虾"角色——任务派给 Worker 虾，Queen 虾自动收集产出、整合 PR。这是 MiCo 区别于其他 3 家的最大机会。',
+      },
+    ],
+    promptForReplay: '你是 AI 平台分析师。Vibe Kanban / Raft / Ruflo / OpenAgents 都是 2026 年"多 agent 编程平台"。请从以下 5 个维度对比：\n1. 接入门槛（一行命令 / 5 行命令 / wizard / 文档）\n2. 隔离机制（worktree / channel / topology / protocol）\n3. 记忆方式（无 / 私有 / HNSW+自学习 / 外部 RAG）\n4. 合并能力（人工 PR / 外部 git / Queen 自动 / 无）\n5. 用户群体（个人/小团队 / 团队协作 / 技术极客 / 学术）\n\n对每家给出一句话定位 + 一句话护城河 + 一句话弱点。结尾写"对一家做企业级 agent 平台（如 MiCo），3 条最重要的启示"。',
+  },
 ];
 
 // ================= 复制 prompt 模板 =================

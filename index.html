@@ -314,6 +314,10 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/playbooks.js"></script>
 <script src="data/aiLens.js"></script>
 <script src="data/openworkerDeepDive.js"></script>
+<script src="data/vibekanbanDeepDive.js"></script>
+<script src="data/raftDeepDive.js"></script>
+<script src="data/rufloDeepDive.js"></script>
+<script src="data/openagentsDeepDive.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
 const $ = (s, el = document) => el.querySelector(s);
@@ -364,6 +368,10 @@ function renderNav() {
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
     <button class="nav-item ${on(state.view === 'product' && state.product === 'openworker')}" onclick="go('#/product/openworker')"><span class="ic">⚐</span>OpenWorker (吴恩达)<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'vibe-kanban')}" onclick="go('#/product/vibe-kanban')"><span class="ic">▦</span>Vibe Kanban<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'raft')}" onclick="go('#/product/raft')"><span class="ic">⚏</span>Raft (Slock)<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'ruflo')}" onclick="go('#/product/ruflo')"><span class="ic">◉</span>Ruflo (ruvnet)<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'openagents')}" onclick="go('#/product/openagents')"><span class="ic">⌬</span>OpenAgents<span class="badge-new">新</span></button>
   `;
 }
 function go(h) { location.hash = h; }
@@ -391,7 +399,7 @@ function viewHome() {
   </div>
   <div class="pgrid">
     ${TD_PRODUCTS.map(p => `
-      <div class="card pcard ${p.id === 'openworker' ? 'new' : ''}" onclick="go('#/product/${p.id}')">
+      <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
         <div class="motto">主语：${p.motto}</div>
         <div class="desc">${p.oneLiner}</div>
@@ -645,6 +653,30 @@ const TASK_SHOTS = {
     detail: { img: 'assets/shots/openworker/02_task_execution.jpg', cap: '单步详情：tool call 卡片 + 输出预览（无独立 task 详情页）' },
     status: { img: 'assets/shots/openworker/02_task_execution.jpg', cap: '状态：隐式（步骤序号），无独立状态机' },
   },
+  'vibe-kanban': {
+    home: { img: 'assets/shots/vibe-kanban/01_kanban_board.jpg', cap: 'Vibe Kanban 主看板：Backlog/Active/Review/Done 四列卡片流' },
+    list: { img: 'assets/shots/vibe-kanban/01_kanban_board.jpg', cap: '看板：每张卡=一个 coding 任务，标注 agent 类型 + worktree 分支' },
+    detail: { img: 'assets/shots/vibe-kanban/02_task_execution.jpg', cap: '任务详情：左 diff / 中 step 链 / 右 agent 队列' },
+    status: { img: 'assets/shots/vibe-kanban/04_terminal_ui.jpg', cap: 'TUI 实时：右侧 3 agent 进度条（Claude 87% / Codex 42% / Amp 0%）' },
+  },
+  raft: {
+    home: { img: 'assets/shots/raft/01_channel_home.jpg', cap: 'Raft 频道首页：人和 agent 混编 chat-thread 视图' },
+    list: { img: 'assets/shots/raft/05_tasks_kanban.jpg', cap: 'Tasks 看板：人和 agent 在同一 Kanban 上' },
+    detail: { img: 'assets/shots/raft/02_thread_conversation.jpg', cap: 'Thread 详情：3 agent 协作 + inline task 派生' },
+    status: { img: 'assets/shots/raft/05_tasks_kanban.jpg', cap: '状态：To Do / In Progress / Done（task 派生自 thread）' },
+  },
+  ruflo: {
+    home: { img: 'assets/shots/ruflo/01_swarm_dashboard.jpg', cap: 'Ruflo 主控台：Queen + 12 Worker 的 swarm 可视化' },
+    list: { img: 'assets/shots/ruflo/01_swarm_dashboard.jpg', cap: '任务列表=swarm 中的 agent 活动（不是 Kanban，是 mesh）' },
+    detail: { img: 'assets/shots/ruflo/03_swarm_topology.jpg', cap: '任务详情：5 拓扑选择 + 共识算法配置' },
+    status: { img: 'assets/shots/ruflo/04_memory_vector.jpg', cap: '状态：SONA 自学习 + HNSW 记忆（任务完成自动 add 记忆）' },
+  },
+  openagents: {
+    home: { img: 'assets/shots/openagents/01_network_home.jpg', cap: 'OpenAgents Network 首页：3 内置 agent + 200+ 插件' },
+    list: { img: 'assets/shots/openagents/01_network_home.jpg', cap: '任务列表=network 中 agent 的 recent tasks' },
+    detail: { img: 'assets/shots/openagents/02_data_agent_chat.jpg', cap: '任务详情：Data Agent 自然语言→SQL→图表' },
+    status: { img: 'assets/shots/openagents/03_network_protocol.jpg', cap: '状态：消息协议层（agent-to-agent 异步）' },
+  },
   openclaw: {
     home: { img: 'assets/shots/openclaw/01-home.png', cap: 'OpenClaw Chat：把 20+ IM 收编成自己的前厅' },
     list: { img: 'assets/shots/openclaw/12-agents.png', cap: 'agents 列表：个人助理的多开与分工' },
@@ -878,15 +910,22 @@ function copyText(text) {
   }
 }
 
-/* ================= 产品深度评测视图（新增 · OpenWorker）============== */
+/* ================= 产品深度评测视图（通用模板 · 5 个产品共用）============== */
 function viewProduct() {
-  // 当前只有 openworker 完整数据；其他产品展示基础信息 + "评测筹备中"
-  if (state.product === 'openworker') return viewOpenWorkerDeepDive();
+  // 5 个产品都走通用模板（vibe-kanban / raft / ruflo / openagents / openworker）
+  const map = {
+    'openworker': TD_OPENWORKER_DEEPDIVE,
+    'vibe-kanban': TD_VIBE_KANBAN_DEEPDIVE,
+    'raft': TD_RAFT_DEEPDIVE,
+    'ruflo': TD_RUFLO_DEEPDIVE,
+    'openagents': TD_OPENAGENTS_DEEPDIVE,
+  };
+  const d = map[state.product];
+  if (d) return viewDeepDive(d);
   return viewProductGeneric(state.product);
 }
 
-function viewOpenWorkerDeepDive() {
-  const d = TD_OPENWORKER_DEEPDIVE;
+function viewDeepDive(d) {
   const p = P[d.productId];
   return `
   <div class="dd-hero">
@@ -959,7 +998,7 @@ function viewOpenWorkerDeepDive() {
     <h2><span class="num">④</span> Philosophy · 产品理念</h2>
     <h3>核心问题</h3>
     <p>${d.philosophy.coreQuestion.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
-    <h3>吴恩达的回答</h3>
+    <h3>产品方的回答</h3>
     <p>${d.philosophy.answer.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
     <h3>问题诊断</h3>
     <ul>${d.philosophy.problemDiagnosis.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
@@ -990,7 +1029,7 @@ function viewOpenWorkerDeepDive() {
   <div class="pm" style="margin-top:30px">
     <h3>◉ 这个评测页是"产品深度评测"模板的第一个实例</h3>
     <div class="row"><b>模板结构</b><p>① 概览 ② Demo ③ Code ④ Philosophy ⑤ Timeline ⑥ Verdict。任何新产品按这个 schema 填齐即可独立成页。</p></div>
-    <div class="row mico"><b>下一批</b><p>Mavis（MiniMax 升级版）/ Hermes / QoderWake / Cabinet——优先选"形态与 MiCo 同向/反向"的产品，模板可复用率高。</p></div>
+    <div class="row mico"><b>下一批</b><p>JoyAgent（京东云）/ Manus / TARS（字节）/ Genspark——优先选"形态与 MiCo 同向/反向"的产品，模板可复用率高。</p></div>
   </div>`;
 }
 

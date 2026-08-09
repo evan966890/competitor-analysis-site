@@ -350,6 +350,9 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/promptfooDeepDive.js"></script>
 <script src="data/inspect-evalsDeepDive.js"></script>
 <script src="data/evalscopeDeepDive.js"></script>
+<script src="data/github-copilot-cliDeepDive.js"></script>
+<script src="data/openai-agents-sdkDeepDive.js"></script>
+<script src="data/openai-realtime-agentsDeepDive.js"></script>
 <script>
 (() => {
   const files = [
@@ -447,7 +450,7 @@ function renderNav() {
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
     <button class="nav-item ${on(state.view == 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>9 维 × 152 家矩阵<span class="badge-new">v3.3</span></button>
-    <div class="nav-sec">产品画像（33 家）</div>
+    <div class="nav-sec">产品画像（36 家）</div>
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
@@ -482,20 +485,20 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 33 + 骨架 124 + 横切 9 维 × 152 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
-    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架 · 2026-08-10 深度 5 L 层 + 15 次重要项目</div>
+    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 36 + 骨架 123 + 横切 9 维 × 159 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
+    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架 · 2026-08-10 深度 5 L 层 + 15 次重要 + 3 闭源</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
-      <div><b>33</b><span>深度评测</span></div>
-      <div><b>1368</b><span>源码 cell</span></div>
-      <div><b>149</b><span>截图</span></div>
+      <div><b>36</b><span>深度评测</span></div>
+      <div><b>1431</b><span>源码 cell</span></div>
+      <div><b>152</b><span>截图</span></div>
       <div><b>168</b><span>demo 导览</span></div>
     </div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
-    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（33 深度 + 124 论文骨架 + 11 历史），每个带 motto/oneLiner/4 维评分
+    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（36 深度 + 123 论文骨架 + 9 历史），每个带 motto/oneLiner/4 维评分
     &nbsp;·&nbsp;
     <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 134 张截图 + 3 家文字 placeholder）
   </div>
@@ -515,13 +518,15 @@ function viewHome() {
 /* ================= 板块对比 ================= */
 function viewLane() {
   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
-  // 33 家重点产品（按 deep 顺序）
+  // 36 家重点产品（按 deep 顺序）
   const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork','wanuai',
     // v3.3 深度 5 L 层 + 15 次重要项目
     'opencode','claude-code','codex-cli','openhands','deepagents',
     'langfuse','litellm','daytona','e2b','autogen','langgraph',
     'swe-bench','github-spec-kit','rules-directories','claude-mem','planning-with-files',
-    'mcp','promptfoo','inspect-evals','evalscope'];
+    'mcp','promptfoo','inspect-evals','evalscope',
+    // v3.3 闭源/官方 3 个（GitHub README 公开，闭源 SaaS 实操待用户登录）
+    'github-copilot-cli','openai-agents-sdk','openai-realtime-agents'];
   const deepItems = l.items.filter(it => DEEP_DIVE_IDS_LANE.includes(it.p));
   const otherItems = l.items.filter(it => !DEEP_DIVE_IDS_LANE.includes(it.p));
   const hasDecisions = l.decisions && l.decisions.length > 0;
@@ -541,7 +546,7 @@ function viewLane() {
   ` : ''}
 
   <!-- 中部：33 家深度产品对比（按 deep 33 顺序）-->
-  <div class="h2">33 家深度产品横向对比</div>
+  <div class="h2">36 家深度产品横向对比</div>
   <div class="rail">
     ${deepItems.map((it, i) => `
       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -558,7 +563,7 @@ function viewLane() {
   ${otherItems.length > 0 ? `
   <!-- 其他产品（背景参考）-->
   <details style="margin-top:18px">
-    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 33 家深度）</summary>
+    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 36 家深度）</summary>
     <div class="rail" style="margin-top:8px">
       ${otherItems.map(it => `
         <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -646,13 +651,13 @@ function viewSourceMatrix() {
 
   return `
   <div class="hero" style="padding-bottom:18px">
-    <h1>9 维 × 152 家源码对比矩阵</h1>
-    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>9 个维度 × 152 家产品 = 1368 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <h1>9 维 × 159 家源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>9 个维度 × 159 家产品 = 1431 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
     <div class="ribbon">96 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
   </div>
 
   <div class="callout" style="margin-bottom:18px">
-    <b>怎么看：</b>行 = 33 家深度 + 124 家骨架，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
+    <b>怎么看：</b>行 = 36 家深度 + 123 家骨架，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
     评分越高 = 该维度做得越深。${m.meta.note}
   </div>
 

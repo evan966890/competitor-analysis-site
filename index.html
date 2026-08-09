@@ -394,7 +394,7 @@ function renderNav() {
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
-    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>29 家视觉导览<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>30 家视觉导览<span class="badge-new">新</span></button>
     <div class="nav-sec">AI 视角</div>
     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
     <div class="nav-sec">产品深度评测</div>
@@ -452,7 +452,7 @@ function viewHome() {
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
-  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：8 维评分 + 29 家 demo 缩略图 / 画像页：8 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
+  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：8 维评分 + 30 家 demo 缩略图 / 画像页：8 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
 }
 
 /* ================= 板块对比 ================= */
@@ -1313,7 +1313,7 @@ function viewProductGeneric(id) {
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
-    <b>📄 本视图：</b>产品基本页（基础信息 + 8 维评分 + 27 家 demo 缩略图）
+    <b>📄 本视图：</b>产品基本页（基础信息 + 8 维评分 + 30 家 demo 缩略图）
     &nbsp;·&nbsp;
     <a href="#/profile/${id}" style="color:var(--accent)">→ 切到「产品画像」</a>（8 维源码横切 + lane 摘要）
   </div>
@@ -1415,14 +1415,14 @@ function viewProductDemoSection(id) {
       <button class="btn-mini" onclick="demoNext()" ${state.demoIdx === states.length - 1 ? 'disabled' : ''}>下一张 →</button>
     </div>
   </div>
-  <div style="text-align:right;margin-top:-8px"><a href="#/demos/all" style="font-size:12px;color:var(--accent)">→ 27 家 demo 总览</a></div>`;
+  <div style="text-align:right;margin-top:-8px"><a href="#/demos/all" style="font-size:12px;color:var(--accent)">→ 30 家 demo 总览</a></div>`;
 }
 
 window.setDemoIdx = (i) => { state.demoIdx = i; render(); };
 window.demoPrev = () => { if (state.demoIdx > 0) { state.demoIdx--; render(); } };
 window.demoNext = () => { state.demoIdx++; render(); };
 
-/* ================= 27 家 demo 总览（v3 module 5）============== */
+/* ================= 30 家 demo 总览（v3 module 5）============== */
 function viewDemosOverview() {
   const filter = state.demoFilter || 'all';
   const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'];
@@ -1436,7 +1436,7 @@ function viewDemosOverview() {
 
   return `
   <div class="hero">
-    <h1>27 家产品视觉导览</h1>
+    <h1>${Object.keys(TD_PRODUCT_DEMOS.demos).length} 家产品视觉导览</h1>
     <p>每个产品 3-6 张关键界面截图，点击卡片进产品页切 tab 浏览</p>
     <div class="ribbon">${ids.length} 个产品 · 共 ${ids.reduce((s,id) => s + TD_PRODUCT_DEMOS.demos[id].states.filter(x => x.img).length, 0)} 张截图</div>
   </div>
@@ -1448,9 +1448,9 @@ function viewDemosOverview() {
   </div>
 
   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
-    <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 29 家</button>
-    <button class="chip ${filter==='deep'?'on':''}" onclick="go('#/demos/deep')">12 深度（已配 deep-dive）</button>
-    <button class="chip ${filter==='shallow'?'on':''}" onclick="go('#/demos/shallow')">17 浅度（仅 demo）</button>
+    <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 ${Object.keys(TD_PRODUCT_DEMOS.demos).length} 家</button>
+    <button class="chip ${filter==='deep'?'on':''}" onclick="go('#/demos/deep')">${DEEP_DIVE_IDS.length} 深度（已配 deep-dive）</button>
+    <button class="chip ${filter==='shallow'?'on':''}" onclick="go('#/demos/shallow')">${Object.keys(TD_PRODUCT_DEMOS.demos).length - DEEP_DIVE_IDS.length} 浅度（仅 demo）</button>
     <button class="chip ${filter==='no-shot'?'on':''}" onclick="go('#/demos/no-shot')">无截图</button>
   </div>
   <div class="demo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">

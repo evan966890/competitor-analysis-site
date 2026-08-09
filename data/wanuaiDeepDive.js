@@ -1,7 +1,8 @@
 // 万有无界 深度评测（v3 扩展 · 2026-08-10 入库）
-// 复用 6 段 schema：demo×6 / code×3 / philosophy / timeline / conclusion
+// 复用 6 段 schema：demo×9 / code×3 / philosophy / timeline / conclusion
 // 来源：work.wanuai.cn 实机登录（用户阿里云账号 SSO）+ 9 张 dashboard 截图 + accessibility tree
 // 标注：9 张截图均为本机实拍（用户 Chrome 自动登录 dashboard），全部一手证据
+// 闭源产品：code 段为基于 UI/accessibility tree 行为推断的 TypeScript 接口（已标 [推断]）
 window.TD_WANUAI_DEEPDIVE = {
   productId: 'wanuai',
   productName: '万有无界',

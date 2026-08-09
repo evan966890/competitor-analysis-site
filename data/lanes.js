@@ -236,6 +236,12 @@ window.TD_LANES = [
             "d": "Studio 是对 DSL 的上层配置入口，但这张官方空态截图不能证明真实生产运行量；本网站仅将它作为信息架构证据。"
           }
         ]
+      },
+      {
+        "p": "buzz",
+        "img": "assets/shots/buzz/04-relay-metrics-实跑.png",
+        "caption": "Buzz：编排=签名事件流——Agent 用自己的密钥派活/接活/审查，relay 是唯一真相源",
+        "hot": []
       }
     ],
     "decisions": [
@@ -431,12 +437,22 @@ window.TD_LANES = [
         "img": "assets/shots/feishu-codem/01-home.jpeg",
         "caption": "飞书 CodeM：Bot/群聊发起研发任务，进度卡片回写",
         "hot": []
+      },
+      {
+        "p": "buzz",
+        "img": "assets/shots/buzz/01-landing-人机协作工作空间.png",
+        "caption": "Buzz：频道=权限边界，人+Agent 在同一签名事件流里对话——Agent 是成员不是 bot",
+        "hot": []
       }
     ],
     "decisions": [
       {
         "verdict": "学 Raft (频道混编)",
         "why": "频道混编（人 + agent 在同一 channel）是 2026 标配。MiCo 虾应支持飞书/Slack/企微双向，IM 既是入口也是上下文容器。"
+      },
+      {
+        "verdict": "学 Buzz (签名事件流)",
+        "why": "Buzz 把频道消息、Git patch、代码审查压进同一条 Nostr 签名事件流——IM 不只是入口，是可审计的信任载体。MiCo 高保密场景可借鉴：虾的关键动作落成签名事件。"
       },
       {
         "verdict": "学 OpenWorker (双向触发)",
@@ -729,6 +745,12 @@ window.TD_LANES = [
         "hot": []
       },
       {
+        "p": "qoderwork",
+        "img": "assets/shots/qoderwork/02-能力市场.png",
+        "caption": "QoderWork 能力市场：可安装的桌面级技能——与 QoderWake 共享同一市场，一个市场喂两个产品形态",
+        "hot": []
+      },
+      {
         "p": "mico",
         "img": "assets/shots/mico/N05-Featured精选.jpeg",
         "caption": "MiCo 精选：专家/技能/连接器——零件铺待升级成整机店",
@@ -800,6 +822,18 @@ window.TD_LANES = [
         "p": "cabinet",
         "img": "assets/shots/cabinet/14-app-launched.png",
         "caption": "Cabinet 明示风险：agents 以 --dangerously-skip-permissions 全权限运行",
+        "hot": []
+      },
+      {
+        "p": "buzz",
+        "img": "assets/shots/buzz/03-relay运行-health.png",
+        "caption": "Buzz buzz-audit：每个落库事件镜像成 SHA-256 链式审计条目（per-community 独立链，verify_chain 篡改检测）",
+        "hot": []
+      },
+      {
+        "p": "qoderwake",
+        "img": "assets/shots/codewaker/06-创建自动任务.png",
+        "caption": "QoderWake 自动任务挂审批门禁 + 独立权限环境（本机/云端沙箱）",
         "hot": []
       }
     ],

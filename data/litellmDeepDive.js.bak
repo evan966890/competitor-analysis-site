@@ -18,7 +18,7 @@ window.TD_LITELLM_DEEPDIVE = {
       id: 'gh-readme',
       caption: 'GitHub README：LiteLLM · 16k+ stars · MIT',
       img: 'assets/shots/paper2/p2-litellm-1.jpg',
-      note: '**LiteLLM** —— 论文 G 层 14 个项目中 "LLM gateway" 路线的代表，**"100+ LLMs, 1 API"** 是不绑死 model provider 的关键基础设施。**',
+      note: '****LiteLLM** —— 论文 G 层 14 个项目中 "LLM gateway" 路线的代表，**"100+ LLMs, 1 API"** 是不绑死 model provider 的关键基础设施。**',
     },
     {
       id: 'topics',
@@ -59,8 +59,8 @@ window.TD_LITELLM_DEEPDIVE = {
       file: 'litellm/core/*.{ts,py,go,rs} (论文定位)',
       code: `// LiteLLM 在 G 层的核心抽象
 // 论文定位：**LiteLLM** —— 论文 G 层 14 个项目中 "LLM gateway" 路线的代表，**"100+ LLMs, 1 API"** 是不绑死 model provider 的关键基础设施。
-// **统一 API** — "litellm.completion(model=gpt-4o, messages=[...])" 一行覆盖 100+ 模型。
-// **Proxy 模式** — "litellm --model gpt-4o --model claude-sonnet-4-5" 起一个 OpenAI-compatible server，**老代码零修改**。
+// **统一 API** — `litellm.completion(model="gpt-4o", messages=[...])` 一行覆盖 100+ 模型。
+// **Proxy 模式** — `litellm --model gpt-4o --model claude-sonnet-4-5` 起一个 OpenAI-compatible server，**老代码零修改**。
 
 interface LiteLLMCore {
   // 5 个关键 API
@@ -70,8 +70,8 @@ interface LiteLLMCore {
 }`,
       points: [
         '**LiteLLM 的核心抽象是论文 G 层代表** —— **LiteLLM** —— 论文 G 层 14 个项目中 "LLM gateway" 路线的代表，**"100+ LLMs, 1 API"** 是不绑死 model provider 的关键基础设施。',
-        '**统一 API** — "litellm.completion(model=gpt-4o, messages=[...])" 一行覆盖 100+ 模型。**',
-        '**Proxy 模式** — "litellm --model gpt-4o --model claude-sonnet-4-5" 起一个 OpenAI-compatible server，**老代码零修改**。**',
+        '****统一 API** — `litellm.completion(model="gpt-4o", messages=[...])` 一行覆盖 100+ 模型。**',
+        '****Proxy 模式** — `litellm --model gpt-4o --model claude-sonnet-4-5` 起一个 OpenAI-compatible server，**老代码零修改**。**',
         '**MiCo 对照**：见 conclusion.forMico。',
       ],
     },
@@ -89,8 +89,8 @@ class LiteLLMFeature {
   // ...
 }`,
       points: [
-        '**Routing + Fallback** — 内置 load balancing / fallback / retry / circuit breaker。**',
-        '**Cost tracking** — 每一次调用记录 cost / token / latency，**团队 dashboard 一目了然**。**',
+        '****Routing + Fallback** — 内置 load balancing / fallback / retry / circuit breaker。**',
+        '****Cost tracking** — 每一次调用记录 cost / token / latency，**团队 dashboard 一目了然**。**',
       ],
     },
     {
@@ -127,8 +127,7 @@ pip install litellm`,
       "**统一 API** — `litellm.completion(model=\"gpt-4o\", messages=[...])` 一行覆盖 100+ 模型。",
       "**Proxy 模式** — `litellm --model gpt-4o --model claude-sonnet-4-5` 起一个 OpenAI-compatible server，**老代码零修改**。",
       "**Routing + Fallback** — 内置 load balancing / fallback / retry / circuit breaker。",
-      "**Cost tracking** — 每一次调用记录 cost / token / latency，**团队 dashboard 一目了然**。",
-      "****SDK 兼容** — 现有 OpenAI / Anthropic 代码零修改迁移到 LiteLLM。**"
+      "**Cost tracking** — 每一次调用记录 cost / token / latency，**团队 dashboard 一目了然**。"
 ],
     differentiationMatrix: [
       "vs OpenRouter — OpenRouter 是 SaaS 路由；LiteLLM 是 OSS proxy + SaaS 双部署。**LiteLLM 强在自托管**。",
@@ -174,6 +173,6 @@ pip install litellm`,
         error: 3,
         observability: 3,
         deployment: 5,
-        governance: 5 ,
+        governance: 5 ⭐,
   },
 };

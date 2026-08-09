@@ -127,8 +127,7 @@ pip install e2b`,
       "**Cloud sandbox** — 不是 on-prem，是 cloud，**用户零部署**。",
       "**AI agent first** — 不是给 DevOps，是给 AI agent，**microVM 预热**。",
       "**Sub-second cold start** — microVM 池 + 快照，**新 sandbox < 1s 启动**。",
-      "**多语言 runtime** — Python / Node / Go / Rust 预制 runtime 镜像。",
-      "****Cloud-only by design** — 不支持 self-host，强制云端 + 多用户隔离。**"
+      "**多语言 runtime** — Python / Node / Go / Rust 预制 runtime 镜像。"
 ],
     differentiationMatrix: [
       "vs Daytona — Daytona 是 AI-first 但 2026-06 转向；**E2B 仍在 OSS-first 路线**。",
@@ -169,7 +168,7 @@ pip install e2b`,
         scheduling: 3,
         memory: 3,
         mcp: 3,
-        sandbox: 5 ,
+        sandbox: 5 ⭐,
         error: 4,
         observability: 4,
         deployment: 3,

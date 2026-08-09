@@ -28,7 +28,7 @@ window.TD_CLAUDECODE_DEEPDIVE = {
       id: 'gh-commands',
       caption: '.claude/commands：slash command 体系（GitHub 已知用法）',
       img: 'assets/shots/paper/claudecode-gh-1.jpg',
-      note: '**`.claude/commands/` 目录** —— CC 用户的标准扩展点：`/commit`、`/review`、`/test` 等都是这个目录里的 markdown 文件触发。**这是 CC 普及度比 OpenCode 高的核心原因**：slash command 让非程序员也能用。**对比 OpenCode 没有 slash command 暴露给用户**，门槛高一档。',
+      note: '**`.claude/commands/` 目录** —— CC 用户的标准扩展点：/commit、/review、/test 等都是这个目录里的 markdown 文件触发。**这是 CC 普及度比 OpenCode 高的核心原因**：slash command 让非程序员也能用。**对比 OpenCode 没有 slash command 暴露给用户**，门槛高一档。',
     },
     {
       id: 'gh-devcontainer',
@@ -146,9 +146,10 @@ claude> /commit
     ],
     designPrinciples: [
       '**plugin-as-directory** — 不是单文件，是带 SKILL.md + version + author 的结构化目录。',
-      '**slash command-first** — 用户的入口是 `/commit` `/review` `/test`，不是 `Task(subagent_type=...)`。',
+      '**slash command-first** — 用户的入口是 /commit /review /test，不是 `Task(subagent_type=...)`。',
       '**MCP first-class** — `.mcp.json` 是项目的"tool 清单"，agent 启动时自动接入。',
       '**anthropic 主导 review** — 56 contributors + bot 只跑 changelog，核心逻辑仍由人 review。',
+      "****V3 plan-mode from day 1** — spec/plan/tasks/implement 强制 4 阶段，agent 不能跳过规划。**",
     ],
     differentiationMatrix: [
       { vs: 'OpenCode', diff: 'OC 是 LSP + subagent + 多端；CC 是 plugin + slash + MCP + TUI。**OC 强在架构，CC 强在生态**。' },
@@ -167,7 +168,8 @@ claude> /commit
     { date: '2025-08', event: 'MCP 协议发布，CC 第一个深度集成' },
     { date: '2025-12', event: 'devcontainer 集成 + plugin marketplace GA' },
     { date: '2026-05', event: '论文 Agent Harness Engineering 收录' },
-    { date: '2026-08', event: '141k stars，CHANGELOG.md 2 days ago 持续滚动' },
+    { date: '2026-08', event: '141k stars，CHANGELOG.md 2 days ago 持续滚动' },,
+      "****V3 plan-mode from day 1** — spec/plan/tasks/implement 强制 4 阶段，agent 不能跳过规划。**"
   ],
 
   // ============ ⑤ CONCLUSION ============
@@ -175,7 +177,7 @@ claude> /commit
     summary: '**Claude Code** 是 L 层 47 个项目中生态最完整的一个 —— plugin + slash + MCP + devcontainer 四件套。**对 MiCo 的核心启示：plugin 体系 + MCP 集成 + slash command 暴露** 是 anthropic 在 2026 年给 coding agent 铺的事实标准。',
     forMico: [
       '**plugin-as-directory** — 抄 CC 的 .claude-plugin/plugin.json + skills/*/SKILL.md 结构。',
-      '**slash command 入口** — 把 agent 能力暴露成 `/command`，降低非程序员使用门槛。',
+      '**slash command 入口** — 把 agent 能力暴露成 /command，降低非程序员使用门槛。',
       '**MCP first-class** — 接 MCP 协议，不要自己造 tool 协议轮子。',
       '**devcontainer 集成** — sandbox 默认接 devcontainer 标准，企业用户零配置隔离。',
       '**L 层 orchestration 评分**：state 4 / scheduling 4 / memory 4 / mcp 5 / sandbox 4 / error 3 / observability 4 / deployment 3 / governance 4。',

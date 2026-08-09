@@ -127,8 +127,7 @@ pip install claude-mem`,
       "**Persistent memory** — CC 关闭后 memory 仍在，**下次启动自动恢复**。",
       "**Vector + structured** — 关键事实用 structured store，**闲聊用 vector**。",
       "**AGENTS.md 集成** — 项目 root 的 AGENTS.md 自动加载，**项目规范是 memory 的一部分**。",
-      "**Session fork** — 已有 session 可派生新 session，**共享 memory**。",
-      "****Session-level + project-level memory** — 双层记忆，**per-session + per-project 隔离**。**"
+      "**Session fork** — 已有 session 可派生新 session，**共享 memory**。"
 ],
     differentiationMatrix: [
       "vs planning-with-files — planning-files 是任务级；Claude-Mem 是 session 级。**planning-files 强在执行，Claude-Mem 强在记忆**。",
@@ -168,7 +167,7 @@ pip install claude-mem`,
   sourceMatrixScores: {
         state: 4,
         scheduling: 3,
-        memory: 5 ,
+        memory: 5 ⭐,
         mcp: 3,
         sandbox: 3,
         error: 3,

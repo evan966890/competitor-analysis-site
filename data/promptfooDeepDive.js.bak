@@ -127,8 +127,7 @@ pip install promptfoo`,
       "**YAML config** — promptfoo eval.yaml 一处配置，**prompt + tests + assertions**。",
       "**多 provider** — OpenAI / Anthropic / Google / Mistral / Ollama，**统一接口**。",
       "**多 assertion** — contains / regex / llm-rubric / similar / javascript，**5 种断言**。",
-      "**Web UI** — promptfoo view 看结果 dashboard，**可视化对比**。",
-      "****CI/CD integration** — GitHub Actions 集成，**eval as gate**。**"
+      "**Web UI** — promptfoo view 看结果 dashboard，**可视化对比**。"
 ],
     differentiationMatrix: [
       "vs DeepEval — DeepEval 是 pytest 风格；Promptfoo 是 yaml + web UI。**DeepEval 强在 Python 集成，Promptfoo 强在 dashboard**。",
@@ -171,7 +170,7 @@ pip install promptfoo`,
         memory: 3,
         mcp: 3,
         sandbox: 3,
-        error: 5 ,
+        error: 5 ⭐,
         observability: 4,
         deployment: 3,
         governance: 4,

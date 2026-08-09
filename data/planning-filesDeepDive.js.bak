@@ -127,8 +127,7 @@ pip install planning-with-files`,
       "**Plan in markdown** — task_plan.md + findings.md + progress.md 三件套，**plan 写到文件**。",
       "**Taskmaster 拆解** — 大任务拆小任务，**每个任务可执行**。",
       "**Progress 跟踪** — progress.md 实时更新，**用户可见**。",
-      "**Manus 风格** — 受 Manus agent 启发，**plan → execute → verify 三阶段**。",
-      "****Three-file convention** — task_plan + findings + progress，**agent 透明**。**"
+      "**Manus 风格** — 受 Manus agent 启发，**plan → execute → verify 三阶段**。"
 ],
     differentiationMatrix: [
       "vs Claude-Mem — Claude-Mem 是 session 记忆；planning-files 是任务规划。**Claude-Mem 强在记忆，planning-files 强在执行**。",
@@ -168,7 +167,7 @@ pip install planning-with-files`,
   sourceMatrixScores: {
         state: 4,
         scheduling: 4,
-        memory: 4 ,
+        memory: 4 ⭐,
         mcp: 3,
         sandbox: 3,
         error: 3,

@@ -127,8 +127,7 @@ pip install inspect evals`,
       "**UK AISI 背书** — UK AI Safety Institute 出品，**政府背书**。",
       "**Python framework** — Inspect 是 Python 框架，**@task / @scorer / @solver 三件套**。",
       "**多 benchmark** — 50+ 内置 benchmark (MMLU / GPQA / MATH / HumanEval / SWE-bench / AgentBench)。",
-      "**Audit log** — 每次评测有 audit log，**可审计可复现**。",
-      "****Government-grade audit** — UK AISI 出品，**企业合规论证**。**"
+      "**Audit log** — 每次评测有 audit log，**可审计可复现**。"
 ],
     differentiationMatrix: [
       "vs Promptfoo — Promptfoo 是工程；Inspect 是政府标准。**Promptfoo 强在工程，Inspect 强在权威**。",
@@ -171,7 +170,7 @@ pip install inspect evals`,
         memory: 3,
         mcp: 3,
         sandbox: 4,
-        error: 5 ,
+        error: 5 ⭐,
         observability: 5,
         deployment: 3,
         governance: 5,

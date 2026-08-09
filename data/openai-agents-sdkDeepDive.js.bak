@@ -19,7 +19,7 @@ window.TD_OPENAI_AGENTS_SDK_DEEPDIVE = {
       id: 'gh-readme',
       caption: 'GitHub README：OpenAI Agents SDK · 28.5k stars · MIT',
       img: 'assets/shots/paper3/p3-openai-agents-1.jpg',
-      note: '**OpenAI Agents SDK** —— 论文 L 层 47 个项目中 "OpenAI 官方多 agent" 路线标杆，**v0.19.4 + 28.5k stars + 6 topics (agents/ai/framework/harness/llm/openai/python)** + **仓库内 AGENTS.md + CLAUDE.md 双文件约定**。**',
+      note: '****OpenAI Agents SDK** —— 论文 L 层 47 个项目中 "OpenAI 官方多 agent" 路线标杆，**v0.19.4 + 28.5k stars + 6 topics (agents/ai/framework/harness/llm/openai/python)** + **仓库内 AGENTS.md + CLAUDE.md 双文件约定**。**',
     },
     {
       id: 'topics',
@@ -71,8 +71,8 @@ interface OpenAIAgentsSDKCore {
 }`,
       points: [
         '**OpenAI Agents SDK 的核心抽象是论文 L 层代表** —— **OpenAI Agents SDK** —— 论文 L 层 47 个项目中 "OpenAI 官方多 agent" 路线标杆，**v0.19.4 + 28.5k stars + 6 topics (agents/ai/framework/harness/llm/openai/python)** + **仓库内 AGENTS.md + CLAUDE.md 双文件约定**。',
-        '**lightweight harness** — 比 LangGraph 轻，**5 行 API 起 agent**。**',
-        '**multi-agent workflow** — Agents as tools, handoffs, deterministic flow，**4 种 agent 协作模式**。**',
+        '****lightweight harness** — 比 LangGraph 轻，**5 行 API 起 agent**。**',
+        '****multi-agent workflow** — Agents as tools, handoffs, deterministic flow，**4 种 agent 协作模式**。**',
         '**MiCo 对照**：见 conclusion.forMico。',
       ],
     },
@@ -90,8 +90,8 @@ class OpenAIAgentsSDKFeature {
   // ...
 }`,
       points: [
-        '**AGENTS.md / CLAUDE.md 双约定** — OpenAI 借势 anthropic 生态，**规则约定互通**。**',
-        '**MCP 集成** — OpenAI 推 MCP，**与 anthropic 生态统一**。**',
+        '****AGENTS.md / CLAUDE.md 双约定** — OpenAI 借势 anthropic 生态，**规则约定互通**。**',
+        '****MCP 集成** — OpenAI 推 MCP，**与 anthropic 生态统一**。**',
       ],
     },
     {
@@ -128,8 +128,7 @@ pip install openai agents sdk`,
       "**lightweight harness** — 比 LangGraph 轻，**5 行 API 起 agent**。",
       "**multi-agent workflow** — Agents as tools, handoffs, deterministic flow，**4 种 agent 协作模式**。",
       "**AGENTS.md / CLAUDE.md 双约定** — OpenAI 借势 anthropic 生态，**规则约定互通**。",
-      "**MCP 集成** — OpenAI 推 MCP，**与 anthropic 生态统一**。",
-      "****Supports both AGENTS.md and CLAUDE.md** — OpenAI 接受 anthropic 约定。**"
+      "**MCP 集成** — OpenAI 推 MCP，**与 anthropic 生态统一**。"
 ],
     differentiationMatrix: [
       "vs LangGraph — LangGraph 是状态机；Agents SDK 是 lightweight harness。**LangGraph 强在编排，Agents SDK 强在简化**。",

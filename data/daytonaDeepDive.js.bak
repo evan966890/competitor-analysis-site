@@ -127,8 +127,7 @@ pip install daytona`,
       "**AI-first sandbox** — 不是给 DevOps 用，是给 AI agent 用，**sub-second 启动**。",
       "**Secure by default** — 每个 sandbox 隔离，**网络/IO/资源**全控制。",
       "**Elastic** — 按需扩缩，**AI agent 触发的临时计算**。",
-      "**⚠️ 2026-06 商业化转向** — 核心开发移到 private codebase，**社区 fork 路径不明**。",
-      "****AI-agent-first abstraction** — sandbox API 按 agent 编程模型设计，不是 DevOps 风格。**"
+      "**⚠️ 2026-06 商业化转向** — 核心开发移到 private codebase，**社区 fork 路径不明**。"
 ],
     differentiationMatrix: [
       "vs E2B — E2B 是 cloud sandbox；Daytona 是 AI-first sandbox。**Daytona 强在 AI 优化，但 2026-06 后不确定**。",
@@ -170,7 +169,7 @@ pip install daytona`,
         scheduling: 3,
         memory: 3,
         mcp: 3,
-        sandbox: 5 ,
+        sandbox: 5 ⭐,
         error: 4,
         observability: 4,
         deployment: 3,

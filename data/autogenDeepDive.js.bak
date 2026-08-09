@@ -127,8 +127,7 @@ pip install autogen`,
       "**多 agent 对话** — AssistantAgent + UserProxyAgent + GroupChatManager，**LLM 互相通信**。",
       "**GroupChat 模式** — 多 agent 共享群聊，**Manager 决定下一个发言**。",
       "**Code execution** — agent 跑代码有安全 sandbox，**UserProxy 实际执行**。",
-      "**Microsoft 背书** — 60.3k stars + 9.1k forks + Microsoft 全产品集成。",
-      "****Multi-provider + multi-language** — .NET + Python 双端，**企业级多语言覆盖**。**"
+      "**Microsoft 背书** — 60.3k stars + 9.1k forks + Microsoft 全产品集成。"
 ],
     differentiationMatrix: [
       "vs LangGraph — LangGraph 是状态机；AutoGen 是多 agent 对话。**LangGraph 强在编排，AutoGen 强在角色建模**。",
@@ -166,7 +165,7 @@ pip install autogen`,
 
   // ============ ⑥ 9 维评分（v3.3 完整版）============
   sourceMatrixScores: {
-        state: 4 ,
+        state: 4 ⭐,
         scheduling: 4,
         memory: 3,
         mcp: 3,

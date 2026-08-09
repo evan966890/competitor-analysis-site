@@ -151,7 +151,7 @@ app.whenReady().then(async () => {
       { vs: 'Codex CLI', diff: 'Codex 是单模型 + binary；OpenHands 是多模型 + 全栈。**Codex 强在简化，OpenHands 强在广度**。' },
       { vs: 'Devin', diff: 'Devin 是闭源 SaaS；OpenHands 是 MIT 开源。**Devin 强在产品，OpenHands 强在可控**。' },
       { vs: 'MiCo', diff: 'MiCo 当前不是全端，没有容器化 day 1，没有多模型中立。**抄 OpenHands = Electron + Docker + 多模型 + SKILL.md 兼容**。' },
-    },
+    ],
   },
 
   // ============ ④ TIMELINE ============

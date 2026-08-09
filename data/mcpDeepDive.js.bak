@@ -127,8 +127,7 @@ pip install mcp (model context protocol)`,
       "**JSON-RPC 2.0** — 基于 JSON-RPC 2.0，**已有 RPC 生态熟悉**。",
       "**stdio + HTTP transport** — 支持 stdio (本地) + HTTP (远程)，**两种部署模式**。",
       "**Tool / Resource / Prompt** — 三个核心原语，**tool 调用 + resource 读取 + prompt 模板**。",
-      "**全行业支持** — OpenAI / Anthropic / Google / Microsoft + Cursor / Cline / Continue / CC 全支持。",
-      "****Cross-industry standard** — OpenAI + Anthropic + Google + Microsoft 联合推。**"
+      "**全行业支持** — OpenAI / Anthropic / Google / Microsoft + Cursor / Cline / Continue / CC 全支持。"
 ],
     differentiationMatrix: [
       "vs OpenAI Function Calling — OpenAI 是单 provider；MCP 是跨 provider。**MCP 强在标准化**。",
@@ -169,7 +168,7 @@ pip install mcp (model context protocol)`,
         state: 3,
         scheduling: 3,
         memory: 3,
-        mcp: 5 ,
+        mcp: 5 ⭐,
         sandbox: 3,
         error: 3,
         observability: 3,

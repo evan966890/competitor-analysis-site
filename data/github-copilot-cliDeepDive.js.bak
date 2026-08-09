@@ -59,7 +59,7 @@ window.TD_GITHUB_COPILOT_CLI_DEEPDIVE = {
       title: 'GitHub Copilot CLI 核心抽象：基于 L 层定位',
       file: 'github-copilot-cli/core/*.{ts,py,go,rs} (论文定位)',
       code: `// GitHub Copilot CLI 在 L 层的核心抽象
-// 论文定位：**GitHub Copilot CLI** —— 论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub is Copilot coding agent"。
+// 论文定位：**GitHub Copilot CLI** —— 论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub's Copilot coding agent"。
 // **同 agentic harness** — 同一份 Copilot backend，VSCode / JetBrains / CLI 三端共享。
 // **GitHub 账号 = 身份** — OAuth 一处，**不用新注册**。
 
@@ -70,9 +70,9 @@ interface GitHubCopilotCLICore {
   // ...
 }`,
       points: [
-        '**GitHub Copilot CLI 的核心抽象是论文 L 层代表** —— GitHub Copilot CLI，论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub Copilot coding agent"。',
-        '**同 agentic harness** — 同一份 Copilot backend，VSCode / JetBrains / CLI 三端共享。**',
-        '**GitHub 账号 = 身份** — OAuth 一处，**不用新注册**。**',
+        '**GitHub Copilot CLI 的核心抽象是论文 L 层代表** —— **GitHub Copilot CLI** —— 论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub's Copilot coding agent"。',
+        '****同 agentic harness** — 同一份 Copilot backend，VSCode / JetBrains / CLI 三端共享。**',
+        '****GitHub 账号 = 身份** — OAuth 一处，**不用新注册**。**',
         '**MiCo 对照**：见 conclusion.forMico。',
       ],
     },
@@ -90,8 +90,8 @@ class GitHubCopilotCLIFeature {
   // ...
 }`,
       points: [
-        '**集成 GitHub 生态** — repository / PR / issue / actions 全打通。**',
-        '**MIT + 386 releases** — 极高频次发布，**bot 自动 update**。**',
+        '****集成 GitHub 生态** — repository / PR / issue / actions 全打通。**',
+        '****MIT + 386 releases** — 极高频次发布，**bot 自动 update**。**',
       ],
     },
     {
@@ -117,7 +117,7 @@ pip install github copilot cli`,
   // ============ ③ PHILOSOPHY ============
   philosophy: {
     coreQuestion: 'GitHub Copilot CLI 在论文 L 层凭什么排进 top 5？',
-    answer: '**GitHub Copilot CLI** —— 论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub is Copilot coding agent"。',
+    answer: '**GitHub Copilot CLI** —— 论文 L 层 47 个项目中 "GitHub 官方 terminal agent" 路线标杆，**386 releases + 1.0.78 latest** + "the same agentic harness as GitHub's Copilot coding agent"。',
     problemDiagnosis: [
       "**问题 1：GitHub 用户在 terminal 跑 coding agent** — VSCode / JetBrains 用户切到 terminal 要新学一个 agent，**Copilot CLI 用同一个账号无缝切换**。",
       "**问题 2：GitHub 生态 100% 集成** — Copilot CLI 直接走 GitHub 账号 + repository，**无需新 OAuth**。",
@@ -128,8 +128,7 @@ pip install github copilot cli`,
       "**同 agentic harness** — 同一份 Copilot backend，VSCode / JetBrains / CLI 三端共享。",
       "**GitHub 账号 = 身份** — OAuth 一处，**不用新注册**。",
       "**集成 GitHub 生态** — repository / PR / issue / actions 全打通。",
-      "**MIT + 386 releases** — 极高频次发布，**bot 自动 update**。",
-      "****Same backend as VSCode Copilot** — 三端共享 harness，**深度一致**。**"
+      "**MIT + 386 releases** — 极高频次发布，**bot 自动 update**。"
 ],
     differentiationMatrix: [
       "vs Claude Code — CC 是 anthropic 闭源 TUI + plugin；Copilot CLI 是 GitHub 官方 terminal。**CC 强在 plugin 生态，Copilot CLI 强在 GitHub 集成**。",

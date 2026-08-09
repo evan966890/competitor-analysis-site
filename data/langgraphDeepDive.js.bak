@@ -79,7 +79,7 @@ interface LangGraphCore {
       title: 'LangGraph 的差异化设计',
       file: 'langgraph/core/feature.*',
       code: `// 差异化设计
-// **Human-in-the-loop** — "interrupt_before" / "interrupt_after" 显式节点。
+// **Human-in-the-loop** — `interrupt_before` / `interrupt_after` 显式节点。
 // **LangSmith 集成** — state 可序列化，**可视化回放**。
 
 class LangGraphFeature {
@@ -89,7 +89,7 @@ class LangGraphFeature {
   // ...
 }`,
       points: [
-        '****Human-in-the-loop** — "interrupt_before" / "interrupt_after" 显式节点。**',
+        '****Human-in-the-loop** — `interrupt_before` / `interrupt_after` 显式节点。**',
         '****LangSmith 集成** — state 可序列化，**可视化回放**。**',
       ],
     },
@@ -127,8 +127,7 @@ pip install langgraph`,
       "**Stateful graph** — 节点 + 边，**state 是 typed dict**。",
       "**Checkpoint** — 每步自动 checkpoint，**断电可恢复**。",
       "**Human-in-the-loop** — `interrupt_before` / `interrupt_after` 显式节点。",
-      "**LangSmith 集成** — state 可序列化，**可视化回放**。",
-      "****Production hardening** — Studio + LangSmith 集成，**state 持久化 + 可视化**。**"
+      "**LangSmith 集成** — state 可序列化，**可视化回放**。"
 ],
     differentiationMatrix: [
       "vs AutoGen — AutoGen 是多 agent 对话；LangGraph 是状态机。**AutoGen 强在角色，LangGraph 强在编排**。",
@@ -166,7 +165,7 @@ pip install langgraph`,
 
   // ============ ⑥ 9 维评分（v3.3 完整版）============
   sourceMatrixScores: {
-        state: 5 ,
+        state: 5 ⭐,
         scheduling: 5,
         memory: 3,
         mcp: 3,

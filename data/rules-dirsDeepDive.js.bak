@@ -127,8 +127,7 @@ pip install rules directories`,
       "**AGENTS.md 标准** — 多数项目 root 一个 AGENTS.md，**agent 启动自动加载**。",
       "**CLAUDE.md (CC)** — Claude Code 专用，**项目级 CC 行为**。",
       "**.cursorrules (Cursor)** — Cursor 专用，**项目级 Cursor 行为**。",
-      "**.github/copilot-instructions.md (Copilot)** — GitHub Copilot 专用，**仓库级 Copilot 行为**。",
-      "****Tool-agnostic convention** — CLAUDE.md / .cursorrules / copilot-instructions.md 跨工具。**"
+      "**.github/copilot-instructions.md (Copilot)** — GitHub Copilot 专用，**仓库级 Copilot 行为**。"
 ],
     differentiationMatrix: [
       "vs agents-md (仓库) — agents-md 是单一仓库；Rules Directories 是跨工具约定。**Rules Directories 强在跨工具**。",
@@ -169,7 +168,7 @@ pip install rules directories`,
         state: 3,
         scheduling: 3,
         memory: 4,
-        mcp: 5 ,
+        mcp: 5 ⭐,
         sandbox: 3,
         error: 3,
         observability: 3,

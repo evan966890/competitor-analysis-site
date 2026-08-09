@@ -127,8 +127,7 @@ pip install swe-bench`,
       "**Real GitHub issues** — 不是人造题，**全部是真实 PR 对应 issue**。",
       "**Docker 标准化** — 每个 case 一个 Docker 镜像，**环境一致**。",
       "**Fail-to-Pass tests** — 评测标准是\"原本失败的测试通过\"，**不是新加的测试**。",
-      "**Multiple datasets** — SWE-bench Lite / Verified / Pro / Multimodal 等多个变体。",
-      "****Multiple variants** — Lite / Verified / Pro / Multimodal，**评测梯度设计**。**"
+      "**Multiple datasets** — SWE-bench Lite / Verified / Pro / Multimodal 等多个变体。"
 ],
     differentiationMatrix: [
       "vs HumanEval — HumanEval 是基础算法；SWE-bench 是真实仓库。**SWE-bench 强在真实**。",
@@ -171,7 +170,7 @@ pip install swe-bench`,
         memory: 3,
         mcp: 3,
         sandbox: 4,
-        error: 5 ,
+        error: 5 ⭐,
         observability: 4,
         deployment: 3,
         governance: 4,

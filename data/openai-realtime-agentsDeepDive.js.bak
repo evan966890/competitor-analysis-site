@@ -19,7 +19,7 @@ window.TD_OPENAI_REALTIME_AGENTS_DEEPDIVE = {
       id: 'gh-readme',
       caption: 'GitHub README：OpenAI Realtime Agents · TBD (demo repo) · MIT',
       img: 'assets/shots/paper3/p3-realtime-agents-1.jpg',
-      note: '**OpenAI Realtime Agents** —— 论文 G 层 14 个项目中 "Realtime API voice agent" 路线标杆，**OpenAI 官方 demo 仓库** 演示生产级 voice agent 编排。**',
+      note: '****OpenAI Realtime Agents** —— 论文 G 层 14 个项目中 "Realtime API voice agent" 路线标杆，**OpenAI 官方 demo 仓库** 演示生产级 voice agent 编排。**',
     },
     {
       id: 'topics',
@@ -71,8 +71,8 @@ interface OpenAIRealtimeAgentsCore {
 }`,
       points: [
         '**OpenAI Realtime Agents 的核心抽象是论文 G 层代表** —— **OpenAI Realtime Agents** —— 论文 G 层 14 个项目中 "Realtime API voice agent" 路线标杆，**OpenAI 官方 demo 仓库** 演示生产级 voice agent 编排。',
-        '**Realtime API first** — 基于 OpenAI Realtime API，**WebSocket 流式**。**',
-        '**Agentic loop in voice** — voice 输入 → tool call → voice 输出，**完整 agent 循环**。**',
+        '****Realtime API first** — 基于 OpenAI Realtime API，**WebSocket 流式**。**',
+        '****Agentic loop in voice** — voice 输入 → tool call → voice 输出，**完整 agent 循环**。**',
         '**MiCo 对照**：见 conclusion.forMico。',
       ],
     },
@@ -90,8 +90,8 @@ class OpenAIRealtimeAgentsFeature {
   // ...
 }`,
       points: [
-        '**Twilio + WebRTC** — 两种部署模式，**电话 / Web 通用**。**',
-        '**Production demo** — 不是 toy，**OpenAI 官方 production 参考**。**',
+        '****Twilio + WebRTC** — 两种部署模式，**电话 / Web 通用**。**',
+        '****Production demo** — 不是 toy，**OpenAI 官方 production 参考**。**',
       ],
     },
     {
@@ -128,8 +128,7 @@ pip install openai realtime agents`,
       "**Realtime API first** — 基于 OpenAI Realtime API，**WebSocket 流式**。",
       "**Agentic loop in voice** — voice 输入 → tool call → voice 输出，**完整 agent 循环**。",
       "**Twilio + WebRTC** — 两种部署模式，**电话 / Web 通用**。",
-      "**Production demo** — 不是 toy，**OpenAI 官方 production 参考**。",
-      "****Twilio + WebRTC + SIP** — 三种部署模式，**电话 / Web 通用**。**"
+      "**Production demo** — 不是 toy，**OpenAI 官方 production 参考**。"
 ],
     differentiationMatrix: [
       "vs LiveKit — LiveKit 是 realtime 基础设施；Realtime Agents 是 agent demo。**LiveKit 强在底层，Realtime Agents 强在 agentic**。",

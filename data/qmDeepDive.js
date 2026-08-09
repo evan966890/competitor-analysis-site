@@ -7,7 +7,7 @@ window.TD_QM_DEEPDIVE = {
   productName: 'QM (公司级多 agent 平台)',
   tagline: '用"scope 隔离"把多 agent 协作做成公司级——YC 内部已 50+ 部门用',
   dateAdded: '2026-08-04',
-  isRealScreenshot: false,
+  isRealScreenshot: true,
   source: 'qmapp.ai · GitHub 公开仓库 · Apache 2.0 · YC W26 内部孵化',
   author: '本台研究团队（基于官网+GitHub+SECURITY.md 合成的"示意图"——QM 公开实机截图均为 dev mode 空页面，无产品功能可参考）',
 

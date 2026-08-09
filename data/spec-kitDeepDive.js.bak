@@ -18,7 +18,7 @@ window.TD_SPEC_KIT_DEEPDIVE = {
       id: 'gh-readme',
       caption: 'GitHub README：GitHub Spec Kit · 18k+ stars · MIT',
       img: 'assets/shots/paper2/p2-spec-kit-1.jpg',
-      note: '**GitHub Spec Kit** —— 论文 T 层 12 个项目中 "Spec-driven development" 路线标杆，**GitHub 官方工具链** —— 把 spec 当 first-class artifact。**',
+      note: '****GitHub Spec Kit** —— 论文 T 层 12 个项目中 "Spec-driven development" 路线标杆，**GitHub 官方工具链** —— 把 spec 当 first-class artifact。**',
     },
     {
       id: 'topics',
@@ -59,7 +59,7 @@ window.TD_SPEC_KIT_DEEPDIVE = {
       file: 'spec-kit/core/*.{ts,py,go,rs} (论文定位)',
       code: `// GitHub Spec Kit 在 T 层的核心抽象
 // 论文定位：**GitHub Spec Kit** —— 论文 T 层 12 个项目中 "Spec-driven development" 路线标杆，**GitHub 官方工具链** —— 把 spec 当 first-class artifact。
-// **Spec first** — /specify /plan /tasks /implement 四阶段 workflow，**spec 优先**。
+// **Spec first** — `/specify` `/plan` `/tasks` `/implement` 四阶段 workflow，**spec 优先**。
 // **Spec as code** — spec 是 markdown 文件，**在 git 仓库**。
 
 interface GitHubSpecKitCore {
@@ -70,8 +70,8 @@ interface GitHubSpecKitCore {
 }`,
       points: [
         '**GitHub Spec Kit 的核心抽象是论文 T 层代表** —— **GitHub Spec Kit** —— 论文 T 层 12 个项目中 "Spec-driven development" 路线标杆，**GitHub 官方工具链** —— 把 spec 当 first-class artifact。',
-        '**Spec first** — /specify /plan /tasks /implement 四阶段 workflow，**spec 优先**。**',
-        '**Spec as code** — spec 是 markdown 文件，**在 git 仓库**。**',
+        '****Spec first** — `/specify` `/plan` `/tasks` `/implement` 四阶段 workflow，**spec 优先**。**',
+        '****Spec as code** — spec 是 markdown 文件，**在 git 仓库**。**',
         '**MiCo 对照**：见 conclusion.forMico。',
       ],
     },
@@ -80,7 +80,7 @@ interface GitHubSpecKitCore {
       file: 'spec-kit/core/feature.*',
       code: `// 差异化设计
 // **GitHub 集成** — Copilot + Issues + Projects 全打通。
-// **Constitution** — /constitution 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。
+// **Constitution** — `/constitution` 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。
 
 class GitHubSpecKitFeature {
   // 主要 feature
@@ -89,8 +89,8 @@ class GitHubSpecKitFeature {
   // ...
 }`,
       points: [
-        '**GitHub 集成** — Copilot + Issues + Projects 全打通。**',
-        '**Constitution** — /constitution 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。**',
+        '****GitHub 集成** — Copilot + Issues + Projects 全打通。**',
+        '****Constitution** — `/constitution` 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。**',
       ],
     },
     {
@@ -124,11 +124,10 @@ pip install github spec kit`,
       "**问题 4：spec 难协作** — 多人改 spec 冲突，**Spec Kit spec 在 git 仓库**。"
 ],
     designPrinciples: [
-      "**Spec first** — /specify /plan /tasks /implement 四阶段 workflow，**spec 优先**。",
+      "**Spec first** — `/specify` `/plan` `/tasks` `/implement` 四阶段 workflow，**spec 优先**。",
       "**Spec as code** — spec 是 markdown 文件，**在 git 仓库**。",
       "**GitHub 集成** — Copilot + Issues + Projects 全打通。",
-      "**Constitution** — /constitution 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。",
-      "****AGENTS.md / constitution integration** — spec Kit + 项目级原则 绑定。**"
+      "**Constitution** — `/constitution` 给项目级原则（性能 / 安全 / 风格），spec 必须遵守。"
 ],
     differentiationMatrix: [
       "vs Aider — Aider 是直接 code；Spec Kit 是 spec first。**Spec Kit 强在规划**。",
@@ -155,7 +154,7 @@ pip install github spec kit`,
   conclusion: {
     summary: '**GitHub Spec Kit** 是论文 T 层代表项目。**对 MiCo 的核心启示见下方 forMico**。',
     forMico: [
-    "**Spec first** — MiCo 虾流程改成 /specify /plan /tasks /implement 四阶段。",
+    "**Spec first** — MiCo 虾流程改成 `/specify` `/plan` `/tasks` `/implement` 四阶段。",
     "**Spec as code** — spec 是 markdown 在 git 仓库，**版本化 + 可协作**。",
     "**/constitution 项目级原则** — 性能 / 安全 / 风格先定，**spec 必须遵守**。",
     "**GitHub 集成** — Copilot + Issues + Projects 全打通，**MiCo 接 GitHub 生态**。",
@@ -168,7 +167,7 @@ pip install github spec kit`,
         state: 4,
         scheduling: 4,
         memory: 4,
-        mcp: 5 ,
+        mcp: 5 ⭐,
         sandbox: 3,
         error: 3,
         observability: 3,

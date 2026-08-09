@@ -127,8 +127,7 @@ pip install langfuse`,
       "**OpenTelemetry first** — 基于 OTEL 协议，每个 LLM call 是一个 span，**和 APM 工具互通**。",
       "**dataset + run + score** — eval 三层模型：dataset 是题库，run 是测试结果，score 是评分。",
       "**prompt-as-code** — prompt 必须在 Langfuse 注册 + 版本化，**不能 inline 写**。",
-      "**17 个 topic 一站式** — analytics / autogen / evaluation / langchain / large-language-models / llama-index / llm / llm-evaluation / llm-observability / llmops / monitoring / observability / open-source / openai / playground / prompt-engineering / prompt-management / self-hosted / ycombinator —— **所有 LLM 生态节点都覆盖**。",
-      "****YAML eval config as code** — eval 配置文件在 git 仓库，**评测可复现**。**"
+      "**17 个 topic 一站式** — analytics / autogen / evaluation / langchain / large-language-models / llama-index / llm / llm-evaluation / llm-observability / llmops / monitoring / observability / open-source / openai / playground / prompt-engineering / prompt-management / self-hosted / ycombinator —— **所有 LLM 生态节点都覆盖**。"
 ],
     differentiationMatrix: [
       "vs Helicone — Helicone 是 LLM proxy + cache；Langfuse 是 observability + eval + prompt。**互补关系**。",
@@ -172,7 +171,7 @@ pip install langfuse`,
         mcp: 4,
         sandbox: 3,
         error: 3,
-        observability: 5 ,
+        observability: 5 ⭐,
         deployment: 3,
         governance: 4,
   },

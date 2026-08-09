@@ -7,7 +7,7 @@ window.TD_LINEAR_DEEPDIVE = {
   productName: 'Linear',
   tagline: '把工作项的流动做到极致——Triage 收单、Cycle 节奏、50ms 手感',
   dateAdded: '2026-08-04',
-  isRealScreenshot: false,
+  isRealScreenshot: true,
   source: 'linear.app · 闭源 · YC W20 · Tuomas Artman 2019 创立',
   author: '本台研究团队（基于官网+公开 docs+Linear Method 合成的"示意图"——Linear 公开截图均为空登录页/未加载态）',
 

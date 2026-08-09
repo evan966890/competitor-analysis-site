@@ -138,6 +138,7 @@ impl ModelProvider {
         '**Codex 显式只接 openai** —— 跟 OpenCode 多模型 / CC 多模型形成对比，**openai 走"垂直整合"路线**。',
         '**`Gpt5Model` 枚举** —— 模型是 enum 不是 string，避免拼写错误。',
         '**对 MiCo 启示**：要不要做多模型网关是个战略选择，**Codex 证明 "单模型 + 深整合" 也是合理路径**。',
+      ],
     },
   ],
 

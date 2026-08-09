@@ -329,6 +329,7 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/buzzDeepDive.js"></script>
 <script src="data/qoderwakeDeepDive.js"></script>
 <script src="data/qoderworkDeepDive.js"></script>
+<script src="data/wanuaiDeepDive.js"></script>
 <script src="data/productDemos.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
@@ -390,7 +391,7 @@ function renderNav() {
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
     <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 12 家矩阵<span class="badge-new">新</span></button>
     <div class="nav-sec">产品画像（12 家）</div>
-    ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork'].map(pid => `
+    ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
     <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>29 家视觉导览<span class="badge-new">新</span></button>
@@ -409,6 +410,7 @@ function renderNav() {
     <button class="nav-item ${on(state.view === 'product' && state.product === 'buzz')}" onclick="go('#/product/buzz')"><span class="ic">🐝</span>Buzz (Block)<span class="badge-new">新</span></button>
     <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwake')}" onclick="go('#/product/qoderwake')"><span class="ic">@FXML</span>QoderWake<span class="badge-new">新</span></button>
     <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwork')}" onclick="go('#/product/qoderwork')"><span class="ic">⌨</span>QoderWork<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'wanuai')}" onclick="go('#/product/wanuai')"><span class="ic">⇄</span>万有无界<span class="badge-new">新</span></button>
   `;
 }
 function go(h) { location.hash = h; }
@@ -423,27 +425,27 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3 · 4 层决策支持系统：广度 29 + 深度 12 + 横切 8 维 × 12 家 + 纵切 10 个 lane + 29 家 demo tour</p>
-    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）</div>
+    <p>v3 · 4 层决策支持系统：广度 30 + 深度 13 + 横切 8 维 × 13 家 + 纵切 10 个 lane + 30 家 demo tour</p>
+    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
-      <div><b>12</b><span>深度评测</span></div>
-      <div><b>72</b><span>源码 cell</span></div>
-      <div><b>125</b><span>截图</span></div>
-      <div><b>29</b><span>demo 导览</span></div>
+      <div><b>13</b><span>深度评测</span></div>
+      <div><b>104</b><span>源码 cell</span></div>
+      <div><b>134</b><span>截图</span></div>
+      <div><b>30</b><span>demo 导览</span></div>
     </div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
-    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 29 个产品，每个带 motto/oneLiner/4 维评分
+    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 30 个产品，每个带 motto/oneLiner/4 维评分
     &nbsp;·&nbsp;
-    <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 125 张截图 + 3 家文字 placeholder）
+    <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 134 张截图 + 3 家文字 placeholder）
   </div>
 
   <div class="pgrid">
     ${TD_PRODUCTS.map(p => `
-      <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
+      <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
         <div class="motto">主语：${p.motto}</div>
         <div class="desc">${p.oneLiner}</div>
@@ -457,7 +459,7 @@ function viewHome() {
 function viewLane() {
   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
   // 12 家重点产品（按 deep 顺序）
-  const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork'];
+  const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork','wanuai'];
   const deepItems = l.items.filter(it => DEEP_DIVE_IDS_LANE.includes(it.p));
   const otherItems = l.items.filter(it => !DEEP_DIVE_IDS_LANE.includes(it.p));
   const hasDecisions = l.decisions && l.decisions.length > 0;
@@ -727,6 +729,7 @@ function openMatrixCell(p, d) {
           ${TD_BUZZ_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           ${TD_QODERWAKE_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           ${TD_QODERWORK_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
+          ${TD_WANUAI_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           <a href="#/lane/orch" style="color:var(--accent)">→ 板块对比</a>
         </p>
       ` : ''}
@@ -1184,6 +1187,7 @@ function viewProduct() {
     'buzz': TD_BUZZ_DEEPDIVE,
     'qoderwake': TD_QODERWAKE_DEEPDIVE,
     'qoderwork': TD_QODERWORK_DEEPDIVE,
+    'wanuai': TD_WANUAI_DEEPDIVE,
   };
   const d = map[state.product];
   if (d) return viewDeepDive(d);
@@ -1349,6 +1353,7 @@ function viewProductDemoSection(id) {
     'buzz': TD_BUZZ_DEEPDIVE,
     'qoderwake': TD_QODERWAKE_DEEPDIVE,
     'qoderwork': TD_QODERWORK_DEEPDIVE,
+    'wanuai': TD_WANUAI_DEEPDIVE,
   };
 
   let states = [];
@@ -1420,7 +1425,7 @@ window.demoNext = () => { state.demoIdx++; render(); };
 /* ================= 27 家 demo 总览（v3 module 5）============== */
 function viewDemosOverview() {
   const filter = state.demoFilter || 'all';
-  const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork'];
+  const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'];
   let ids = Object.keys(TD_PRODUCT_DEMOS.demos);
   if (filter === 'deep') ids = ids.filter(id => DEEP_DIVE_IDS.includes(id));
   else if (filter === 'shallow') ids = ids.filter(id => !DEEP_DIVE_IDS.includes(id));
@@ -1489,6 +1494,7 @@ function viewProductProfile(id) {
     'buzz': TD_BUZZ_DEEPDIVE,
     'qoderwake': TD_QODERWAKE_DEEPDIVE,
     'qoderwork': TD_QODERWORK_DEEPDIVE,
+    'wanuai': TD_WANUAI_DEEPDIVE,
   };
   const deepDive = DEEPDIVES[id];
 

@@ -314,8 +314,10 @@ window.TD_PLAYBOOKS = [
             img: 'assets/shots/openagents/01_network_home.jpg' },
           { p: 'qoderwake', action: '6 预置角色（PM/RD/QA/...）+ 100 技能 → 群组协同（任务在角色间 sequential/parallel/handoff 流转）',
             img: 'assets/shots/qoderwake/07-官网-6岗位.png' },
+          { p: 'wanuai', action: '行业项目模板（AI 影视短剧 5 阶段：剧本→资产→视频→后期→发行）+ 4 专家 + 1 助理 → 队长 agent 仅调度不生产（纯 PM 角色）',
+            img: 'assets/shots/wanuai/03-project-影视短剧模板.jpg' },
         ],
-        obs: '5 个解法：VK 走 worktree 物理隔离；Raft 走 IM 频道混编；Ruflo 走 swarm + 自学习；OpenAgents 走自研协议；QoderWake 走"预置角色+群组"开箱即用。VK 最直白，Raft 最易上手，Ruflo 能力最满，OpenAgents 协议最严谨，QoderWake 上手最快（5 分钟）。',
+        obs: '5 个解法：VK 走 worktree 物理隔离；Raft 走 IM 频道混编；Ruflo 走 swarm + 自学习；OpenAgents 走自研协议；QoderWake 走"预置角色+群组"开箱即用。**第 6 解：万有无界走"行业项目模板+队长仅调度"**——不是配置通用 6 角色，而是把行业 know-how 沉淀成模板，队长是纯 PM 不执行。上手最快的是 QoderWake，模板最深的是万有无界。',
       },
       {
         n: 2, name: '路由：哪个 agent 接哪个任务？',

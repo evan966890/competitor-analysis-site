@@ -1,16 +1,16 @@
-// 8 维源码对比矩阵 · 12 家深度产品
+// 8 维源码对比矩阵 · 13 家深度产品
 // 字段：meta | dimensions | products | cells
 // 每个 cell 必含 score(1-5) + summary + forMico，可选 codeSnippet/evidence
-// 8 维 × 12 家 = 96 单元
-// 全部 evidence 引用现有截图库（vibe-kanban/ruflo/raft/openworker 为"示意图"；buzz/qoderwork/qoderwake 为官网/实机实拍）
+// 8 维 × 13 家 = 104 单元
+// 全部 evidence 引用现有截图库（vibe-kanban/ruflo/raft/openworker 为"示意图"；buzz/qoderwork/qoderwake 为官网/实机实拍；wanuai 为本机实机登录 dashboard）
 // code snippet 为基于官方文档/源码推断的演示代码，非实机 git blame
 window.TD_SOURCE_MATRIX = {
   meta: {
-    version: '3.1',
-    dateAdded: '2026-08-09',
-    title: '8 维源码对比矩阵 · 12 家产品',
-    description: '12 家深度产品在 8 个源码维度上的实现对比。横向看差异，纵向看取舍。每格可点开看完整内容（代码/截图/对 MiCo 启示）。',
-    note: 'evidence 字段：multica/qm/paperclip/jira-meego/linear/buzz/qoderwake 为实机或官网实拍截图；vibe-kanban/ruflo/raft/openworker/qoderwork 为基于官方发布物料合成的"示意图"或官网。code snippet 为构造的演示代码，已标注 [推断]。',
+    version: '3.2',
+    dateAdded: '2026-08-10',
+    title: '8 维源码对比矩阵 · 13 家产品',
+    description: '13 家深度产品在 8 个源码维度上的实现对比。横向看差异，纵向看取舍。每格可点开看完整内容（代码/截图/对 MiCo 启示）。',
+    note: 'evidence 字段：multica/qm/paperclip/jira-meego/linear/buzz/qoderwake/wanuai 为实机或官网实拍截图；vibe-kanban/ruflo/raft/openworker/qoderwork 为基于官方发布物料合成的"示意图"或官网。code snippet 为构造的演示代码，已标注 [推断]。',
   },
 
   // ============ 8 个维度 ============
@@ -65,14 +65,14 @@ window.TD_SOURCE_MATRIX = {
     },
   ],
 
-  // ============ 12 家产品（与 products.js 一致）============
+  // ============ 13 家产品（与 products.js 一致）============
   products: [
     'multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo',
     'raft', 'jira-meego', 'linear', 'openworker',
-    'buzz', 'qoderwork', 'qoderwake',
+    'buzz', 'qoderwork', 'qoderwake', 'wanuai',
   ],
 
-  // ============ 96 个 cells（含 code snippet + evidence）============
+  // ============ 104 个 cells（含 code snippet + evidence）============
   cells: {
 
     // ============ 1. Multica ============
@@ -907,6 +907,79 @@ fn verify_chain(chain: &AuditChain) -> Result<()> {
         evidence: { img: 'assets/shots/codewaker/01-management.png', cap: 'QoderWake 管理后台：数字员工列表' } },
       deployment: { score: 3, summary: '桌面客户端（macOS 13+/Win 10+/Linux，推断 Tauri/Electron），本机/云端双部署 + 闭源绑阿里系。',
         forMico: '桌面+云双部署是 2026 标配。闭源+绑阿里系是企业客户硬伤，MiCo 私有化部署是机会。' },
-    }
+    },
+    // ============ 13. 万有无界（阿里云 · 2026-08 内测）============
+    'wanuai': {
+      state: { score: 3, summary: '**行业项目模板的隐式 5 阶段状态机**——剧本创作 → 资产设计与生成 → 视频素材生成 → 后期制作 → 发行与宣传播出。**但 UI 上不显式状态机**（没 Multica 的 4 态 Issue 卡），项目空间仅显示"还没有项目"空态 + 模板入口。任务=会话+项目，状态隐含在群聊/项目空间切换里。',
+        forMico: '**学"行业项目模板 + 阶段流程"抽象**——MiCo 岗位虾的"按业务线定制"是深度，但"冷启动摩擦大"。**学万有无界**：预置 5-10 个行业项目模板，每个模板有阶段流程 + 角色分配 + 队长虾，让"新部门先用模板跑起来，再按业务线定制"。**不学**：状态不显式（任务追踪的硬伤，缺 Task/Issue 实体）。',
+        codeSnippet: { file: 'wanuai/project-template/short-drama.ts (推断)', code: `interface ProjectTemplate {
+  name: 'AI 影视短剧创作项目';
+  teamSize: '1-6 人';
+  stages: [
+    { name: '剧本创作', lead: '?', deliverables: ['剧本', '大纲'] },
+    { name: '资产设计与生成', lead: '镜导', deliverables: ['角色', '场景'] },
+    { name: '视频素材生成', lead: '?', deliverables: ['分镜视频'] },
+    { name: '后期制作', lead: '?', deliverables: ['配乐', '剪辑'] },
+    { name: '发行与宣传播出', lead: '?', deliverables: ['投放物料'] },
+  ];
+}` },
+        evidence: { img: 'assets/shots/wanuai/03-project-影视短剧模板.jpg', cap: '万有无界行业项目模板：5 阶段流程预置' } },
+      scheduling: { score: 4, summary: '**"队长小有仅做任务调度与派发，不承担具体生产任务"**——这是**纯 PM 角色 agent**的明确产品化。配合单聊/群聊/项目空间 3 维交互（单聊=派给单 agent；群聊=多 agent 协同；项目空间=项目级调度）。**与 QoderWake 群组协同同构**，但用"行业模板 + 队长"降低用户理解成本。',
+        forMico: '**学"队长仅调度不生产"**——这是**纯 PM 角色 agent** 抽象。**MiCo 现有岗位虾**没明确区分"调度岗"vs"执行岗"。**学**：给每个虾加 `responsibility: "调度" | "生产" | "混合"` 字段，让队长虾可识别，可建"调度+生产"协同模式。**特别适合复杂项目**（5 阶段流程的 PM）。',
+        codeSnippet: { file: 'wanuai/captain/dispatcher.ts (推断)', code: `interface Captain {
+  role: '小有';
+  responsibility: '任务调度与派发';
+  production: false;  // 不承担具体生产任务
+}
+interface DispatchTask {
+  stage: '剧本创作' | '资产设计' | '视频素材' | '后期' | '发行';
+  captain: '小有';
+  workers: Agent[];  // 队长派给具体执行 agent
+  mode: 'sequential' | 'parallel' | 'handoff';
+}` } },
+      memory: { score: 3, summary: '**协作资产/个人知识库 双重 tab + 会话资产/项目资产 双重 sub-tab**——四象限资产模型。**2GB freemium 配额**是亮点。**但缺智能记忆（HNSW/向量）**——资产 = 文件存储，不是 agent 记忆。**类 Multica 资产但不是 QM 的"作用域记忆"**。',
+        forMico: '**学"4 象限资产分类"**——协作 vs 个人 × 会话 vs 项目。**MiCo 上下文 OS 缺这层分类**，目前是单一上下文池。**学**：上下文拆成 4 类（协作会话/个人会话/协作项目/个人项目），用户能更精准地管理记忆边界。**2GB freemium 配额**也好抄（让个人/小团队先用）。',
+        evidence: { img: 'assets/shots/wanuai/04-assets-2GB配额.jpg', cap: '万有无界资产库：协作/个人 × 会话/项目 = 4 象限 + 2GB 配额' } },
+      mcp: { score: 4, summary: '**10105 技能市场 + 标准化技能元数据**——id/description/isFree/installCount/triggers/chineseTriggers/upstream/localOnly/backendAccess。**推测支持 MCP 协议**（内部命名 `wanyou-*/ppt-delivery-adapter/SOP 文档创作` 像是 skill 规范）。公开 12 技能看到真实数据源集成（小红书/抖音/微博/B站/快手/知乎/头条/百度 7 平台聚合 / 中国政府网官方数据 / 创业注册 ICP 等）。',
+        forMico: '**学"10105 技能规模 + 标准化元数据"**——MiCo 技能市场目前规模小，**学**：技能暴露触发词（中文丰富同义词集）+ 安装数 + 分类 + upstream（来源）+ localOnly/backendAccess 标记。**让"该装哪个"决策更快**。**特别学触发词**——从 `UI设计/界面设计/UX/落地页/配色/字体/无障碍/组件库/HTML页面/网页生成` 看，**触发词是中文丰富同义词集，不是简单关键词**。',
+        codeSnippet: { file: 'wanuai/marketplace/skill-schema.ts (推断)', code: `interface Skill {
+  id: string;            // 'xiaohongshu-daily-hot' / 'wanyou-ui-ux-pro-max'
+  name: string;           // 显示名
+  description: string;
+  isFree: true;           // 内测期全免费
+  installCount: number;   // 21-164 公开
+  triggers?: string[];    // 触发词
+  chineseTriggers?: string[]; // 中文触发：UI设计/界面设计/UX
+  categories: string[];   // 标签：[内容洞察, 热点追踪, 小红书运营]
+  upstream?: string;      // github.com/nextlevelbuilder/...
+  localOnly?: boolean;    // 'Local-only document authoring'
+  backendAccess?: boolean;// 'no backend access'
+}` },
+        evidence: { img: 'assets/shots/wanuai/05-market-10105技能.jpg', cap: '万有无界技能市场：10105 技能 + 标准化元数据 + 安装数' } },
+      sandbox: { score: 2, summary: '**per-action 拦截无可见 UI**——dashboard 找不到"危险动作弹窗"或"分级自主度设置"。**隐藏的安全设计**——所有写操作可能直接执行，靠"队长调度"+"积分配额"软约束。**对比 OpenWorker 每次外发前弹窗**——缺可感知的审批 UX。',
+        forMico: '**学"队长调度软约束"**——用角色定位（仅调度不生产）做边界。**不学**：完全没 per-action 拦截（安全风险）。**MiCo 改进**：保留 per-action 拦截（虾的 BPM 审批 + 发版门禁），加"队长调度"做软约束补充。**让队长虾先 review 再放行，比无门禁好**。' },
+      error: { score: 2, summary: '**闭源 SaaS 无可观察的错误恢复机制**——dashboard 看不到"失败归因"或"重试策略"。**"我的待办"是消息通知聚合**（不是任务失败重试中心）。**对比 Hermes L1/L2/L3 三级归因**——万有无界缺运维视角。',
+        forMico: '**不学**：完全无错误归因。**MiCo 缺的是"我的待办"——审批收件箱**（按 agent / 按任务 / 按时间统一拉到一起），不是单纯消息通知。**学**：把"待我审批 / 失败任务 / 系统通知"3 类统一收件箱化。' },
+      observability: { score: 4, summary: '**4 类积分看板 + 消耗表 4 维度**——订阅/订购/活动/总余额 × Agent/项目空间 × 单聊/群聊/项目空间 × 今天/近7天/近30天/近1年。**这是 token 成本对账的完整维度**。**兑换 + 充值** 双入口。**对比 Multica/QM/Paperclip**——"成本可见"做到极致。**短板**：缺 trace 面板（看不到 agent 的 tool call 链路）。',
+        forMico: '**最该学的 1 块**——**4 类积分 + 消耗表 4 维度**。MiCo 现在"成本分摊"是公司内部组织行为，**没有可视化积分看板**。**学**：给每个用户/每个虾做"积分余额 + 消耗表"，按 Agent/项目 × 单聊/群聊/项目空间 × 时间。**对企业客户**："IT 部门这个月花了多少？哪个虾最贵？"秒答。**这是 MiCo 该补的"成本对账"形态——把 token 成本从黑盒变成可感知积分**。',
+        codeSnippet: { file: 'wanuai/billing/credits.ts (推断)', code: `interface CreditBalance {
+  total: number;
+  subscription: number;   // 订阅积分（月度配额）
+  purchase: number;       // 订购积分（一次性买）
+  campaign: number;        // 活动积分（签到/试用）
+}
+interface UsageTable {
+  rows: AgentUsageRow[];
+  filters: {
+    scope: 'Agent' | '项目空间';
+    range: '今天' | '近7天' | '近30天' | '近1年';
+  };
+  columns: ['Agent名称', '积分↓', '单聊↓', '群聊↓', '项目空间↓'];
+}` },
+        evidence: { img: 'assets/shots/wanuai/07-points-4类积分+消耗表.jpg', cap: '万有无界积分看板：4 类积分 + 消耗表 4 维度' } },
+      deployment: { score: 2, summary: '**闭源阿里云 SaaS**——用户不可自托管、不可二次开发、SSO 绑阿里云生态。**内测期免费**（平台所有能力均可免费体验），后续按任务规模/模型资源消耗提供不同版本或企业方案。**对比 Multica/QM/Paperclip/BBuzz**——这些都有开源/自托管形态，万有无界完全没有。',
+        forMico: '**不学**：纯阿里云生态绑定、闭源。**MiCo 私有化部署 + 不绑单一厂商**对企业客户是护城河。**学**：freemium 思路（让个人/小团队先用免费版 → 升级付费），但 MiCo 走 to B 内部成本分摊路线，不是 to C 显式积分。' },
+    },
+
   },
 };

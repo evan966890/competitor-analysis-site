@@ -3,7 +3,7 @@
 // 9 家 deep-dive 优先走 deep-dive 文件的 demoShots（更精细），这里只作为兜底
 // 数据结构：{ productId, productName, isSchematic, states: [{id, label, img, note}] }
 window.TD_PRODUCT_DEMOS = {
-  meta: { version: 1, dateAdded: "2026-08-04", totalProducts: 27 },
+  meta: { version: 1, dateAdded: "2026-08-04", totalProducts: 29 },
   demos: {
     'mico': {
       productId: 'mico',
@@ -189,9 +189,56 @@ window.TD_PRODUCT_DEMOS = {
     'qoderwake': {
       productId: 'qoderwake',
       productName: 'qoderwake',  // 由 view 端用 P[id].name 覆盖
-      isSchematic: true,
+      isSchematic: false,
       states: [
-        { id: "txt", label: "无截图", img: null, note: "该产品暂无实机截图，研究主要基于官网+公开 docs。详见产品详情页。"}
+        { id: "s1", label: "官网6岗位", img: "assets/shots/qoderwake/07-官网-6岗位.png", note: "点击放大查看原图。QoderWake 官网：6+ 预置岗位 + 100+ 技能——\"各司其职、全天在线的数字员工\"。" },
+        { id: "s2", label: "管理后台", img: "assets/shots/codewaker/01-management.png", note: "点击放大查看原图。桌面客户端管理后台：每个 Waker 有岗位/状态/记忆/工作记录。" },
+        { id: "s3", label: "群组协同", img: "assets/shots/codewaker/02-我的群组.png", note: "点击放大查看原图。我的群组：多 Waker 编组做项目（任务进行中 12/13）。" },
+        { id: "s4", label: "Waker详情", img: "assets/shots/codewaker/04-产品经理详情.png", note: "点击放大查看原图。产品经理 Waker 详情：岗位说明书+技能+记忆+工作记录。" },
+        { id: "s5", label: "对话任务", img: "assets/shots/codewaker/05-创建对话任务.png", note: "点击放大查看原图。创建对话任务：人在环里的协作入口。" },
+        { id: "s6", label: "自动任务", img: "assets/shots/codewaker/06-创建自动任务.png", note: "点击放大查看原图。创建自动任务：无人值守+审批门禁。" }
+      ]
+    },
+    'buzz': {
+      productId: 'buzz',
+      productName: 'buzz',  // 由 view 端用 P[id].name 覆盖
+      isSchematic: false,
+      states: [
+        { id: "s1", label: "落地页", img: "assets/shots/buzz/01-landing-人机协作工作空间.png", note: "点击放大查看原图。本机 relay 实跑的 web 入口：\"人类与 AI Agent 的团队协作\"——Agent 当正式成员。" },
+        { id: "s2", label: "登录Nostr身份", img: "assets/shots/buzz/02-login-Nostr身份.png", note: "点击放大查看原图。登录页：底层身份是 Nostr secp256k1 密钥对（人 NIP-42 / Agent NIP-98）。" },
+        { id: "s3", label: "relay运行", img: "assets/shots/buzz/03-relay运行-health.png", note: "点击放大查看原图。本机 relay 实跑：Postgres/Redis/MinIO/Git 对象存储/NIP-PL push 全通。" },
+        { id: "s4", label: "Prometheus指标", img: "assets/shots/buzz/04-relay-metrics-实跑.png", note: "点击放大查看原图。relay 实时指标：buzz_total_users{type=agent/human}、git_repos、community 成员角色。" },
+        { id: "s5", label: "频道源码", img: "assets/shots/buzz/01b-landing-hero.png", note: "频道即访问边界（open/private + NIP-29 group id），成员 role 枚举含 Bot 指定——详见深度评测源码段。" },
+        { id: "s6", label: "Git事件源码", img: "assets/shots/buzz/03-relay运行-health.png", note: "NIP-34 把 patch/PR/issue/status 全部建模成签名事件——详见深度评测源码段（buzz-core/src/kind.rs）。" }
+      ]
+    },
+    'qoderwork': {
+      productId: 'qoderwork',
+      productName: 'qoderwork',  // 由 view 端用 P[id].name 覆盖
+      isSchematic: false,
+      states: [
+        { id: "s1", label: "官网桌面助手", img: "assets/shots/qoderwork/01-官网-桌面智能体.png", note: "点击放大查看原图。QoderWork 官网：桌面级通用智能体助手——自然语言驱动，操作浏览器/文件/产出文档。" },
+        { id: "s2", label: "能力市场", img: "assets/shots/qoderwork/02-能力市场.png", note: "点击放大查看原图。能力市场：与 QoderWake 共享同一技能库（产品族策略）。" },
+        { id: "s3", label: "定价", img: "assets/shots/qoderwork/03-定价.png", note: "点击放大查看原图。按 Credits 计费，与 QoderWake 共享账号/Credits 体系。" },
+        { id: "s4", label: "下载", img: "assets/shots/qoderwork/04-下载.png", note: "点击放大查看原图。桌面客户端（macOS/Win/Linux）——本地优先形态。" },
+        { id: "s5", label: "核心能力", img: "assets/shots/qoderwork/01-官网-桌面智能体.png", note: "核心能力：自然语言任务自动化+浏览器操作+本地文件+Office 产出+MCP——详见深度评测。" },
+        { id: "s6", label: "产品族", img: "assets/shots/qoderwork/02-能力市场.png", note: "产品族梯度：QoderWork（个人助手）→ QoderWake（团队员工），统一账号+共享技能市场。" }
+      ]
+    },
+    'wanuai': {
+      productId: 'wanuai',
+      productName: 'wanuai',  // 由 view 端用 P[id].name 覆盖
+      isSchematic: false,
+      states: [
+        { id: "s1", label: "创业引路", img: "assets/shots/wanuai/01-home-创业引路.jpg", note: "点击放大查看原图。万有无界首页：'搭建由多名数字员工组成的协作小组'——阿里云 2026-08 内测的 B 端人+Agent 协作平台（钉钉 CEO 陈宇森负责）。" },
+        { id: "s2", label: "4专家+1助理", img: "assets/shots/wanuai/02-agent-4专家1助理.jpg", note: "点击放大查看原图。Agent 编制页：A股研究/竞品分析/法律合规/镜本导演 4 专家 + 小万个人助理 1 助理——固定岗位分层，非自由配置。" },
+        { id: "s3", label: "影视短剧模板", img: "assets/shots/wanuai/03-project-影视短剧模板.jpg", note: "点击放大查看原图。行业项目模板：AI 影视短剧 5 阶段流程（剧本→资产→视频→后期→发行）——编排不是 DSL/DAG，是行业 know-how 沉淀。" },
+        { id: "s4", label: "2GB资产配额", img: "assets/shots/wanuai/04-assets-2GB配额.jpg", note: "点击放大查看原图。资产空间：2GB freemium 配额——4 象限管理（公共/个人/团队/项目）。" },
+        { id: "s5", label: "10105技能市场", img: "assets/shots/wanuai/05-market-10105技能.jpg", note: "点击放大查看原图。技能市场：10105 技能 + 标准化元数据（触发词/安装数/upstream）——零件铺型生态。" },
+        { id: "s6", label: "待办通知空态", img: "assets/shots/wanuai/06-todo-通知空态.jpg", note: "点击放大查看原图。待办/通知空态：项目空间任务流的可观测界面（人在环里的协作入口）。" },
+        { id: "s7", label: "4类积分+消耗", img: "assets/shots/wanuai/07-points-4类积分+消耗表.jpg", note: "点击放大查看原图。积分中心：4 类积分（订阅/订购/活动/总）+ 消耗表 4 维度（Agent × 单聊/群聊/项目空间 × 时间）——成本对账看板。" },
+        { id: "s8", label: "账号下拉", img: "assets/shots/wanuai/08-account-dropdown.jpg", note: "点击放大查看原图。账号中心下拉：含企业空间/插件等管理入口——B 端治理雏形。" },
+        { id: "s9", label: "Workspace主页", img: "assets/shots/wanuai/09-workspace-主页.jpg", note: "点击放大查看原图。Workspace 主页：项目空间 + 队长 agent 调度视角——'人+Agent' 协作的最终落脚点。" }
       ]
     },
     'chatgpt-desktop': {

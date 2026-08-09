@@ -37,7 +37,7 @@ window.TD_AILENS = [
     icon: '✦',
     mode: 'prebuilt',
     engine: 'Mavis (MiniMax) · 基于 motto 聚类',
-    products: ['mico', 'multica', 'qm', 'openclaw', 'hermes', 'paperclip', 'cabinet', 'opencode', 'linear', 'jira-meego', 'slack', 'feishu', 'workbuddy', 'claude-ma', 'crewai', 'qoderwake', 'chatgpt-desktop', 'mavis', 'feishu-codem', 'claude-tag', 'agent365', 'openworker'],
+    products: ['mico', 'multica', 'qm', 'openclaw', 'hermes', 'paperclip', 'cabinet', 'opencode', 'linear', 'jira-meego', 'slack', 'feishu', 'workbuddy', 'claude-ma', 'crewai', 'qoderwake', 'chatgpt-desktop', 'mavis', 'feishu-codem', 'claude-tag', 'agent365', 'openworker', 'buzz', 'qoderwork'],
     related: [],
     summary: '把 22 个产品按"主语"重新聚类，会发现 6 个理念家族：执行者、队员、雇员、场所、知识底座、控制平面。每个家族对"agent 是什么"有完全不同的回答。',
     sections: [

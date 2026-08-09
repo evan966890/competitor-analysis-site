@@ -242,6 +242,25 @@ window.TD_LANES = [
         "img": "assets/shots/buzz/04-relay-metrics-实跑.png",
         "caption": "Buzz：编排=签名事件流——Agent 用自己的密钥派活/接活/审查，relay 是唯一真相源",
         "hot": []
+      },
+      {
+        "p": "wanuai",
+        "img": "assets/shots/wanuai/03-project-影视短剧模板.jpg",
+        "caption": "万有无界：行业项目模板=编排单位（5 阶段流程：剧本→资产→视频→后期→发行），队长 agent 只调度不生产",
+        "hot": [
+          {
+            "x": 24,
+            "y": 28,
+            "t": "5 阶段流程",
+            "d": "AI 影视短剧模板内嵌完整 5 阶段——编排不是 DSL 也不是 DAG，是行业 know-how 沉淀下来的项目模板。"
+          },
+          {
+            "x": 72,
+            "y": 62,
+            "t": "队长仅调度",
+            "d": "项目里队长 agent 只发令不执行——是纯 PM 角色，把执行交给专家群。"
+          }
+        ]
       }
     ],
     "decisions": [
@@ -515,6 +534,25 @@ window.TD_LANES = [
         "img": "assets/shots/openclaw/12-agents.png",
         "caption": "OpenClaw agents：个人助理的多开与分工",
         "hot": []
+      },
+      {
+        "p": "wanuai",
+        "img": "assets/shots/wanuai/02-agent-4专家1助理.jpg",
+        "caption": "万有无界：4 专家（A股/竞品/法律/镜导）+ 1 个人助理（小万）分层，固定岗位而非自由配置",
+        "hot": [
+          {
+            "x": 20,
+            "y": 38,
+            "t": "4 专家层",
+            "d": "A股研究/竞品分析/法律合规/镜本导演——专家是行业分工的具象，不是通用 Lobe 拼装。"
+          },
+          {
+            "x": 78,
+            "y": 30,
+            "t": "小万（个人助理）",
+            "d": "独立于专家的助理层——承接日常问答，把重活派给专家群。"
+          }
+        ]
       },
       {
         "p": "mico",
@@ -991,6 +1029,25 @@ window.TD_LANES = [
         "img": "assets/shots/workbuddy/01-home.jpeg",
         "caption": "WorkBuddy 官网：下载+插件市场+IM 遥控的消费入口",
         "hot": []
+      },
+      {
+        "p": "wanuai",
+        "img": "assets/shots/wanuai/05-market-10105技能.jpg",
+        "caption": "万有无界技能市场：10105 技能 + 标准化元数据（触发词/安装数/upstream）——零件铺型",
+        "hot": [
+          {
+            "x": 18,
+            "y": 22,
+            "t": "10105 技能池",
+            "d": "一万零一百零五——海量零件平铺，需要搜索/分类才能找到。"
+          },
+          {
+            "x": 74,
+            "y": 65,
+            "t": "上游元数据",
+            "d": "每条技能都标 upstream——可追到来源、版本、信任链。"
+          }
+        ]
       }
     ],
     "decisions": [

@@ -1,16 +1,16 @@
-// 8 维源码对比矩阵 · 9 家深度产品
+// 8 维源码对比矩阵 · 12 家深度产品
 // 字段：meta | dimensions | products | cells
 // 每个 cell 必含 score(1-5) + summary + forMico，可选 codeSnippet/evidence
-// 8 维 × 9 家 = 72 单元
-// 全部 evidence 引用现有截图库（vibe-kanban/ruflo/raft/openworker 为"示意图"）
+// 8 维 × 12 家 = 96 单元
+// 全部 evidence 引用现有截图库（vibe-kanban/ruflo/raft/openworker 为"示意图"；buzz/qoderwork/qoderwake 为官网/实机实拍）
 // code snippet 为基于官方文档/源码推断的演示代码，非实机 git blame
 window.TD_SOURCE_MATRIX = {
   meta: {
-    version: '3.0',
-    dateAdded: '2026-08-04',
-    title: '8 维源码对比矩阵 · 9 家产品',
-    description: '9 家深度产品在 8 个源码维度上的实现对比。横向看差异，纵向看取舍。每格可点开看完整内容（代码/截图/对 MiCo 启示）。',
-    note: 'evidence 字段：multica/qm/paperclip/jira-meego/linear 为实机截图；vibe-kanban/ruflo/raft/openworker 为基于官方发布物料合成的"示意图"。code snippet 为构造的演示代码，已标注 [推断]。',
+    version: '3.1',
+    dateAdded: '2026-08-09',
+    title: '8 维源码对比矩阵 · 12 家产品',
+    description: '12 家深度产品在 8 个源码维度上的实现对比。横向看差异，纵向看取舍。每格可点开看完整内容（代码/截图/对 MiCo 启示）。',
+    note: 'evidence 字段：multica/qm/paperclip/jira-meego/linear/buzz/qoderwake 为实机或官网实拍截图；vibe-kanban/ruflo/raft/openworker/qoderwork 为基于官方发布物料合成的"示意图"或官网。code snippet 为构造的演示代码，已标注 [推断]。',
   },
 
   // ============ 8 个维度 ============
@@ -65,13 +65,14 @@ window.TD_SOURCE_MATRIX = {
     },
   ],
 
-  // ============ 9 家产品（与 products.js 一致）============
+  // ============ 12 家产品（与 products.js 一致）============
   products: [
     'multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo',
     'raft', 'jira-meego', 'linear', 'openworker',
+    'buzz', 'qoderwork', 'qoderwake',
   ],
 
-  // ============ 72 个 cells（含 code snippet + evidence）============
+  // ============ 96 个 cells（含 code snippet + evidence）============
   cells: {
 
     // ============ 1. Multica ============
@@ -739,5 +740,173 @@ async def execute_with_approval(op: Operation):
         evidence: { img: 'assets/shots/openworker/01_desktop_home.jpg', cap: 'OpenWorker 桌面原生（Tauri）' } },
     },
 
+    // ============ 10. Buzz (Block / Jack Dorsey) ============
+    'buzz': {
+      state: { score: 4, summary: '事件流即状态——一张 events 表装下消息/反应/profile/Git patch/合并决策全部签名事件，kind 整数是唯一分发开关。Schnorr 签名原样落库，独立可验。',
+        forMico: 'MiCo 的任务/会话/产物是三张表，Buzz 一张事件流。MiCo 要抄的是"关键动作落签名事件"的审计层，不是把三张表并成一张。',
+        codeSnippet: { file: 'crates/buzz-db/src/event.rs (推断)', code: `pub async fn insert_event(
+  pool: &PgPool,
+  community_id: CommunityId,
+  event: &Event,
+  channel_id: Option<Uuid>,
+) -> Result<(StoredEvent, bool)> {
+  let kind_u32 = u32::from(event.kind.as_u16());
+  if kind_u32 == KIND_AUTH { return Err(DbError::AuthEventRejected); }
+  if is_ephemeral(kind_u32) { return Err(DbError::EphemeralEventRejected(...)); }
+  let sig_bytes = event.sig.serialize();  // Schnorr 签名原样落库
+  // 单一 events 表 + ON CONFLICT DO NOTHING = 幂等
+  sqlx::query(r#"INSERT INTO events (...) VALUES (...) ON CONFLICT DO NOTHING"#)
+}` },
+        evidence: { img: 'assets/shots/buzz/03-relay运行-health.png', cap: 'Buzz 本机 relay 实跑：单 events 表 + 签名持久化' } },
+      scheduling: { score: 3, summary: '频道即访问边界——NIP-29 group id + 成员通过 (community_id, channel_id, pubkey) 三元组定位，无中心调度器；agent 接活 = 在目标频道发签名事件。',
+        forMico: 'Buzz 的"频道=权限边界"思路比 MiCo 的"任务派单"更轻——但对个人/小团队是 OK 的，公司级必补调度。',
+        evidence: { img: 'assets/shots/buzz/01b-landing-hero.png', cap: 'Buzz 频道即访问边界：open/private + NIP-29' } },
+      memory: { score: 3, summary: 'NIP-05 profile + community-local 记忆 + 跨 community 隔离——无 HNSW/向量，靠"事件回放"重建上下文。',
+        forMico: '事件回放是好思路（可审计），但实时检索慢。MiCo 的智能记忆（图谱+HNSW）可叠加在事件流之上做实时检索。' },
+      mcp: { score: 3, summary: '基于 Nostr NIP 协议（25+ NIP 覆盖身份/消息/反应/支付/长文），无 MCP 标准。生态走 Nostr relay 互联。',
+        forMico: 'Buzz 选 Nostr 自成一套生态，2026 MCP 是事实标准。MiCo 该跟 MCP。' },
+      sandbox: { score: 4, summary: 'secp256k1 私钥 = 不可伪造身份 + buzz-audit SHA-256 哈希链审计（per-community 独立链）+ verify_chain 篡改检测。这是 Buzz 与所有 bot 式集成的根本区别。',
+        forMico: '**最强可学的一块**——虾的关键动作（上岗/转正/审批/合并/打款）落成 SHA-256 链，做 verify_chain 篡改检测，是安全合规团队准入评估里最缺的。',
+        codeSnippet: { file: 'crates/buzz-audit/src/chain.rs (推断)', code: `// Buzz 的可验证审计链：每条落库事件镜像成 audit_log，SHA-256 链式 hash
+fn append_event(chain: &mut AuditChain, event: &StoredEvent) {
+  let prev_hash = chain.last_hash.unwrap_or(Hash::zero());
+  let payload = serialize(&(prev_hash, event));
+  let new_hash = sha256(payload);
+  chain.entries.push(AuditEntry { event_id: event.id, prev_hash, hash: new_hash });
+  chain.last_hash = Some(new_hash);
+}
+
+fn verify_chain(chain: &AuditChain) -> Result<()> {
+  for (i, entry) in chain.entries.iter().enumerate() {
+    let prev = if i == 0 { Hash::zero() } else { chain.entries[i-1].hash };
+    let expected = sha256(serialize(&(prev, &entry.event_id)));
+    if expected != entry.hash { return Err(ChainBroken(i)); }
+  }
+  Ok(())
+}` },
+        evidence: { img: 'assets/shots/buzz/04-relay-metrics-实跑.png', cap: 'Buzz buzz-audit 链：每条事件 = 一次链 append' } },
+      error: { score: 3, summary: '事件写入 ON CONFLICT DO NOTHING（幂等去重）+ 瞬态事件(Ephemeral) 不入库。无应用层重试。',
+        forMico: '幂等写入是好的。MiCo 任务重试该学这模式——同一任务 ID 多次入队不重复执行。' },
+      observability: { score: 5, summary: 'Prometheus 指标（buzz_total_users{type=human/agent}、buzz_total_git_repos、buzz_community_relay_members{role=...}）+ 全量事件可审计 + verify_chain 定期跑。',
+        forMico: '指标维度本身揭示 Buzz 的世界观：人和 agent 同表只分 type。MiCo 编制化统计可学这思路——按"员工/岗位"维度看健康度。' },
+      deployment: { score: 4, summary: '单 relay（Rust）+ Postgres/Redis/MinIO/对象存储，可自托管可互联（relay-to-relay 联邦）。本机已实跑。',
+        forMico: '本台已证 Buzz 一台 macOS 跑得起来（colima + just setup + cargo build）。与 Multica/QM 同级，优于任何 SaaS-only。' },
+    },
+
+    // ============ 11. QoderWork (阿里 · 个人桌面助手) ============
+    'qoderwork': {
+      state: { score: 2, summary: '任务=会话内步骤链（自然语言 → 拆解 → 浏览器/文件操作 → 产出文档），无独立状态机。隐式状态=步骤序号。',
+        forMico: '个人向 OK，公司级必补 4-6 态。QoderWork 验证了"全能助手"形态的市场——MiCo 客户端可学。',
+        evidence: { img: 'assets/shots/qoderwork/01-官网-桌面智能体.png', cap: 'QoderWork 官网：桌面级通用智能体助手' } },
+      scheduling: { score: 1, summary: '单 agent 按需触发，无调度。每次任务一 agent。',
+        forMico: '个人向 OK，公司级必补调度。MiCo 调度器 + 虾编制是同场景的更优解。' },
+      memory: { score: 3, summary: '桌面本地记忆（推断）+ 跨会话保留 + 离线可用。能力市场技能记忆可按需挂载。',
+        forMico: '本地记忆是个人向够用，团队级需共享图谱。MiCo 上下文 OS 已具备，可与 QoderWork 形态互参。',
+        codeSnippet: { file: 'qoderwork/desktop/src/memory.ts (推断)', code: `interface QoderWorkMemory {
+  conversations: Conversation[];  // 跨会话保留
+  skills: Skill[];                // 能力市场挂载
+  facts: MemoryEntry[];           // 沉淀的事实
+  scope: 'local';                 // 本地优先
+}
+
+// 桌面端本地 SQLite + 索引
+// 团队场景需上传到 MiCo 上下文 OS 共享图谱
+` } },
+      mcp: { score: 4, summary: 'MCP 协议支持 + 能力市场（Skill 安装）+ 共享 QoderWake 技能库。',
+        forMico: 'MCP + 能力市场是 2026 标配。QoderWork 验证了可行性，MiCo 该跟。',
+        codeSnippet: { file: 'qoderwork/desktop/src/capabilities.ts (推断)', code: `interface QoderWorkCapabilities {
+  taskAutomation: { trigger: 'natural_language'; scope: 'desktop' };
+  browser: { automation: true; formFilling: boolean };
+  localFiles: { read: true; write: true; formats: ['word', 'excel', 'ppt', 'pdf'] };
+  mcp: { supported: true; servers: McpServer[] };
+  skillMarket: { installable: Skill[]; sharedWith: 'qoderwake' };
+}` },
+        evidence: { img: 'assets/shots/qoderwork/02-能力市场.png', cap: 'QoderWork 能力市场：与 QoderWake 共享技能' } },
+      sandbox: { score: 3, summary: '桌面 OS 权限（macOS/Win/Linux）+ 应用容器沙箱 + 文件白名单（user_selected/full）+ 浏览器域名白名单。',
+        forMico: '沙箱+白名单是安全底线。QoderWork 的桌面权限模型 MiCo 客户端可参照，但 MiCo 该挂"岗位边界"——不是"全能助手什么都干"，是"这个岗位的虾只能碰这些文件/这些域名"。',
+        codeSnippet: { file: 'qoderwork/desktop/src/permissions.ts (推断)', code: `interface DesktopPermissions {
+  fileSystem: {
+    scope: 'user_selected' | 'full';
+    operations: ['read', 'write', 'create'];
+    sandboxing: 'app_container';
+  };
+  browser: {
+    automation: 'extension' | 'cdp';
+    domains: string[];  // 域名白名单
+    credentialAccess: 'none' | 'managed';
+  };
+  output: { formats: ['docx', 'xlsx', 'pptx', 'pdf']; location: 'user_chosen' };
+}` },
+        evidence: { img: 'assets/shots/qoderwork/04-下载.png', cap: 'QoderWork 桌面客户端：macOS/Win/Linux + 应用容器' } },
+      error: { score: 2, summary: '单步重试，无系统级恢复。',
+        forMico: '基础款。' },
+      observability: { score: 3, summary: '任务执行面板 + 自然语言步骤链 + token 计数，基础但清晰。',
+        forMico: '步骤链 UX 清晰，MiCo 任务执行页可学。' },
+      deployment: { score: 3, summary: '桌面客户端（macOS 13+/Win 10+/Linux，推断 Tauri 壳），本地优先 + 闭源绑阿里系。',
+        forMico: '本地优先是个人向标杆，但闭源+绑阿里系是企业客户硬伤。MiCo 私有化部署是机会。' },
+    },
+
+    // ============ 12. QoderWake (阿里 · 预置数字员工工作台) ============
+    'qoderwake': {
+      state: { score: 3, summary: '6 预置岗位（PM/RD/QA 等）+ 任务二分（对话任务 vs 自动任务）+ 自主度档（supervised/autonomous）。比 QoderWork 多了"角色"和"门禁"两维。',
+        forMico: '**最强可学的一块**——"角色=岗位说明书+环境+记忆"三件套，阿里独立得出同一抽象，证明这是行业共识。MiCo 方向正确，可学它的预置角色库做冷启动。',
+        codeSnippet: { file: 'qoderwake/desktop/src/models/waker.ts (推断)', code: `interface Waker {
+  id: string;
+  role: PredefinedRole;          // 6 预置岗位之一
+  jobDescription: JobSpec;       // 岗位说明书：职责/边界/产出
+  environment: 'local' | 'cloud'; // 独立权限环境
+  skills: Skill[];               // 100+ 岗位技能子集
+  memory: {
+    facts: MemoryEntry[];
+    viewable: boolean;           // 可查看
+    correctable: boolean;        // 可纠正
+    forgettable: boolean;        // 可遗忘
+  };
+  status: 'online' | 'offline';
+}` },
+        evidence: { img: 'assets/shots/qoderwake/07-官网-6岗位.png', cap: 'QoderWake 官网：6+ 预置岗位 + 100+ 岗位技能' } },
+      scheduling: { score: 4, summary: '6 预置角色 + 群组协同（多 Waker 编组做项目）+ 协同模式 sequential/parallel/handoff。',
+        forMico: '群组=跨角色项目组，与 MiCo 专家团同构。QoderWake 的协同模式（串行/并行/交接）值得抄——MiCo 专家团编排可把协同模式做成显性配置。',
+        codeSnippet: { file: 'qoderwake/desktop/src/models/group.ts (推断)', code: `interface WakerGroup {
+  id: string;
+  project: ProjectId;
+  members: Waker[];          // 多角色 Waker（PM+RD+QA...）
+  tasks: Task[];
+  coordination: 'sequential' | 'parallel' | 'handoff';
+}
+
+// sequential: 串行评审
+// parallel:   并行调研
+// handoff:    接力交付（MiCo 专家团"防七嘴八舌"同构）
+` },
+        evidence: { img: 'assets/shots/codewaker/02-我的群组.png', cap: 'QoderWake 群组协同：任务进行中 12/13 实跑' } },
+      memory: { score: 4, summary: '角色记忆（沉淀 facts）+ 可查看/可纠正/可遗忘（官网原话）+ 跨角色隔离。社区/团队维度做记忆边界。',
+        forMico: '**记忆可控是 QoderWake 最值得抄的**——"任何一条记忆可查看/纠正/遗忘"做成显性卖点，反黑盒。MiCo 上下文 OS 也强调记忆可控，可把这做成一等公民。' },
+      mcp: { score: 4, summary: 'MCP 协议 + 能力市场（100+ 岗位技能）+ 共享 QoderWork 技能库——一个市场喂两个产品形态。',
+        forMico: 'MCP + 能力市场跨产品共享——这是阿里"一个市场喂多产品"的策略。MiCo 技能市场可跨形态（个人/团队）复用。' },
+      sandbox: { score: 3, summary: '角色=审批门禁（自动任务高风险动作要人确认）+ 本机/云端沙箱环境。**注意：QoderWake 的门禁是"角色级"而非"per-action"，颗粒度比 Linear 粗**。',
+        forMico: 'QoderWake 把"自主度分档"产品化（supervised/autonomous），与 WorkBuddy 三档、MiCo P1-5 自主度是同一类设计。MiCo 该把 P1-5 做成显性配置。',
+        codeSnippet: { file: 'qoderwake/desktop/src/models/task.ts (推断)', code: `interface Task {
+  type: 'dialog' | 'auto';
+  assignee: Waker | WakerGroup;
+  approvalGate?: {
+    trigger: 'high_risk' | 'always' | 'never';
+    approver: UserId;
+  };
+  autonomy: 'supervised' | 'autonomous';
+}
+
+// dialog: 人机协作，实时交互
+// auto:   后台执行，高风险挂门禁
+` },
+        evidence: { img: 'assets/shots/codewaker/06-创建自动任务.png', cap: 'QoderWake 自动任务：审批门禁 + 自主度档' } },
+      error: { score: 3, summary: '自动任务门禁失败回退（approver 拒绝则暂停），无跨任务重试。',
+        forMico: '门禁失败 = 暂停，比"自动重试"更安全。MiCo 审批流可学。' },
+      observability: { score: 3, summary: '群组任务面板（任务进行中 X/Y 实跑）+ Waker 详情（角色+技能+记忆+工作记录）+ 记忆可视化。',
+        forMico: '群组任务面板是好的项目视图。MiCo 项目空间可学。',
+        evidence: { img: 'assets/shots/codewaker/01-management.png', cap: 'QoderWake 管理后台：数字员工列表' } },
+      deployment: { score: 3, summary: '桌面客户端（macOS 13+/Win 10+/Linux，推断 Tauri/Electron），本机/云端双部署 + 闭源绑阿里系。',
+        forMico: '桌面+云双部署是 2026 标配。闭源+绑阿里系是企业客户硬伤，MiCo 私有化部署是机会。' },
+    }
   },
 };

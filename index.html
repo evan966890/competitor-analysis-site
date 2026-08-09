@@ -335,21 +335,36 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/codexDeepDive.js"></script>
 <script src="data/openhandsDeepDive.js"></script>
 <script src="data/deepagentsDeepDive.js"></script>
+<script src="data/langfuseDeepDive.js"></script>
+<script src="data/litellmDeepDive.js"></script>
+<script src="data/daytonaDeepDive.js"></script>
+<script src="data/e2bDeepDive.js"></script>
+<script src="data/autogenDeepDive.js"></script>
+<script src="data/langgraphDeepDive.js"></script>
+<script src="data/swebenchDeepDive.js"></script>
+<script src="data/spec-kitDeepDive.js"></script>
+<script src="data/rules-dirsDeepDive.js"></script>
+<script src="data/claude-memDeepDive.js"></script>
+<script src="data/planning-filesDeepDive.js"></script>
+<script src="data/mcpDeepDive.js"></script>
+<script src="data/promptfooDeepDive.js"></script>
+<script src="data/inspect-evalsDeepDive.js"></script>
+<script src="data/evalscopeDeepDive.js"></script>
 <script>
 (() => {
   const files = [
     // E (20)
-    'daytona','nanoclaw','cmux','cua','e2b','browser-harness','opensandbox','agent-infra-sandbox',
+    'nanoclaw','cmux','cua','browser-harness','opensandbox','agent-infra-sandbox',
     'judge0','agent-sandbox-k8s','stakpak-agent','oss-fuzz-gen','e2b-desktop','tensorlake','arrakis',
     'agentscope-runtime','swe-rex','sandboxed-sh','capsule','terminal-bench-env',
-    // T (12)
-    'github-spec-kit','mcp-servers','cli-anything','agents-md','mcp','rules-directories',
+    // T (12) — github-spec-kit/rules-directories/mcp 已升级为完整 deep-dive
+    'mcp-servers','cli-anything','agents-md',
     'langchain-mcp-adapters','microsoft-mcp-servers','acpx','microsoft-learn-mcp','ibm-mcp','agent-md',
-    // C (9)
-    'claude-mem','superclaude','planning-with-files','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
-    // L (47) — opencode/claude-code/codex-cli/openhands/deepagents 已升级为完整 deep-dive
-    'gemini-cli','deerflow','autogen','openmanus','pi','aider',
-    'agno','claude-code-plugins','langgraph','semantic-kernel','openai-agents-sdk','qwen-code','archon','devika',
+    // C (9) — claude-mem/planning-files 已升级为完整 deep-dive
+    'superclaude','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
+    // L (47) — opencode/claude-code/codex-cli/openhands/deepagents/autogen/langgraph 已升级为完整 deep-dive
+    'gemini-cli','deerflow','openmanus','pi','aider',
+    'agno','claude-code-plugins','semantic-kernel','openai-agents-sdk','qwen-code','archon','devika',
     'google-adk','swe-agent','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive',
     'microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw',
     'mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion',
@@ -425,34 +440,34 @@ function renderNav() {
     <button class="nav-item ${on(state.view === 'home')}" onclick="go('#/')"><span class="ic">⌂</span>总览</button>
     <button class="nav-item ${on(state.view === 'bench')}" onclick="go('#/bench')"><span class="ic">◫</span>对比工作台</button>
     <div class="nav-sec">横向比较</div>
-    <button class="nav-item ${on(state.view === 'tasks')}" onclick="go('#/tasks')"><span class="ic">▤</span>任务面板<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'playbook' || state.view === 'playbooks')}" onclick="go('#/playbook')"><span class="ic">▶</span>工作流剧本<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'tasks')}" onclick="go('#/tasks')"><span class="ic">▤</span>任务面板<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'playbook' || state.view === 'playbooks')}" onclick="go('#/playbook')"><span class="ic">▶</span>工作流剧本<span class="badge-new">v3.3</span></button>
     <div class="nav-sec">板块对比</div>
     ${TD_LANES.map(l => `<button class="nav-item ${on(state.view === 'lane' && state.lane === l.id)}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
-    <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 12 家矩阵<span class="badge-new">新</span></button>
-    <div class="nav-sec">产品画像（12 家）</div>
+    <button class="nav-item ${on(state.view == 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>9 维 × 152 家矩阵<span class="badge-new">v3.3</span></button>
+    <div class="nav-sec">产品画像（33 家）</div>
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
     `).join('')}
-    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>30 家视觉导览<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>168 家视觉导览<span class="badge-new">v3.3</span></button>
     <div class="nav-sec">AI 视角</div>
-    <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">v3.3</span></button>
     <div class="nav-sec">产品深度评测</div>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'openworker')}" onclick="go('#/product/openworker')"><span class="ic">⚐</span>OpenWorker (吴恩达)<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'vibe-kanban')}" onclick="go('#/product/vibe-kanban')"><span class="ic">▦</span>Vibe Kanban<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'raft')}" onclick="go('#/product/raft')"><span class="ic">⚏</span>Raft (Slock)<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'ruflo')}" onclick="go('#/product/ruflo')"><span class="ic">◉</span>Ruflo (ruvnet)<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'openagents')}" onclick="go('#/product/openagents')"><span class="ic">⌬</span>OpenAgents<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'multica')}" onclick="go('#/product/multica')"><span class="ic">▤</span>Multica<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'qm')}" onclick="go('#/product/qm')"><span class="ic">◐</span>QM (公司治理)<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'jira-meego')}" onclick="go('#/product/jira-meego')"><span class="ic">▣</span>Jira / Meego<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'linear')}" onclick="go('#/product/linear')"><span class="ic">◇</span>Linear<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'buzz')}" onclick="go('#/product/buzz')"><span class="ic">🐝</span>Buzz (Block)<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwake')}" onclick="go('#/product/qoderwake')"><span class="ic">@FXML</span>QoderWake<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwork')}" onclick="go('#/product/qoderwork')"><span class="ic">⌨</span>QoderWork<span class="badge-new">新</span></button>
-    <button class="nav-item ${on(state.view === 'product' && state.product === 'wanuai')}" onclick="go('#/product/wanuai')"><span class="ic">⇄</span>万有无界<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'openworker')}" onclick="go('#/product/openworker')"><span class="ic">⚐</span>OpenWorker (吴恩达)<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'vibe-kanban')}" onclick="go('#/product/vibe-kanban')"><span class="ic">▦</span>Vibe Kanban<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'raft')}" onclick="go('#/product/raft')"><span class="ic">⚏</span>Raft (Slock)<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'ruflo')}" onclick="go('#/product/ruflo')"><span class="ic">◉</span>Ruflo (ruvnet)<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'openagents')}" onclick="go('#/product/openagents')"><span class="ic">⌬</span>OpenAgents<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'multica')}" onclick="go('#/product/multica')"><span class="ic">▤</span>Multica<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'qm')}" onclick="go('#/product/qm')"><span class="ic">◐</span>QM (公司治理)<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'jira-meego')}" onclick="go('#/product/jira-meego')"><span class="ic">▣</span>Jira / Meego<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'linear')}" onclick="go('#/product/linear')"><span class="ic">◇</span>Linear<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'buzz')}" onclick="go('#/product/buzz')"><span class="ic">🐝</span>Buzz (Block)<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwake')}" onclick="go('#/product/qoderwake')"><span class="ic">@FXML</span>QoderWake<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'qoderwork')}" onclick="go('#/product/qoderwork')"><span class="ic">⌨</span>QoderWork<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view === 'product' && state.product === 'wanuai')}" onclick="go('#/product/wanuai')"><span class="ic">⇄</span>万有无界<span class="badge-new">v3.3</span></button>
   `;
 }
 function go(h) { location.hash = h; }
@@ -467,20 +482,20 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 151 + 横切 9 维 × 151 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
-    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架</div>
+    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 33 + 骨架 124 + 横切 9 维 × 152 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
+    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架 · 2026-08-10 深度 5 L 层 + 15 次重要项目</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
-      <div><b>151</b><span>深度评测</span></div>
-      <div><b>1359</b><span>源码 cell</span></div>
-      <div><b>134</b><span>截图</span></div>
-      <div><b>30</b><span>demo 导览</span></div>
+      <div><b>33</b><span>深度评测</span></div>
+      <div><b>1368</b><span>源码 cell</span></div>
+      <div><b>149</b><span>截图</span></div>
+      <div><b>168</b><span>demo 导览</span></div>
     </div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
-    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（13 深度 + 138 论文骨架 + 17 历史），每个带 motto/oneLiner/4 维评分
+    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（33 深度 + 124 论文骨架 + 11 历史），每个带 motto/oneLiner/4 维评分
     &nbsp;·&nbsp;
     <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 134 张截图 + 3 家文字 placeholder）
   </div>
@@ -494,14 +509,19 @@ function viewHome() {
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
-  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：8 维评分 + 30 家 demo 缩略图 / 画像页：8 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
+  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：8 维评分 + 168 家 demo 缩略图 / 画像页：8 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
 }
 
 /* ================= 板块对比 ================= */
 function viewLane() {
   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
-  // 12 家重点产品（按 deep 顺序）
-  const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork','wanuai'];
+  // 33 家重点产品（按 deep 顺序）
+  const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork','wanuai',
+    // v3.3 深度 5 L 层 + 15 次重要项目
+    'opencode','claude-code','codex-cli','openhands','deepagents',
+    'langfuse','litellm','daytona','e2b','autogen','langgraph',
+    'swe-bench','github-spec-kit','rules-directories','claude-mem','planning-with-files',
+    'mcp','promptfoo','inspect-evals','evalscope'];
   const deepItems = l.items.filter(it => DEEP_DIVE_IDS_LANE.includes(it.p));
   const otherItems = l.items.filter(it => !DEEP_DIVE_IDS_LANE.includes(it.p));
   const hasDecisions = l.decisions && l.decisions.length > 0;
@@ -520,8 +540,8 @@ function viewLane() {
   </div>
   ` : ''}
 
-  <!-- 中部：12 家深度产品对比（按 deep 12 顺序）-->
-  <div class="h2">12 家深度产品横向对比</div>
+  <!-- 中部：33 家深度产品对比（按 deep 33 顺序）-->
+  <div class="h2">33 家深度产品横向对比</div>
   <div class="rail">
     ${deepItems.map((it, i) => `
       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -538,7 +558,7 @@ function viewLane() {
   ${otherItems.length > 0 ? `
   <!-- 其他产品（背景参考）-->
   <details style="margin-top:18px">
-    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 12 家深度）</summary>
+    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 33 家深度）</summary>
     <div class="rail" style="margin-top:8px">
       ${otherItems.map(it => `
         <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -626,13 +646,13 @@ function viewSourceMatrix() {
 
   return `
   <div class="hero" style="padding-bottom:18px">
-    <h1>8 维 × 12 家源码对比矩阵</h1>
-    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>8 个维度 × 12 家深度产品 = 96 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <h1>9 维 × 152 家源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>9 个维度 × 152 家产品 = 1368 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
     <div class="ribbon">96 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
   </div>
 
   <div class="callout" style="margin-bottom:18px">
-    <b>怎么看：</b>行 = 12 家深度产品，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
+    <b>怎么看：</b>行 = 33 家深度 + 124 家骨架，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
     评分越高 = 该维度做得越深。${m.meta.note}
   </div>
 
@@ -1355,7 +1375,7 @@ function viewProductGeneric(id) {
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
-    <b>📄 本视图：</b>产品基本页（基础信息 + 8 维评分 + 30 家 demo 缩略图）
+    <b>📄 本视图：</b>产品基本页（基础信息 + 8 维评分 + 168 家 demo 缩略图）
     &nbsp;·&nbsp;
     <a href="#/profile/${id}" style="color:var(--accent)">→ 切到「产品画像」</a>（8 维源码横切 + lane 摘要）
   </div>

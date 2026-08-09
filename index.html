@@ -388,7 +388,7 @@ function renderNav() {
     ${TD_LANES.map(l => `<button class="nav-item ${on(state.view === 'lane' && state.lane === l.id)}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
-    <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 9 家矩阵<span class="badge-new">新</span></button>
+    <button class="nav-item ${on(state.view === 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>8 维 × 12 家矩阵<span class="badge-new">新</span></button>
     <div class="nav-sec">产品画像（12 家）</div>
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
@@ -423,7 +423,7 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3 · 4 层决策支持系统：广度 29 + 深度 12 + 横切 8 维 × 9 家 + 纵切 9 个 lane + 29 家 demo tour</p>
+    <p>v3 · 4 层决策支持系统：广度 29 + 深度 12 + 横切 8 维 × 12 家 + 纵切 10 个 lane + 29 家 demo tour</p>
     <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
@@ -476,8 +476,8 @@ function viewLane() {
   </div>
   ` : ''}
 
-  <!-- 中部：9 家深度产品对比（按 deep 9 顺序）-->
-  <div class="h2">9 家深度产品横向对比</div>
+  <!-- 中部：12 家深度产品对比（按 deep 12 顺序）-->
+  <div class="h2">12 家深度产品横向对比</div>
   <div class="rail">
     ${deepItems.map((it, i) => `
       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -494,7 +494,7 @@ function viewLane() {
   ${otherItems.length > 0 ? `
   <!-- 其他产品（背景参考）-->
   <details style="margin-top:18px">
-    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 9 家深度）</summary>
+    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 12 家深度）</summary>
     <div class="rail" style="margin-top:8px">
       ${otherItems.map(it => `
         <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
@@ -582,13 +582,13 @@ function viewSourceMatrix() {
 
   return `
   <div class="hero" style="padding-bottom:18px">
-    <h1>8 维 × 9 家源码对比矩阵</h1>
-    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>8 个维度 × 9 家深度产品 = 72 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
-    <div class="ribbon">72 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
+    <h1>8 维 × 12 家源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>8 个维度 × 12 家深度产品 = 96 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <div class="ribbon">96 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
   </div>
 
   <div class="callout" style="margin-bottom:18px">
-    <b>怎么看：</b>行 = 9 家深度产品，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
+    <b>怎么看：</b>行 = 12 家深度产品，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
     评分越高 = 该维度做得越深。${m.meta.note}
   </div>
 
@@ -639,15 +639,15 @@ function viewSourceMatrix() {
     </table>
   </div>
 
-  <!-- 单一维度深入视图（按当前选中维度展开 9 家） -->
+  <!-- 单一维度深入视图（按当前选中维度展开 12 家） -->
   <div style="margin-top:24px">
     ${viewMatrixDimDetail()}
   </div>
 
   <div class="pm" style="margin-top:30px">
     <h3>◉ v3 模块 1 完成度</h3>
-    <div class="row"><b>数据底座</b><p>72 cells 全部填齐（8 维 × 9 家），每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
-    <div class="row"><b>下一批</b><p>① 给部分 cell 补 code snippet（当前 5/72，目标 24/72）② 给部分 cell 补 evidence 截图（当前 0/72，目标 36/72）③ 加"按产品切片"视图（产品画像的前置）</p></div>
+    <div class="row"><b>数据底座</b><p>96 cells 全部填齐（8 维 × 12 家），每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
+    <div class="row"><b>下一批</b><p>① 给部分 cell 补 code snippet（当前 5/96，目标 36/96）② 给部分 cell 补 evidence 截图（当前 0/96，目标 48/96）③ 加"按产品切片"视图（产品画像的前置）</p></div>
   </div>
   `;
 }
@@ -656,7 +656,7 @@ function viewMatrixDimDetail() {
   const m = TD_SOURCE_MATRIX;
   const dim = m.dimensions.find(d => d.id === state.matrixDim) || m.dimensions[0];
   return `
-  <div class="h2">${dim.name} · 9 家详细对比</div>
+  <div class="h2">${dim.name} · 12 家详细对比</div>
   <p class="sub" style="margin-bottom:14px">${dim.desc}</p>
   <p style="font-size:12px;color:var(--ink2);margin-bottom:14px"><b>关键问题：</b>${dim.keyQuestion}</p>
 
@@ -1553,7 +1553,7 @@ function viewProductProfile(id) {
   <!-- ② 8 维源码横截面 -->
   <div class="dd-section">
     <h2><span class="num">②</span> 8 维源码横截面</h2>
-    <p class="sub" style="margin-bottom:14px">该产品在 8 个源码维度上的实现细节（与 9 家矩阵同源数据）。点 cell 看完整内容（代码/截图/启示）。</p>
+    <p class="sub" style="margin-bottom:14px">该产品在 8 个源码维度上的实现细节（与 12 家矩阵同源数据）。点 cell 看完整内容（代码/截图/启示）。</p>
     <div class="matrix-wrap" style="overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel)">
       <table class="matrix" style="width:100%;border-collapse:collapse;font-size:13px">
         <thead>
@@ -1645,8 +1645,8 @@ function viewProductProfile(id) {
     </div>
     <div class="row">
       <b>8 维源码对比</b>
-      <p>想看它跟其他 8 家在源码层面的对比？
-        <a href="#/source-matrix" style="color:var(--accent)">→ 8 维 × 9 家矩阵</a>（这个产品是第 N 行）。</p>
+      <p>想看它跟其他 11 家在源码层面的对比？
+        <a href="#/source-matrix" style="color:var(--accent)">→ 8 维 × 12 家矩阵</a>（这个产品是第 N 行）。</p>
     </div>
   </div>
   ` : `

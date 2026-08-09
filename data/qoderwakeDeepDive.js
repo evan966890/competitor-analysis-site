@@ -148,6 +148,7 @@ interface Task {
       { vs: 'Paperclip', diff: 'Paperclip 是"AI 公司编制"（CEO/CTO + Board 审批 + 预算成本中心），面向创业者；QoderWake 是"预置数字员工工作台"（6 角色 + 群组协同），面向企业研发。**前者有"董事会"和"预算"，后者只有"审批门禁"——编制化叙事 Paperclip 更重**。' },
       { vs: 'WorkBuddy', diff: 'WorkBuddy（腾讯）是"桌面智能体工作台"（Craft/Plan/Ask 三档 + IM 远程遥控）；QoderWake 是"预置数字员工"（6 角色 + 群组）。**前者偏单 agent 自主度，后者偏多角色编排**。两者都是中国大厂的 agent 工作台，可对照 MiCo。' },
       { vs: 'Multica', diff: 'Multica 是"AI 同事协作"（Issue 中心 + 14 runtime + Squad）；QoderWake 是"预置数字员工"（角色中心 + 群组 + 审批）。**前者开源可自托管，后者闭源 SaaS——但 QoderWake 的预置角色库 Multica 没有**。' },
+      { vs: '万有无界（阿里同门）', diff: '万有无界是"行业项目模板 + 队长仅调度 + 4 专家 + 1 助理"（短剧 5 阶段流程 + 10105 技能市场 + 4 类积分看板）；QoderWake 是"6 预置角色 + 群组协同 + 审批门禁"（通用角色）。**抽象相同，入口策略相反**：QoderWake 通用，万有无界场景化。**对 MiCo 启示**：岗位虾的"通用角色 + 行业模板"双层是值得抄的。' },
       { vs: 'MiCo', diff: 'MiCo 是"岗位虾编制后台 + 任务协作前台"（按业务线定制 + 试运行/转正/成本分摊）；QoderWake 是"预置数字员工"（6 角色开箱 + 群组协同 + 审批门禁）。**MiCo 的定制化深度和台账/成本语言是 QoderWake 没有的；QoderWake 的预置角色库和低门槛上手是 MiCo 该补的冷启动形态**。两者是同构物，入口策略相反。' },
     ],
   },

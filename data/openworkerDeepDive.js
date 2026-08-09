@@ -6,6 +6,7 @@ window.TD_OPENWORKER_DEEPDIVE = {
   productName: 'OpenWorker (吴恩达)',
   tagline: '桌面 AI 同事——把"任务"从"对话"变回"工作"',
   dateAdded: '2026-08-04',
+  isRealScreenshot: true,
   source: 'github.com/andrewyng/openworker（12.4k stars · 1.7k forks · MIT · andrewyng/Rohit Prasad 2026-07-24 首发）',
   author: '本台研究团队（基于 GitHub README + 仓库结构 + 第三方测评合成的产品形态示意图 + AI 视角分析）',
 
@@ -163,6 +164,7 @@ def post_slack_message(channel: str, text: str, as_user: str = "evan"):
       '**AI 在"夹层"里尴尬**——一边惊叹它的聪明，一边每天还在无数软件间复制粘贴改格式。',
       '**"会回答"≠"会做完"**——市面 90% agent 还在"产出待办清单"阶段，OpenWorker 目标是产出"可交付物"。',
       '**安全姿态是"默认信任 + 关键操作审批"**——不学 OpenClaw 的 `--dangerously-skip-permissions`（裸跑），也不学 QM 的 Strict 模式（每步审批）。',
+      '**"开源个人 agent harness"是稀缺品类**——市面 desktop agent 多是闭源 SaaS（Manus/Replit Agent）或 CLI 单兵（Claude Code/Codex CLI），OpenWorker 用 Tauri + 25+ 集成 + 审批内建交出"开源可商用"答卷。',
     ],
     designPrinciples: [
       '**本地优先（local-first）**——agent 循环、对话、模型 key、连接器 token 都在本地；唯一上云的是 OAuth 经纪。',
@@ -175,6 +177,7 @@ def post_slack_message(channel: str, text: str, as_user: str = "evan"):
       { vs: 'OpenClaw', diff: 'OpenClaw 是 350k+ stars 的"个人助理生态"（20+ IM 渠道 + ClawHub 技能 + dreaming 记忆整理）；OpenWorker 是 12.4k stars 的"个人同事工具"（25+ 连接器 + 桌面原生 + 审批内建）。前者是平台，后者是应用。' },
       { vs: 'WorkBuddy', diff: 'WorkBuddy 是腾讯的"小龙虾桌面工作台"（Craft/Plan/Ask 三档自主度 + 远程遥控 + 后台自动化）；OpenWorker 自主度未分档（默认每次弹窗），但**开源** + 基于 **aisuite** + 25+ 集成更广。' },
       { vs: 'Multica', diff: 'Multica 是"任务即一切"（看板/队列/squad/skill + 14 运行时）；OpenWorker 是"会话即一切"（任务 = 会话内步骤链）。' },
+      { vs: 'QoderWork', diff: 'QoderWork 是阿里"个人桌面助手"（自然语言 + 浏览器/文件/Office + MCP，5 Credits/步计费）；OpenWorker 是吴恩达"个人同事工具"（25+ 集成 + 审批内建 + aisuite 5 模型切换）。**前者靠产品体验（按 Credits），后者靠开发者体验（开源可改）**。' },
       { vs: 'MiCo', diff: 'MiCo 是企业级（编制/审批/台账/治理）；OpenWorker 是个人级（5 天 12.4k stars 印证硬需求）。**MiCo 的护城河就是 OpenWorker 缺的三条**：换人/审批/成本归集。' },
     ],
   },
@@ -195,6 +198,7 @@ def post_slack_message(channel: str, text: str, as_user: str = "evan"):
       '**审批弹窗 UX 值得抄**：把"每次外发前确认"搬到 MiCo 审批流（当前是 BPM 审批 + 发版门禁，缺"运行时调用级拦截"）。',
       '**25+ 集成清单是上游**：别重造，直接接（Connector 适配层）。',
       '**本地 SQLite 记忆是反面教材**：证明"无公司治理"的硬伤，MiCo Assets 的图谱（1067 节点）就是差异点。',
+      '**aisuite 多模型抽象可参考**：5 档商用模型 + Ollama 本地模型零成本切换，让虾不锁死单一 LLM 厂商。**MiCo 应该在 harness 层做"5 模型 + 本地模型"切换能力**。',
     ],
   },
 };

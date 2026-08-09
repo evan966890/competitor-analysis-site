@@ -137,6 +137,7 @@ class PermissionScheme {
       '**任务管理≠项目管理**——前者是个人向工具（Things/Todoist），后者是组织向工具（Jira/Linear）。Jira 押注后者。',
       '**"完成"的定义因公司而异**——同样是"开发完成"，有的公司要"代码合并 + 测试通过 + 文档更新"，有的只要"PR 合"。Jira 用 workflow condition 把"完成"产品化。',
       '**"权限"是组织管理最痛的点**——1000 人的公司不能靠"约定"，必须有"系统级强制"。Jira 的 3 层权限是 20 年沉淀的标准。',
+      '**AI 时代 Jira 的核心问题：issue 还是给人执行的**——Jira workflow 假定"人按下按钮"，AI agent 不能自然地参与 transition。**Meego（飞书项目）的 AI 嵌入更激进**，把 AI 当成"团队成员"参与 issue 流转。',
     ],
     designPrinciples: [
       '**Workflow = 治理**——状态机不只是"卡片流转"，是"组织意志的编码"。每条 transition 可以挂 condition/validator/post-function。',

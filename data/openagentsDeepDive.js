@@ -6,6 +6,7 @@ window.TD_OPENAGENTS_DEEPDIVE = {
   productName: 'OpenAgents (xlang.ai · HKU)',
   tagline: '开源跨工具·能自己部署——3 个内置 agent + 200+ 插件 + 自研 Network 协议',
   dateAdded: '2026-08-04',
+  isRealScreenshot: true,
   source: 'github.com/xlang-ai/OpenAgents（Apache 2.0 · HKU xlang.ai 实验室 · 2024-2026 持续迭代）',
   author: '本台研究团队（基于 GitHub README + 仓库结构 + HKU 论文合成的产品形态示意图 + AI 视角分析）',
 
@@ -262,6 +263,7 @@ class WebAgent:
       { vs: 'Ruflo', diff: 'Ruflo 是"能力军火库"（100+ 预制 agent + 32 插件 + 5 拓扑 + 自学习）；OpenAgents 是"学术最小集"（3 内置 + 200+ 第三方 + Network 协议）。Ruflo 强在能力密度，OpenAgents 强在协议 + 学术严谨。' },
       { vs: 'OpenWorker', diff: 'OpenWorker 是"个人向 desktop agent"（单 agent + 25+ 集成 + 桌面原生）；OpenAgents 是"团队向 multi-agent 网络"（3 内置 + 200+ 插件 + 协议层）。OpenWorker 强在 UX/集成，OpenAgents 强在协议/跨工具。' },
       { vs: 'Vibe Kanban', diff: 'VK 是"编程专用 Kanban"（6 coding agent + worktree 隔离 + TUI）；OpenAgents 是"通用 agent 网络"（3 通用 agent + 200+ 插件 + Network 协议）。VK 强在编程，OpenAgents 强在跨工具。' },
+      { vs: 'Buzz (Block)', diff: 'Buzz 是 Nostr 协议工作空间（密码学签名事件 + buzz-audit 哈希链 + Apache 2.0）；OpenAgents 是 Network 协议（typed message + capability 声明 + 200+ 插件）。**Buzz 走信任原语，OpenAgents 走消息协议——两者都补 MiCo "协议层"的缺**。' },
       { vs: 'MiCo', diff: 'MiCo 是企业级（编制/审批/台账/治理 + 私有化）；OpenAgents 是学术级（3 通用 agent + 自部署 + Network 协议）。**MiCo 应学的：Network 协议层（虾间消息标准化）；OpenAgents 是 MiCo "自托管"定位的对标，但 3 内置 agent 深度不够。**' },
     ],
   },

@@ -147,6 +147,7 @@ const RUNTIMES: AgentRuntime[] = [
       '**任务模型不统一**——市面 80% agent 平台要么"只有 Chat"（如 OpenClaw/Hermes）要么"只有 Issue"（如 Linear/Jira），缺少"Chat ↔ Issue"双向流动。Multica 给了 Chat 入口 + Issue 出口，**但 Chat 转 Issue 是手工的**。',
       '**没有"公司级"概念**——Squad 是技术概念（按 role 分组），不是业务概念（按部门/项目分）。**MiCo 编制化恰好是补这个空缺**。',
       '**"AI 队友"的隐喻有时是负担**——AI 不是真的同事，没有试运行/转正/离职/晋升。**MiCo 编制化是把隐喻变成现实**。',
+      '**Runtime 选择困难**——14 种 CLI runtime 对开发者是"乐高"对用户是"选哪个"。**没有"推荐配置"，让用户自选 = 把责任推给用户**。',
     ],
     designPrinciples: [
       '**Issue 是一等公民**——所有动作（评论/时间线/产物/状态）都挂 issue。**没有"任务 vs 会话 vs 文档"分裂**。',

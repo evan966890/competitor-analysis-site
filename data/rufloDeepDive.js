@@ -6,6 +6,7 @@ window.TD_RUFLO_DEEPDIVE = {
   productName: 'Ruflo (ruvnet)',
   tagline: '多 Agent 编程·能力拉满——100+ agent / 32 插件 / 215 MCP 工具的工业级编排',
   dateAdded: '2026-08-04',
+  isRealScreenshot: true,
   source: 'github.com/ruvnet/ruflo（48.5k stars · MIT · TS+Rust WASM · 2025-Q3 启动 · v3.7.0-alpha 2026-05）',
   author: '本台研究团队（基于 GitHub README + 仓库结构 + 文档合成的产品形态示意图 + AI 视角分析）',
 
@@ -217,6 +218,7 @@ export class AgentDB {
       { vs: 'Vibe Kanban', diff: 'VK 是"编程专用 Kanban"（6 个 coding agent + worktree 隔离 + TUI）；Ruflo 是"通用 agent 编排平台"（100+ agent 覆盖全栈 + 5 种 swarm 拓扑 + 自学习）。VK 是狙击枪，Ruflo 是军火库。' },
       { vs: 'OpenWorker', diff: 'OpenWorker 是"个人向 desktop agent"（单 agent + 25+ 集成 + 桌面原生）；Ruflo 是"团队向 multi-agent 平台"（100+ agent + 32 插件 + 5 拓扑 + 联邦）。OpenWorker 强在 UX/集成，Ruflo 强在能力/规模。' },
       { vs: 'Raft', diff: 'Raft 是"agent 协作工作台"（不预制 agent + IM 体感 + 商业 SaaS）；Ruflo 是"agent 能力军火库"（100+ 预制 agent + CLI 体感 + 开源）。Raft 强在协作 UX，Ruflo 强在能力密度。' },
+      { vs: 'QoderWake', diff: 'QoderWake 是阿里"团队员工"（6 预置角色 + 群组协同 + 审批门禁）；Ruflo 是 ruvnet"agent 军火库"（100+ 预制 + 5 拓扑 + SONA 自学习）。**QoderWake 强在开箱即用，Ruflo 强在能力深度**。' },
       { vs: 'MiCo', diff: 'MiCo 是企业级（编制/审批/台账/治理 + 私有化）；Ruflo 是技术极客向（CLI + 配置 + 开源 + 5 拓扑）。**MiCo 应学的：HNSW 记忆 + SONA 自学习（必须达到的最低标准）；Ruflo 应警示的：插件市场 + 配置爆炸（不适合企业上手）。**' },
     ],
   },

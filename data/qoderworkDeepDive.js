@@ -169,6 +169,7 @@ interface ProductPositioning {
       { vs: 'OpenClaw', diff: 'OpenClaw 是 350k+ stars 的"个人助理生态"（20+ IM 渠道 + ClawHub 技能 + dreaming 记忆）；QoderWork 是"桌面级通用助手"（本地文件+浏览器+Office+MCP）。**前者渠道生态最大，后者桌面能力栈更全**。两者都是个人助手形态。' },
       { vs: 'WorkBuddy', diff: 'WorkBuddy（腾讯）是"桌面智能体工作台"（Craft/Plan/Ask 三档 + IM 远程遥控 + 后台自动化）；QoderWork 是"桌面通用助手"（自然语言 + 浏览器/文件/文档）。**两者都是中国大厂桌面助手，能力栈接近**。' },
       { vs: 'QoderWake', diff: 'QoderWake（同门）是"预置数字员工"（6 角色 + 群组协同 + 审批门禁），面向团队；QoderWork 是"桌面通用助手"，面向个人。**一个账号共享，构成个人→团队梯度**。' },
+      { vs: 'OpenWorker (吴恩达)', diff: 'OpenWorker 是开源"个人同事工具"（Tauri + 25+ 集成 + 审批内建 + aisuite 5 模型）；QoderWork 是闭源"桌面通用助手"（本地文件 + 浏览器 + Office + MCP + 5 Credits/步）。**前者靠开发者体验（开源可改），后者靠产品体验（按 Credits 计费）**。' },
       { vs: 'MiCo', diff: 'MiCo 是"团队协作平台"（编制化 + 任务 + IM + 上下文 OS），无个人入口；QoderWork 是"个人桌面助手"。**MiCo 可借鉴 QoderWork 形态补一个轻量个人入口做获客**，但 MiCo 的编制化/台账/上下文深度是 QoderWork 没有的。' },
     ],
   },

@@ -6,6 +6,7 @@ window.TD_VIBE_KANBAN_DEEPDIVE = {
   productName: 'Vibe Kanban (BloopAI)',
   tagline: '多个 AI 程序员同时开工——任务级 Git Worktree 隔离',
   dateAdded: '2026-08-04',
+  isRealScreenshot: true,
   source: 'github.com/BloopAI/vibe-kanban（14.2k stars · MIT · Rust+React+TS+SQLite · BloopAI 2025）',
   author: '本台研究团队（基于 GitHub README + 仓库结构 + 第三方测评合成的产品形态示意图 + AI 视角分析）',
 
@@ -192,6 +193,7 @@ impl TaskRouter {
       { vs: 'OpenWorker (吴恩达)', diff: 'OpenWorker 是"个人向 desktop agent"（单 agent + 25+ 集成 + 桌面原生）；Vibe Kanban 是"团队向 multi-agent Kanban"（6 agent 并行 + worktree 隔离 + Web/TUI）。OpenWorker 强在 UX/审批/集成，Vibe Kanban 强在"并行不冲突"。' },
       { vs: 'Ruflo', diff: 'Ruflo 是"agent 编排平台"（100+ 预制 agent + 32 插件 + swarm 拓扑 + 自学习）；Vibe Kanban 是"编程专用 Kanban"（6 个 coding agent + worktree 隔离 + TUI）。Ruflo 是通用军火库，Vibe Kanban 是狙击枪。' },
       { vs: 'Raft (Slock)', diff: 'Raft 是"人和 agent 在频道里协作"（IM-first + 团队 workspace + 商业 SaaS）；Vibe Kanban 是"agent 在 Kanban 上排队"（任务-first + 个人工作台 + 开源）。Raft 偏 IM，VK 偏 IDE。' },
+      { vs: 'QoderWake', diff: 'QoderWake 是阿里"团队员工"（6 预置角色 + 群组协同 + 审批门禁 + 桌面客户端）；Vibe Kanban 是开源"编程 Kanban"（6 coding agent + worktree 隔离 + Web/TUI）。**前者面向所有任务（审批门禁内建），后者面向编程（worktree 隔离更强）**。' },
       { vs: 'MiCo', diff: 'MiCo 是企业级（编制/审批/台账/治理）；Vibe Kanban 是个人/小团队级（无编制/默认全自主/无审批）。**MiCo 应学的：worktree 隔离（每虾=独立工作目录）；Vibe Kanban 是 MiCo 应警示的：默认无审批 = 危险。**' },
     ],
   },

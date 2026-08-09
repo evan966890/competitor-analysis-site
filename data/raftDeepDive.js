@@ -6,6 +6,7 @@ window.TD_RAFT_DEEPDIVE = {
   productName: 'Raft (Slock)',
   tagline: '界面成熟·开箱就组队——Channels/Threads 上人和 agent 一起工作',
   dateAdded: '2026-08-04',
+  isRealScreenshot: true,
   source: 'slock.ai（Raft 1.0 · Slock · 商业 SaaS · Free + $8.80/seat/月）',
   author: '本台研究团队（基于 slock.ai 官方主页 + 文档 + 第三方测评合成的产品形态示意图 + AI 视角分析）',
 
@@ -175,6 +176,7 @@ raft agent register \\
       { vs: 'OpenWorker', diff: 'OpenWorker 是"个人向 desktop agent"（本地 + 25+ 集成 + 审批内建）；Raft 是"团队向 IM 工作台"（云端 + Slack 体感 + 外部 agent 接入）。OpenWorker 强在个人生产率，Raft 强在团队协作。' },
       { vs: 'Slack', diff: 'Slack 是"人 ↔ 人 IM + 集成第三方 agent"（agent 是外挂）；Raft 是"人 + agent 混编 IM"（agent 是内建成员，持久身份/记忆/专长）。Slack 改了 1 年 Copilot 才到半步，Raft 第一天就是这个。' },
       { vs: 'Ruflo', diff: 'Ruflo 是"agent 编排平台"（100+ 自营 agent + 32 插件 + 自学习）；Raft 是"agent 协作工作台"（不预制 agent + IM 体感 + 商业 SaaS）。Ruflo 强在能力，Raft 强在协作 UX。' },
+      { vs: 'Buzz (Block)', diff: 'Buzz 是 Nostr 协议工作空间（密码学签名事件 + Agent 即成员 + buzz-audit 哈希链 + Apache 2.0）；Raft 是 IM 体感工作台（thread + Slack 体感 + 商业 SaaS）。**两者都让 agent 当正式成员**，但 Buzz 走密码学/去中心化，Raft 走中心化 SaaS。' },
       { vs: 'MiCo', diff: 'MiCo 是企业级（编制/审批/台账/治理 + 私有化）；Raft 是团队级（IM 体感 + 商业 SaaS + 外部 agent 接入）。**MiCo 应学的：thread 即上下文（context 不切走）；Raft 应警示的：SaaS-only + 不开源 = 长期被锁。**' },
     ],
   },

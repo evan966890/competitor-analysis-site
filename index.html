@@ -330,6 +330,43 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
 <script src="data/qoderwakeDeepDive.js"></script>
 <script src="data/qoderworkDeepDive.js"></script>
 <script src="data/wanuaiDeepDive.js"></script>
+<script>
+(() => {
+  const files = [
+    // E (20)
+    'daytona','nanoclaw','cmux','cua','e2b','browser-harness','opensandbox','agent-infra-sandbox',
+    'judge0','agent-sandbox-k8s','stakpak-agent','oss-fuzz-gen','e2b-desktop','tensorlake','arrakis',
+    'agentscope-runtime','swe-rex','sandboxed-sh','capsule','terminal-bench-env',
+    // T (12)
+    'github-spec-kit','mcp-servers','cli-anything','agents-md','mcp','rules-directories',
+    'langchain-mcp-adapters','microsoft-mcp-servers','acpx','microsoft-learn-mcp','ibm-mcp','agent-md',
+    // C (9)
+    'claude-mem','superclaude','planning-with-files','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
+    // L (47)
+    'opencode','claude-code','gemini-cli','codex-cli','openhands','deerflow','autogen','openmanus','pi','aider',
+    'agno','claude-code-plugins','langgraph','semantic-kernel','openai-agents-sdk','qwen-code','deepagents','archon','devika',
+    'google-adk','swe-agent','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive',
+    'microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw',
+    'mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion',
+    'deepagentsjs','hankweave',
+    // O (15)
+    'langfuse','mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk',
+    'latitude','laminar','bedrock-agentcore','claude-code-reverse','openinference','future-agi',
+    // V (21)
+    'promptfoo','deepeval','ragas','lm-evaluation-harness','swe-bench','verifiers','agentbench','langwatch',
+    'evalscope','terminal-bench','harbor','tau2-bench','nemo-gym','theagentcompany','auto-harness','inspect-evals',
+    'swe-bench-pro','agent-evaluation','workarena','openhands-benchmarks','webarena-verified',
+    // G (14)
+    'litellm','kong','ironclaw','portkey-gateway','cai','openai-realtime-agents','plano','openai-cs-agents-demo',
+    'contextforge','archestra','tracecat','agentgateway','haft','mini-coding-agent',
+  ];
+  files.forEach(f => {
+    const sc = document.createElement('script');
+    sc.src = 'data/' + f + 'DeepDive.js';
+    document.head.appendChild(sc);
+  });
+})();
+</script>
 <script src="data/productDemos.js"></script>
 <script>
 /* ================= 状态与路由 ================= */
@@ -425,20 +462,20 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3 · 4 层决策支持系统：广度 30 + 深度 13 + 横切 8 维 × 13 家 + 纵切 10 个 lane + 30 家 demo tour</p>
-    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界</div>
+    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 151 + 横切 9 维 × 151 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
+    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
-      <div><b>13</b><span>深度评测</span></div>
-      <div><b>104</b><span>源码 cell</span></div>
+      <div><b>151</b><span>深度评测</span></div>
+      <div><b>1359</b><span>源码 cell</span></div>
       <div><b>134</b><span>截图</span></div>
       <div><b>30</b><span>demo 导览</span></div>
     </div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
-    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 30 个产品，每个带 motto/oneLiner/4 维评分
+    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（13 深度 + 138 论文骨架 + 17 历史），每个带 motto/oneLiner/4 维评分
     &nbsp;·&nbsp;
     <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 134 张截图 + 3 家文字 placeholder）
   </div>
@@ -1425,7 +1462,15 @@ window.demoNext = () => { state.demoIdx++; render(); };
 /* ================= 30 家 demo 总览（v3 module 5）============== */
 function viewDemosOverview() {
   const filter = state.demoFilter || 'all';
-  const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'];
+  const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai',
+    // 论文附录 138 项目骨架（v3.3 · 2026-08-10）
+    'daytona','nanoclaw','cmux','cua','e2b','browser-harness','opensandbox','agent-infra-sandbox','judge0','agent-sandbox-k8s','stakpak-agent','oss-fuzz-gen','e2b-desktop','tensorlake','arrakis','agentscope-runtime','swe-rex','sandboxed-sh','capsule','terminal-bench-env',
+    'github-spec-kit','mcp-servers','cli-anything','agents-md','mcp','rules-directories','langchain-mcp-adapters','microsoft-mcp-servers','acpx','microsoft-learn-mcp','ibm-mcp','agent-md',
+    'claude-mem','superclaude','planning-with-files','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
+    'opencode','claude-code','gemini-cli','codex-cli','openhands','deerflow','autogen','openmanus','pi','aider','agno','claude-code-plugins','langgraph','semantic-kernel','openai-agents-sdk','qwen-code','deepagents','archon','devika','google-adk','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive','microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw','mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion','deepagentsjs','hankweave',
+    'langfuse','mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk','latitude','laminar','bedrock-agentcore','openinference','future-agi',
+    'promptfoo','deepeval','ragas','lm-evaluation-harness','swe-bench','verifiers','agentbench','langwatch','evalscope','harbor','tau2-bench','nemo-gym','theagentcompany','auto-harness','inspect-evals','swe-bench-pro','agent-evaluation','workarena','openhands-benchmarks','webarena-verified',
+    'litellm','kong','ironclaw','portkey-gateway','cai','openai-realtime-agents','plano','openai-cs-agents-demo','contextforge','archestra','tracecat','agentgateway','haft','mini-coding-agent'];
   let ids = Object.keys(TD_PRODUCT_DEMOS.demos);
   if (filter === 'deep') ids = ids.filter(id => DEEP_DIVE_IDS.includes(id));
   else if (filter === 'shallow') ids = ids.filter(id => !DEEP_DIVE_IDS.includes(id));

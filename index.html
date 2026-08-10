@@ -1099,13 +1099,13 @@ function viewPlaybook() {
 
   <div class="pb-scenario">
     <h3>◉ 场景</h3>
-    <p>${pb.scenario}</p>
+    <p>${pb.scenario.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
   </div>
 
   ${pb.steps.map(s => `
     <div class="pb-step">
       <div class="sn">STEP ${s.n} / ${pb.steps.length}</div>
-      <div class="st">${s.name}</div>
+      <div class="st">${s.name.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
       <div class="grid">
         ${s.cells.map(c => `
           <div class="cell" ${c.img ? `onclick="openLB('${c.img}', '${c.action.replace(/'/g, "\\'")}', [], '${(P[c.p]?.name || c.p).replace(/'/g, "\\'")}')"` : ''} style="${c.img ? 'cursor:zoom-in' : ''}">
@@ -1115,7 +1115,7 @@ function viewPlaybook() {
           </div>
         `).join('')}
       </div>
-      ${s.obs ? `<div class="obs">◉ <b>产品经理观察：</b>${s.obs}</div>` : ''}
+      ${s.obs ? `<div class="obs">◉ <b>产品经理观察：</b>${s.obs.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>` : ''}
     </div>
   `).join('')}
 

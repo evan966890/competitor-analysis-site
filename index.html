@@ -508,8 +508,8 @@ function viewHome() {
     ${TD_PRODUCTS.map(p => `
       <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
-        <div class="motto">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
-        <div class="desc">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
+        <div class="motto">主语：${md(p.motto)}</div>
+        <div class="desc">${md(p.oneLiner)}</div>
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
@@ -518,10 +518,71 @@ function viewHome() {
 
 /* ================= 板块对比 ================= */
 
-// 简易 markdown 渲染：**bold** → <b>bold</b>
+// HTML escape (XSS 防护)
+function esc(s) {
+  if (typeof s !== 'string') return s || '';
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/**
+ * ⚠️ 规则：所有**文本字段**（motto / oneLiner / micoNote / verdict / obs / caption / note / pros / cons / ...）渲染时
+ *    **必须**走 md() 包装。md() 自动做 XSS escape + 处理 **bold** + `code` 字符。
+ *
+ *    ❌ 错误: ${p.micoNote}
+ *    ✅ 正确: ${md(p.micoNote)}
+ *
+ *    60 字符截断版本用 md60() — 多做了 <b> 标签安全闭合检查。
+ *
+ * 历史上曾因漏包装导致 **`** 字符**裸露渲染（2026-08-10 修了 30+ 处）。
+ * 改 47 处统一改用 md() 后，规则变简单：**任何文本字段都过 md()**。
+ *
+ * 例外（不用 md()）：
+ *   - 纯结构字段（id / name / type / icon / 数字）— 直接渲染
+ *   - 已知安全 HTML（图片 src / 链接 href）— 用 img / a 标签
+ *   - 代码块（c.code）— 用 <pre> 包，已经 escape `<`
+ */
+
+// 简易 markdown 渲染（先 escape 防 XSS，再做 **bold** + `code`）
 function md(s) {
   if (typeof s !== 'string') return s || '';
-  return s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+}
+
+// md + 60 字符截断 + b 标签安全闭合
+function md60(s) {
+  if (typeof s !== 'string') return s || '';
+  const r = esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  const cut = r.slice(0, 60);
+  const o = (cut.match(/<b>/g) || []).length;
+  const c = (cut.match(/<\/b>/g) || []).length;
+  const safe = o > c ? cut + '</b>' : cut;
+  return safe + (s.length > 60 ? '…' : '');
+}
+
+// md + 60 字符截断 + b 标签安全闭合
+function md60(s) {
+  if (typeof s !== 'string') return s || '';
+  const r = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  const cut = r.slice(0, 60);
+  const o = (cut.match(/<b>/g) || []).length;
+  const c = (cut.match(/<\/b>/g) || []).length;
+  const safe = o > c ? cut + '</b>' : cut;
+  return safe + (s.length > 60 ? '…' : '');
+}
+
+// md + N 字符截断 + b 标签安全闭合（通用版）
+function mdCut(s, n) {
+  if (typeof s !== 'string') return s || '';
+  const r = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  const cut = r.slice(0, n);
+  const o = (cut.match(/<b>/g) || []).length;
+  const c = (cut.match(/<\/b>/g) || []).length;
+  const safe = o > c ? cut + '</b>' : cut;
+  return safe + (s.length > n ? '…' : '');
 }
 
 function viewLane() {
@@ -541,14 +602,14 @@ function viewLane() {
 
   return `
   <div class="lane-head"><span class="icon">${l.icon}</span><span class="h1">${l.name}</span></div>
-  <p class="lane-idea">${l.idea.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+  <p class="lane-idea">${md(l.idea)}</p>
 
   ${hasDecisions ? `
   <!-- 顶部：3 条产品决策（核心新增）-->
   <div class="lane-decisions" style="background:linear-gradient(135deg,var(--panel) 0%,var(--bg) 100%);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:9px;padding:18px 20px;margin:18px 0">
     <h3 style="margin:0 0 10px;font-size:15px;color:var(--accent)">◉ 看完本 lane 后的 3 条产品决策</h3>
     <ol style="margin:0;padding-left:22px;font-size:13px;line-height:1.65">
-      ${l.decisions.map(d => `<li style="margin:6px 0"><b style="color:var(--ink)">${d.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</b> —— ${d.why.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}
+      ${l.decisions.map(d => `<li style="margin:6px 0"><b style="color:var(--ink)">${md(d.verdict)}</b> —— ${md(d.why)}</li>`).join('')}
     </ol>
   </div>
   ` : ''}
@@ -558,11 +619,11 @@ function viewLane() {
   <div class="rail">
     ${deepItems.map((it, i) => `
       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
-        <div class="who"><b>${P[it.p]?.name || it.p}</b><span>${it.evidence ? `<span class="tag">${it.evidence}</span> ` : ''}<span class="tag type-${P[it.p]?.type || '闭源'}">${P[it.p]?.type || ''}</span></span></div>
-        <img src="${it.img}" loading="lazy" alt="${it.caption}">
-        <div class="cap">${it.caption}${(it.hot && it.hot.length) ? ` <span class="tag">◉ ${it.hot.length} 处讲解</span>` : ''}</div>
+        <div class="who"><b>${P[it.p]?.name || it.p}</b><span>${it.evidence ? `<span class="tag">${esc(it.evidence)}</span> ` : ''}<span class="tag type-${P[it.p]?.type || '闭源'}">${P[it.p]?.type || ''}</span></span></div>
+        <img src="${it.img}" loading="lazy" alt="${esc(it.caption)}">
+        <div class="cap">${esc(it.caption)}${(it.hot && it.hot.length) ? ` <span class="tag">◉ ${it.hot.length} 处讲解</span>` : ''}</div>
         <div style="margin-top:6px;font-size:11.5px;padding:6px 8px;background:var(--bg);border-radius:4px;border-left:2px solid var(--accent)">
-          <b style="color:var(--accent)">→ MiCo：</b>${P[it.p]?.micoNote ? P[it.p].micoNote.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').slice(0, 60) + (P[it.p].micoNote.length > 60 ? '…' : '') : '查看产品画像'}
+          <b style="color:var(--accent)">→ MiCo：</b>${P[it.p]?.micoNote ? md60(P[it.p].micoNote) : '查看产品画像'}
           <a href="#/profile/${it.p}" style="margin-left:6px;color:var(--accent);font-size:11px">画像 →</a>
         </div>
       </div>`).join('')}
@@ -576,8 +637,8 @@ function viewLane() {
       ${otherItems.map(it => `
         <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
           <div class="who"><b>${P[it.p]?.name || it.p}</b><span class="tag type-${P[it.p]?.type || '闭源'}">${P[it.p]?.type || ''}</span></span></div>
-          <img src="${it.img}" loading="lazy" alt="${it.caption}">
-          <div class="cap">${it.caption}</div>
+          <img src="${it.img}" loading="lazy" alt="${esc(it.caption)}">
+          <div class="cap">${esc(it.caption)}</div>
         </div>`).join('')}
     </div>
   </details>
@@ -585,9 +646,9 @@ function viewLane() {
 
   <div class="pm">
     <h3>◉ 产品经理怎么看「${l.name.split(' ')[0]}」</h3>
-    <div class="row"><b>页面逻辑</b><p>${l.logic.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
-    <div class="row"><b>判断</b><p>${l.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
-    <div class="row mico"><b>对 MiCo</b><p>${l.mico.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
+    <div class="row"><b>页面逻辑</b><p>${md(l.logic)}</p></div>
+    <div class="row"><b>判断</b><p>${md(l.verdict)}</p></div>
+    <div class="row mico"><b>对 MiCo</b><p>${md(l.mico)}</p></div>
   </div>`;
 }
 
@@ -643,9 +704,9 @@ function viewLab() {
     ${t.rubric.products.map(r => `
       <tr><td>${P[r.p]?.name || r.p}</td>
       ${r.scores.map(s => `<td><span class="sc sc${s}">${s}</span></td>`).join('')}
-      <td class="note">${r.note}</td></tr>`).join('')}
+      <td class="note">${md(r.note)}</td></tr>`).join('')}
   </table>
-  <div class="callout"><b>结论 · </b>${t.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>`;
+  <div class="callout"><b>结论 · </b>${md(t.verdict)}</div>`;
 }
 
 /* ================= 8 维源码对比矩阵（v3 新增）================= */
@@ -659,14 +720,14 @@ function viewSourceMatrix() {
 
   return `
   <div class="hero" style="padding-bottom:18px">
-    <h1>9 维 × ${m.products.length} 家源码对比矩阵</h1>
-    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>${m.dimensions.length} 个维度 × ${m.products.length} 家产品 = ${m.products.length * m.dimensions.length} 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
-    <div class="ribbon">${Object.keys(m.cells).length * m.dimensions.length} cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
+    <h1>9 维 × ${Object.keys(m.cells).length} cell 源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>${m.dimensions.length} 个维度 × ${Object.keys(m.cells).length} 个 cell 条目 = ${Object.keys(m.cells).length * m.dimensions.length} 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <div class="ribbon">${Object.keys(m.cells).length * m.dimensions.length} cells · ${Object.keys(m.cells).length} 产品 × ${m.dimensions.length} 维（其中 ${m.products.length} 来自总览列表，${Object.keys(m.cells).length - m.products.length} 个额外 paper 项目仅在矩阵中）</div>
   </div>
 
   <div class="callout" style="margin-bottom:18px">
     <b>怎么看：</b>行 = ${m.products.length} 家产品，列 = ${m.dimensions.length} 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
-    评分越高 = 该维度做得越深。${m.meta.note}
+    评分越高 = 该维度做得越深。${md(m.meta.note)}
   </div>
 
   <!-- 维度切换器 -->
@@ -707,7 +768,7 @@ function viewSourceMatrix() {
                 <div style="display:inline-flex;align-items:center;gap:5px">
                   <span class="${matrixScoreClass(cell.score)}" style="font-weight:600">${cell.score}</span>
                 </div>
-                <div style="font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.35;max-width:160px;text-align:left">${cell.summary.slice(0, 50)}${cell.summary.length > 50 ? '…' : ''}</div>
+                <div style="font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.35;max-width:160px;text-align:left">${mdCut(cell.summary, 50)}</div>
               </td>`;
             }).join('')}
           </tr>
@@ -723,7 +784,7 @@ function viewSourceMatrix() {
 
   <div class="pm" style="margin-top:30px">
     <h3>◉ v3 模块 1 完成度</h3>
-    <div class="row"><b>数据底座</b><p>9 维 × ${m.products.length} 家 = ${Object.keys(m.cells).length * m.dimensions.length} 单元。每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
+    <div class="row"><b>数据底座</b><p>9 维 × ${Object.keys(m.cells).length} cell 条目 = ${Object.keys(m.cells).length * m.dimensions.length} 单元（每 cell 1 个产品 × 9 维）。其中 ${m.products.length} 个产品在总览有入口，${Object.keys(m.cells).length - m.products.length} 个 paper 项目只在矩阵中出现。每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
     <div class="row"><b>下一批</b><p>① 给部分 cell 补 code snippet（当前 5/96，目标 36/96）② 给部分 cell 补 evidence 截图（当前 0/96，目标 48/96）③ 加"按产品切片"视图（产品画像的前置）</p></div>
   </div>
   `;
@@ -748,9 +809,9 @@ function viewMatrixDimDetail() {
           <b>${productName}</b>
           <span class="${matrixScoreClass(cell.score)}" style="font-weight:600;font-size:14px;padding:1px 8px">${cell.score}</span>
         </div>
-        <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${cell.summary}</div>
+        <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${md(cell.summary)}</div>
         <div style="font-size:11.5px;color:var(--ink2);line-height:1.45;padding-top:6px;border-top:1px dashed var(--line)">
-          <b style="color:var(--accent)">→ MiCo：</b>${cell.forMico}
+          <b style="color:var(--accent)">→ MiCo：</b>${md(cell.forMico)}
         </div>
       </div>`;
     }).join('')}
@@ -773,11 +834,11 @@ function openMatrixCell(p, d) {
       <h2 style="margin:0 0 6px;font-size:22px">${product?.name || p}</h2>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
         <span class="${matrixScoreClass(cell.score)}" style="font-size:18px;padding:2px 12px;font-weight:600">${cell.score} / 5</span>
-        <span style="color:var(--ink2);font-size:13px">${product?.motto || ''}</span>
+        <span style="color:var(--ink2);font-size:13px">${md(product?.motto || '')}</span>
       </div>
 
       <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">实现摘要</h3>
-      <p style="margin:0;font-size:13.5px;line-height:1.6">${cell.summary}</p>
+      <p style="margin:0;font-size:13.5px;line-height:1.6">${md(cell.summary)}</p>
 
       ${cell.codeSnippet ? `
         <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">代码片段</h3>
@@ -786,11 +847,11 @@ function openMatrixCell(p, d) {
       ` : ''}
 
       <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">对 MiCo 启示</h3>
-      <p style="margin:0;font-size:13.5px;line-height:1.6;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">${cell.forMico}</p>
+      <p style="margin:0;font-size:13.5px;line-height:1.6;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">${md(cell.forMico)}</p>
 
       ${product ? `
         <h3 style="margin:18px 0 6px;font-size:14px;color:var(--accent)">关联</h3>
-        <p style="font-size:12.5px;color:var(--ink2)">${product.oneLiner}</p>
+        <p style="font-size:12.5px;color:var(--ink2)">${md(product.oneLiner)}</p>
         <p style="font-size:12px;margin-top:8px">
           ${TD_OPENWORKER_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
           ${TD_VIBE_KANBAN_DEEPDIVE?.productId === p ? `<a href="#/product/${p}" style="color:var(--accent)">→ 查看该产品深度评测</a> · ` : ''}
@@ -869,10 +930,10 @@ function buildReportHTML() {
     <table><tr><th>产品</th>${TD_DIMS.map(([, n]) => `<th>${n}</th>`).join('')}</tr>
     ${ps.map(p => `<tr><td>${p.name}</td>${TD_DIMS.map(([k]) => `<td>${p.scores[k]}</td>`).join('')}</tr>`).join('')}</table>
     ${ps.map(p => `
-      <div class="pc"><h2>${p.name} <span class="tag type-${p.type}">${p.type}</span> <span class="tag">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></h2>
-      <p class="sub">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+      <div class="pc"><h2>${p.name} <span class="tag type-${p.type}">${p.type}</span> <span class="tag">主语：${md(p.motto)}</span></h2>
+      <p class="sub">${md(p.oneLiner)}</p>
       <ul>${p.pros.map(x => `<li>＋ ${x}</li>`).join('')}${p.cons.map(x => `<li>－ ${x}</li>`).join('')}</ul>
-      <p class="sub"><b>对 MiCo：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</p></div>`).join('')}
+      <p class="sub"><b>对 MiCo：</b>${md(p.micoNote)}</p></div>`).join('')}
   </div>`;
 }
 function downloadReport() {
@@ -884,7 +945,7 @@ function downloadReport() {
     md += `\n## ${p.name}（${p.type} · 主语：${p.motto}）\n\n${p.oneLiner}\n\n`;
     p.pros.forEach(x => md += `- ＋ ${x}\n`);
     p.cons.forEach(x => md += `- － ${x}\n`);
-    md += `\n**对 MiCo**：${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}\n`;
+    md += `\n**对 MiCo**：${md(p.micoNote)}\n`;
   });
   const blob = new Blob([md], { type: 'text/markdown' });
   const a = document.createElement('a');
@@ -1061,8 +1122,8 @@ function viewTasks() {
             const isMico = id === 'mico';
             if (!shot) return `<td class="${isMico ? 'mico-col' : ''}"><div class="taskmatrix-empty" style="padding:24px">无该位置素材</div></td>`;
             return `<td class="${isMico ? 'mico-col' : ''}" onclick='openLB(${JSON.stringify(shot.img)}, ${JSON.stringify(shot.cap)}, [], ${JSON.stringify(P[id]?.name || id)})'>
-              <img class="cell-img" src="${shot.img}" loading="lazy" alt="${shot.cap}">
-              <div class="cell-cap">${shot.cap}</div>
+              <img class="cell-img" src="${shot.img}" loading="lazy" alt="${esc(shot.cap)}">
+              <div class="cell-cap">${esc(shot.cap)}</div>
             </td>`;
           }).join('')}
         </tr>
@@ -1091,7 +1152,7 @@ function viewPlaybook() {
   const pb = TD_PLAYBOOKS.find(x => x.id === state.playbook) || TD_PLAYBOOKS[0];
   return `
   <div class="h1"><span style="font-size:24px;margin-right:8px">${pb.icon}</span>${pb.name}</div>
-  <p class="sub" style="max-width:900px">${pb.why.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+  <p class="sub" style="max-width:900px">${md(pb.why)}</p>
 
   <div class="topic-tabs">
     ${TD_PLAYBOOKS.map(p => `<button class="chip ${p.id === pb.id ? 'on' : ''}" onclick="go('#/playbook/${p.id}')">${p.icon} ${p.name}</button>`).join('')}
@@ -1099,23 +1160,23 @@ function viewPlaybook() {
 
   <div class="pb-scenario">
     <h3>◉ 场景</h3>
-    <p>${pb.scenario.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <p>${md(pb.scenario)}</p>
   </div>
 
   ${pb.steps.map(s => `
     <div class="pb-step">
       <div class="sn">STEP ${s.n} / ${pb.steps.length}</div>
-      <div class="st">${s.name.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
+      <div class="st">${md(s.name)}</div>
       <div class="grid">
         ${s.cells.map(c => `
           <div class="cell" ${c.img ? `onclick="openLB('${c.img}', '${c.action.replace(/'/g, "\\'")}', [], '${(P[c.p]?.name || c.p).replace(/'/g, "\\'")}')"` : ''} style="${c.img ? 'cursor:zoom-in' : ''}">
             <div class="who"><span>${P[c.p]?.name || c.p}</span><span class="tag type-${P[c.p]?.type || '闭源'}">${P[c.p]?.type || ''}</span></div>
-            <div class="act">${c.action.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
+            <div class="act">${md(c.action)}</div>
             ${c.img ? '<div style="font-size:11px;color:var(--ink3);margin-top:4px">◉ 点击放大</div>' : '<div style="font-size:11px;color:var(--ink3);margin-top:4px">文字描述（暂无截图）</div>'}
           </div>
         `).join('')}
       </div>
-      ${s.obs ? `<div class="obs">◉ <b>产品经理观察：</b>${s.obs.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>` : ''}
+      ${s.obs ? `<div class="obs">◉ <b>产品经理观察：</b>${md(s.obs)}</div>` : ''}
     </div>
   `).join('')}
 
@@ -1126,7 +1187,7 @@ function viewPlaybook() {
 
   <div class="pb-mico">
     <h3>◉ 对 MiCo</h3>
-    <p>${pb.mico.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <p>${md(pb.mico)}</p>
   </div>`;
 }
 
@@ -1160,8 +1221,8 @@ function viewAiLensPrebuilt() {
     </div>
     <div class="ailens-body">
       <h2>${item.icon} ${item.name}</h2>
-      <div class="engine">${item.engine}</div>
-      <div class="summary">${item.summary}</div>
+      <div class="engine">${md(item.engine)}</div>
+      <div class="summary">${md(item.summary)}</div>
       <div style="margin: 10px 0">
         ${item.products.map(id => `<span class="tag" style="margin-right:4px">${P[id]?.name || id}</span>`).join('')}
         ${item.related?.length ? `<span class="tag" style="margin-left:8px">关联：源码解剖 → ${item.related.join(', ')}</span>` : ''}
@@ -1169,7 +1230,7 @@ function viewAiLensPrebuilt() {
       ${item.sections.map(s => `
         <div class="ai-section">
           <h3>${s.h}</h3>
-          ${s.p.split('\n').filter(x => x.trim()).map(p => `<p>${p.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`).join('')}
+          ${s.p.split('\n').filter(x => x.trim()).map(p => `<p>${md(p)}</p>`).join('')}
         </div>
       `).join('')}
       <div class="replay">
@@ -1299,15 +1360,26 @@ function viewProduct() {
 }
 
 function viewDeepDive(d) {
-  // 容错：d.productId 可能与 P key 不一致（如 claudecode vs claude-code）
-  const p = P[d.productId] || P[d.productId.replace(/-/g, '')] || P[d.productId.replace(/^(\w)/, (m) => m.toUpperCase())] || { motto: '', oneLiner: '', pros: [], cons: [], scores: {}, micoNote: '', type: 'OSS' };
+  // 容错：d.productId 可能与 P key 不一致（如 claudecode vs claude-code、codex vs codex-cli）
+  // 6 个 case 已知：claudecode / codex / planning-files / rules-dirs / spec-kit / swebench
+  const pid = d.productId;
+  const noHyphen = pid.replace(/-/g, '');
+  // 尝试：exact → 无 hyphen → 加常见 suffix → P key 的去 hyphen 形式等于/包含 pid
+  const fuzzyMatch = Object.keys(P).find(k => {
+    const kStrip = k.replace(/-/g, '');
+    return kStrip === noHyphen
+      || (noHyphen.length >= 4 && kStrip.startsWith(noHyphen))
+      || (noHyphen.length >= 4 && kStrip.includes(noHyphen))
+      || (kStrip.length >= 4 && noHyphen.startsWith(kStrip));
+  });
+  const p = P[pid] || P[noHyphen] || P[fuzzyMatch] || { motto: '', oneLiner: '', pros: [], cons: [], scores: {}, micoNote: '', type: 'OSS' };
   return `
   <div class="dd-hero">
     <h1>${d.productName}</h1>
-    <div class="dd-tagline">${d.tagline}</div>
+    <div class="dd-tagline">${md(d.tagline)}</div>
     <div class="dd-meta">
-      <b>数据来源：</b>${d.source}<br>
-      <b>评测人：</b>${d.author}<br>
+      <b>数据来源：</b>${md(d.source)}<br>
+      <b>评测人：</b>${md(d.author)}<br>
       <b>入库时间：</b>${d.dateAdded}
     </div>
   </div>
@@ -1317,18 +1389,18 @@ function viewDeepDive(d) {
     <h2><span class="num">①</span> 概览 · Overview</h2>
     <div class="dd-overview-grid">
       <div class="dd-overview-card">
-        <p><b>主语：</b>${p.motto || d.tagline || ''}</p>
-        <p>${p.oneLiner || d.tagline || ''}</p>
+        <p><b>主语：</b>${md(p.motto || d.tagline || '')}</p>
+        <p>${md(p.oneLiner || d.tagline || '')}</p>
         <h3 style="margin:14px 0 6px;font-size:13px;color:var(--accent)">+ Pros</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0">${(p.pros||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0">${(p.pros||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${md(x)}</li>`).join('')}</ul>
         <h3 style="margin:14px 0 6px;font-size:13px;color:#a83a3a">- Cons</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0">${(p.cons||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">－ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0">${(p.cons||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">－ ${md(x)}</li>`).join('')}</ul>
       </div>
       <div class="dd-scorecard">
         <h3>8 维度评分（1-5）</h3>
         ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${(p.scores?.[k] || 3)*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores?.[k] || 3}">${p.scores?.[k] || 3}</span></span></div>`).join('')}
         <h3 style="margin-top:14px">对 MiCo</h3>
-        <p style="font-size:12.5px;color:var(--ink2)">${(p.micoNote || d.tagline || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+        <p style="font-size:12.5px;color:var(--ink2)">${md(p.micoNote || d.tagline || '')}</p>
       </div>
     </div>
   </div>
@@ -1340,10 +1412,10 @@ function viewDeepDive(d) {
     <div class="dd-shot-grid">
       ${d.demoShots.map(s => `
         <div class="dd-shot">
-          <img src="${s.img}" loading="lazy" alt="${s.caption}" onclick="openLB('${s.img}', '${s.caption.replace(/'/g, "\\'")}', [], '${d.productName}')" style="cursor:zoom-in">
+          <img src="${s.img}" loading="lazy" alt="${esc(s.caption)}" onclick="openLB('${s.img}', '${s.caption.replace(/'/g, "\\'")}', [], '${d.productName}')" style="cursor:zoom-in">
           <div class="dd-shot-body">
-            <div class="dd-shot-cap">${s.caption}</div>
-            <div class="dd-shot-note">${s.note}</div>
+            <div class="dd-shot-cap">${md(s.caption)}</div>
+            <div class="dd-shot-note">${md(s.note)}</div>
             <span class="dd-shot-tag">${d.isRealScreenshot ? '实机截图' : '示意图'}</span>
           </div>
         </div>
@@ -1362,7 +1434,7 @@ function viewDeepDive(d) {
           <span class="f mono">${c.file}</span>
         </div>
         <div class="codepanel" style="border-radius:0"><pre>${c.code.replace(/</g, '&lt;')}</pre></div>
-        <ul class="points" style="background:#faf9f6;border:1px solid var(--line);border-top:none;border-radius:0 0 9px 9px">${c.points.map(pt => `<li>${pt.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+        <ul class="points" style="background:#faf9f6;border:1px solid var(--line);border-top:none;border-radius:0 0 9px 9px">${c.points.map(pt => `<li>${md(pt)}</li>`).join('')}</ul>
       </div>
     `).join('')}
   </div>
@@ -1371,24 +1443,24 @@ function viewDeepDive(d) {
   <div class="dd-section dd-philosophy">
     <h2><span class="num">④</span> Philosophy · 产品理念</h2>
     <h3>核心问题</h3>
-    <p>${d.philosophy.coreQuestion.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <p>${md(d.philosophy.coreQuestion)}</p>
     <h3>产品方的回答</h3>
-    <p>${d.philosophy.answer.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <p>${md(d.philosophy.answer)}</p>
     <h3>问题诊断</h3>
-    <ul>${d.philosophy.problemDiagnosis.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+    <ul>${d.philosophy.problemDiagnosis.map(x => `<li>${md(x)}</li>`).join('')}</ul>
     <h3>设计原则</h3>
-    <ul>${d.philosophy.designPrinciples.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+    <ul>${d.philosophy.designPrinciples.map(x => `<li>${md(x)}</li>`).join('')}</ul>
     <h3>差异化矩阵</h3>
     ${d.philosophy.differentiationMatrix.map(m => {
       // 容错：string array (如 "vs X — Y") 或 { vs, diff } 对象
       if (typeof m === 'string') {
         const match = m.match(/^(vs [^\s—]+(?: [^\s—]+)*)\s*—\s*(.*)$/);
         if (match) {
-          return `<p style="margin:6px 0"><b>${match[1]}：</b>${match[2].replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+          return `<p style="margin:6px 0"><b>${match[1]}：</b>${md(match[2])}</p>`;
         }
-        return `<p style="margin:6px 0">${m.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+        return `<p style="margin:6px 0">${md(m)}</p>`;
       }
-      return `<p style="margin:6px 0"><b>${m.vs}：</b>${(m.diff || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+      return `<p style="margin:6px 0"><b>${m.vs}：</b>${md(m.diff || '')}</p>`;
     }).join('')}
   </div>
 
@@ -1396,7 +1468,7 @@ function viewDeepDive(d) {
   <div class="dd-section">
     <h2><span class="num">⑤</span> 时间线 · Timeline</h2>
     <div class="dd-timeline">
-      ${d.timeline.map(t => `<div class="tl-item"><b>${t.date}</b>${t.event}</div>`).join('')}
+      ${d.timeline.map(t => `<div class="tl-item"><b>${t.date}</b>${md(t.event)}</div>`).join('')}
     </div>
   </div>
 
@@ -1404,9 +1476,9 @@ function viewDeepDive(d) {
   <div class="dd-section">
     <h2><span class="num">⑥</span> 结论 · Verdict</h2>
     <div class="dd-conclusion">
-      <p class="summary">${d.conclusion.summary}</p>
+      <p class="summary">${md(d.conclusion.summary)}</p>
       <h3 style="margin:14px 0 8px;font-size:14px;color:var(--accent)">对 MiCo 的启示</h3>
-      <ul>${d.conclusion.forMico.map(x => `<li><b>→</b> ${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
+      <ul>${d.conclusion.forMico.map(x => `<li><b>→</b> ${md(x)}</li>`).join('')}</ul>
     </div>
   </div>
 
@@ -1423,8 +1495,8 @@ function viewProductGeneric(id) {
   return `
   <div class="hero">
     <h1>${p.name}</h1>
-    <p>${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
-    <div class="ribbon">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')} · ${p.type}</div>
+    <p>${md(p.oneLiner)}</p>
+    <div class="ribbon">主语：${md(p.motto)} · ${p.type}</div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
@@ -1439,10 +1511,10 @@ function viewProductGeneric(id) {
     <tr>${TD_DIMS.map(([k]) => `<td><span class="sc sc${p.scores[k]}">${p.scores[k]}</span></td>`).join('')}</tr>
   </table>
   <div class="h2">Pros</div>
-  <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="margin:4px 0">＋ ${x}</li>`).join('')}</ul>
+  <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="margin:4px 0">＋ ${md(x)}</li>`).join('')}</ul>
   <div class="h2">Cons</div>
-  <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${x}</li>`).join('')}</ul>
-  <div class="callout"><b>对 MiCo：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</div>
+  <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${md(x)}</li>`).join('')}</ul>
+  <div class="callout"><b>对 MiCo：</b>${md(p.micoNote)}</div>
   ${viewProductDemoSection(id)}
   <div class="pm" style="margin-top:20px">
     <h3>◉ 深度评测</h3>
@@ -1523,7 +1595,7 @@ function viewProductDemoSection(id) {
     ` : `
       <div style="padding:60px;text-align:center;background:var(--bg);border-radius:6px;color:var(--ink2)">无截图</div>
     `}
-    <div style="margin-top:10px;font-size:13px;color:var(--ink)">${cur.note || ''}</div>
+    <div style="margin-top:10px;font-size:13px;color:var(--ink)">${md(cur.note || '')}</div>
     <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:12px">
       <button class="btn-mini" onclick="demoPrev()" ${state.demoIdx === 0 ? 'disabled' : ''}>← 上一张</button>
       <span style="color:var(--ink2);align-self:center">${state.demoIdx + 1} / ${states.length}</span>
@@ -1620,7 +1692,7 @@ function viewDemosOverview() {
             ${d?.isSchematic ? '<span style="font-size:9px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:8px">示意图</span>' : ''}
           </div>
           ${firstImg ? `<img src="${firstImg.img}" loading="lazy" alt="${id}" style="width:100%;border-radius:6px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top">` : `<div style="padding:40px;background:var(--panel);border-radius:6px;color:var(--ink2);text-align:center;font-size:12px">无截图</div>`}
-          <div style="font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5">${prod?.oneLiner || ''}</div>
+          <div style="font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5">${md(prod?.oneLiner || '')}</div>
         </div>
       `;
     }).join('')}
@@ -1670,16 +1742,16 @@ function viewProductProfile(id) {
   const micoInsights = hasMatrix
     ? matrixDims.map(d => {
         const c = matrixCells[d.id];
-        return c ? `<li><b>${d.name}：</b>${c.forMico}</li>` : '';
+        return c ? `<li><b>${d.name}：</b>${md(c.forMico)}</li>` : '';
       }).join('')
-    : `<li>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</li>`;
+    : `<li>${md(p.micoNote)}</li>`;
 
   return `
   <div class="dd-hero">
     <h1>${p.name} · 产品画像</h1>
-    <div class="dd-tagline">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
+    <div class="dd-tagline">${md(p.oneLiner)}</div>
     <div class="dd-meta">
-      <b>主语：</b>${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}<br>
+      <b>主语：</b>${md(p.motto)}<br>
       <b>类型：</b>${p.type}<br>
     </div>
   </div>
@@ -1700,9 +1772,9 @@ function viewProductProfile(id) {
       </div>
       <div class="dd-overview-card">
         <h3 style="margin:0 0 8px;font-size:13px;color:var(--accent)">+ Pros</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.pros.slice(0, 4).map(x => `<li style="margin:3px 0">＋ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.pros.slice(0, 4).map(x => `<li style="margin:3px 0">＋ ${md(x)}</li>`).join('')}</ul>
         <h3 style="margin:14px 0 8px;font-size:13px;color:#a83a3a">- Cons</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.cons.slice(0, 3).map(x => `<li style="margin:3px 0">－ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0;font-size:12.5px">${p.cons.slice(0, 3).map(x => `<li style="margin:3px 0">－ ${md(x)}</li>`).join('')}</ul>
       </div>
     </div>
   </div>
@@ -1736,7 +1808,7 @@ function viewProductProfile(id) {
               <td style="padding:10px 8px;text-align:center;border-bottom:1px solid var(--line)">
                 <span class="sc sc${c.score}" style="font-weight:600;font-size:15px">${c.score}</span>
               </td>
-              <td style="text-align:left;padding:10px 12px;font-size:12.5px;line-height:1.5;border-bottom:1px solid var(--line)">${c.summary}</td>
+              <td style="text-align:left;padding:10px 12px;font-size:12.5px;line-height:1.5;border-bottom:1px solid var(--line)">${md(c.summary)}</td>
               <td style="padding:10px 8px;text-align:center;font-size:11px;color:var(--ink2);border-bottom:1px solid var(--line)">
                 ${hasCode ? '<span title="有代码片段">▤</span>' : ''}${hasEvidence ? ' <span title="有截图证据">◉</span>' : ''}
                 <div style="margin-top:4px"><a href="javascript:void(0)" onclick="openMatrixCell('${id}', '${d.id}')" style="font-size:11px;color:var(--accent)">查看 →</a></div>
@@ -1761,8 +1833,8 @@ function viewProductProfile(id) {
             <b>${lane.name}</b>
             <span style="font-size:11px;color:var(--ink2)">${lane.id}</span>
           </div>
-          <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${item.caption}</div>
-          ${item.evidence ? `<div style="font-size:11px;color:var(--ink2);margin-bottom:6px"><b>证据：</b>${item.evidence}</div>` : ''}
+          <div style="font-size:12.5px;line-height:1.5;color:var(--ink);margin-bottom:8px">${md(item.caption)}</div>
+          ${item.evidence ? `<div style="font-size:11px;color:var(--ink2);margin-bottom:6px"><b>证据：</b>${md(item.evidence)}</div>` : ''}
           ${item.hot?.length ? `<div style="font-size:10.5px;color:var(--ink2);padding-top:6px;border-top:1px dashed var(--line)">
             <b>热点标注：</b>${item.hot.length} 处
           </div>` : ''}
@@ -1784,10 +1856,10 @@ function viewProductProfile(id) {
         <p class="summary" style="font-size:13.5px;line-height:1.6">综合 8 维源码分析，${p.name} 对 MiCo 的核心启示：</p>
         <ul style="margin-top:10px;padding-left:24px">${micoInsights}</ul>
         <p style="margin-top:14px;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:12.5px;line-height:1.55">
-          <b style="color:var(--accent)">原 micoNote：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}
+          <b style="color:var(--accent)">原 micoNote：</b>${md(p.micoNote)}
         </p>
       ` : `
-        <p class="summary" style="font-size:13.5px;line-height:1.6">${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</p>
+        <p class="summary" style="font-size:13.5px;line-height:1.6">${md(p.micoNote)}</p>
       `}
     </div>
   </div>

@@ -495,9 +495,9 @@ function viewHome() {
       <div><b>${total}</b><span>产品</span></div>
       <div><b>${laneCount}</b><span>能力板块</span></div>
       <div><b>36</b><span>深度评测</span></div>
-      <div><b>1431</b><span>源码 cell</span></div>
-      <div><b>152</b><span>截图</span></div>
-      <div><b>168</b><span>demo 导览</span></div>
+      <div><b>${Object.keys(TD_SOURCE_MATRIX.cells).length * TD_SOURCE_MATRIX.dimensions.length}</b><span>源码 cell</span></div>
+      <div><b>${Object.values(TD_PRODUCT_DEMOS?.demos || {}).reduce((s, d) => s + (d.states?.filter(x => x.img).length || 0), 0) + 36 * 6}</b><span>截图</span></div>
+      <div><b>${total}</b><span>demo 导览</span></div>
     </div>
   </div>
 

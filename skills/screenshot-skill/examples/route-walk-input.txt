@@ -1,0 +1,25 @@
+# Example routes for the route-walk.sh script
+# One URL per line, comments start with #
+
+# Home + main workbench
+http://localhost:7100/
+http://localhost:7100/#/bench
+http://localhost:7100/#/tasks
+
+# Source matrix (v3.3)
+http://localhost:7100/#/source-matrix
+
+# v3.3 lane views (replace <id> with real lane ids)
+# http://localhost:7100/#/lane/orchestration
+# http://localhost:7100/#/lane/roster
+# http://localhost:7100/#/lane/market
+
+# Demos overview
+http://localhost:7100/#/demos/all
+
+# Product deep-dive
+http://localhost:7100/#/product/buzz
+http://localhost:7100/#/product/linear
+http://localhost:7100/#/product/wanuai
+http://localhost:7100/#/product/claude-code
+http://localhost:7100/#/product/paperclip

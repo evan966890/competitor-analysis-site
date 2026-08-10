@@ -959,10 +959,10 @@ const TASK_SHOTS = {
     status: { img: 'assets/shots/multica/07-issues-board.png', cap: '状态：Todo/In Progress/In Review/Done 四列' },
   },
   linear: {
-    home: { img: 'assets/shots/linear/01-board.jpeg', cap: 'Linear 首页：Triage 收单 + Cycle 节奏' },
-    list: { img: 'assets/shots/linear/01-board.jpeg', cap: '看板：动线最顺（50ms 手感）' },
-    detail: { img: 'assets/shots/linear/02-issue.jpeg', cap: 'issue 详情：富文本 + 子任务 + 关联' },
-    status: { img: 'assets/shots/linear/03-status.jpeg', cap: '状态：Backlog/Todo/In Progress/Done/Canceled' },
+    home: { img: 'assets/shots/linear/01-home.jpeg', cap: 'Linear 首页：Triage 收单 + Cycle 节奏' },
+    list: { img: 'assets/shots/linear/schematic-kanban.png', cap: '看板：动线最顺（50ms 手感）' },
+    detail: { img: 'assets/shots/linear/schematic-issue.png', cap: 'issue 详情：富文本 + 子任务 + 关联' },
+    status: { img: 'assets/shots/linear/schematic-cycle.png', cap: '状态：Backlog/Todo/In Progress/Done/Canceled' },
   },
   paperclip: {
     home: { img: 'assets/shots/paperclip/03-EVA-dashboard.png', cap: 'Paperclip Dashboard：CEO/CTO 视角的"公司仪表板"' },
@@ -1066,8 +1066,8 @@ function viewTasks() {
 
   <div class="pm" style="margin-top:26px">
     <h3>◉ 产品经理观察（任务面板）</h3>
-    <div class="row"><b>共同骨架</b><p>几乎所有 agent 平台都从 issue/任务系统起步——这是"工作"的最记账单位。但分水岭在**状态机 + 验收**：MiCo 有"验收"列（In Review），Hermes 走"依赖满足才派单"，QM 没有任务模型。</p></div>
-    <div class="row"><b>对 MiCo</b><p class="mico">MiCo 任务页骨架已是 Linear 级；短板在**收口（验收收件箱/批量验收/结构化 DoD）**，不在执行。下一步：把 OpenWorker 的"任务执行面板"形态（步骤进度 + 工具调用 + 产物）搬到任务详情页——让任务卡有"中间现场"可看。</p></div>
+    <div class="row"><b>共同骨架</b><p>几乎所有 agent 平台都从 issue/任务系统起步——这是"工作"的最记账单位。但分水岭在 <b>状态机 + 验收</b>：MiCo 有"验收"列（In Review），Hermes 走"依赖满足才派单"，QM 没有任务模型。</p></div>
+    <div class="row"><b>对 MiCo</b><p class="mico">MiCo 任务页骨架已是 Linear 级；短板在 <b>收口（验收收件箱/批量验收/结构化 DoD）</b>，不在执行。下一步：把 OpenWorker 的"任务执行面板"形态（步骤进度 + 工具调用 + 产物）搬到任务详情页——让任务卡有"中间现场"可看。</p></div>
   </div>`;
 }
 

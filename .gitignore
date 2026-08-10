@@ -1,0 +1,26 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Runtime artifacts (do not commit — these are the inputs and outputs of a session)
+*.log
+/tmp-*.json
+wb-req-*.json
+
+# Local debug / backup dirs
+_archive/
+_bmad-output/
+*.bak
+*.tmp

@@ -72,11 +72,27 @@ window.TD_SOURCE_MATRIX = {
     },
   ],
 
-  // ============ 13 家产品（与 products.js 一致）============
+  // ============ 162 家产品（13 完整 deepDive + 138 论文项目 + 11 历史 = v3.3 完整）============
   products: [
     'multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo',
     'raft', 'jira-meego', 'linear', 'openworker',
     'buzz', 'qoderwork', 'qoderwake', 'wanuai',
+    // v3.3 新增 5 L 层完整 deepDive
+    'opencode', 'claude-code', 'codex-cli', 'openhands', 'deepagents',
+    // v3.3 新增 15 次重要项目
+    'langfuse', 'litellm', 'daytona', 'e2b', 'autogen', 'langgraph',
+    'swe-bench', 'github-spec-kit', 'rules-directories', 'claude-mem', 'planning-files',
+    'mcp', 'promptfoo', 'inspect-evals', 'evalscope',
+    // v3.3 新增 3 闭源/官方
+    'github-copilot-cli', 'openai-agents-sdk', 'openai-realtime-agents',
+    // 论文附录 138 项目（v3.3 · 2026-08-10）
+    'daytona','nanoclaw','cmux','cua','browser-harness','opensandbox','agent-infra-sandbox','judge0','agent-sandbox-k8s','stakpak-agent','oss-fuzz-gen','e2b-desktop','tensorlake','arrakis','agentscope-runtime','swe-rex','sandboxed-sh','capsule','terminal-bench-env',
+    'mcp-servers','cli-anything','agents-md','langchain-mcp-adapters','microsoft-mcp-servers','acpx','microsoft-learn-mcp','ibm-mcp','agent-md',
+    'superclaude','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
+    'gemini-cli','deerflow','openmanus','pi','aider','agno','claude-code-plugins','semantic-kernel','qwen-code','archon','devika','google-adk','pydantic-ai','aperant','eigent','openharness','superset','hive','microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw','mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion','deepagentsjs','hankweave',
+    'mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk','latitude','laminar','bedrock-agentcore','claude-code-reverse','openinference','future-agi',
+    'deepeval','ragas','lm-evaluation-harness','verifiers','agentbench','langwatch','harbor','tau2-bench','nemo-gym','theagentcompany','auto-harness','swe-bench-pro','agent-evaluation','workarena','openhands-benchmarks','webarena-verified',
+    'kong','ironclaw','portkey-gateway','cai','plano','openai-cs-agents-demo','contextforge','archestra','tracecat','agentgateway','haft',
   ],
 
   // ============ 104 个 cells（含 code snippet + evidence）============

@@ -1018,6 +1018,10 @@ window.TD_PRODUCTS = [
 window.TD_DIMS = [
   ['orch', '编排'], ['task', '任务'], ['im', '会话入口'], ['roster', '编制管理'],
   ['cron', '定时'], ['memory', '记忆上下文'], ['skills', '技能生态'], ['gov', '安全治理'],
+];
+
+// 138 论文项目骨架（v3.3 论文附录 Table S1 收录）
+window.TD_PRODUCTS_PAPER = [
   { id: 'daytona', name: 'Daytona', type: 'paper', motto: 'Execution Substrates & Sandboxing代表',
     oneLiner: 'pivoted from dev environments to agent sandboxes; sub-90ms cold start; Firecracker/Kata/Container（72.4k stars · 论文 E 层）',
     scores: {"orch":2,"task":2,"im":2,"roster":2,"cron":2,"memory":2,"skills":3,"gov":3},

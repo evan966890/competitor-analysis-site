@@ -486,7 +486,7 @@ function viewHome() {
   return `
   <div class="hero">
     <h1>${total} 个 Agent 平台，一台拆尽</h1>
-    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 36 + 骨架 123 + 横切 9 维 × 159 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
+    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 36 + 骨架 123 + 横切 9 维 × ${TD_SOURCE_MATRIX.products.length} 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
     <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架 · 2026-08-10 深度 5 L 层 + 15 次重要 + 3 闭源</div>
     <div class="stats">
       <div><b>${total}</b><span>产品</span></div>
@@ -652,13 +652,13 @@ function viewSourceMatrix() {
 
   return `
   <div class="hero" style="padding-bottom:18px">
-    <h1>9 维 × 159 家源码对比矩阵</h1>
-    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>9 个维度 × 159 家产品 = 1431 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
-    <div class="ribbon">96 cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
+    <h1>9 维 × ${m.products.length} 家源码对比矩阵</h1>
+    <p>v3 改造第一块：把"源码解剖"从 3 个话题扩到 <b>${m.dimensions.length} 个维度 × ${m.products.length} 家产品 = ${m.products.length * m.dimensions.length} 单元</b>。横向看分布，纵向看取舍。点击任意 cell 看完整内容。</p>
+    <div class="ribbon">${Object.keys(m.cells).length * m.dimensions.length} cells · ${m.products.length} 家 · ${m.dimensions.length} 维</div>
   </div>
 
   <div class="callout" style="margin-bottom:18px">
-    <b>怎么看：</b>行 = 36 家深度 + 123 家骨架，列 = 8 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
+    <b>怎么看：</b>行 = ${m.products.length} 家产品，列 = ${m.dimensions.length} 个源码维度。每个 cell 显示评分（1-5）+ 一句话实现摘要。点 cell 看完整内容（代码/截图/对 MiCo 启示）。
     评分越高 = 该维度做得越深。${m.meta.note}
   </div>
 
@@ -716,7 +716,7 @@ function viewSourceMatrix() {
 
   <div class="pm" style="margin-top:30px">
     <h3>◉ v3 模块 1 完成度</h3>
-    <div class="row"><b>数据底座</b><p>96 cells 全部填齐（8 维 × 12 家），每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
+    <div class="row"><b>数据底座</b><p>9 维 × ${m.products.length} 家 = ${Object.keys(m.cells).length * m.dimensions.length} 单元。每 cell 含 score + summary + forMico + 可选 code snippet。这是后续 v3 模块（产品画像 / lane 改造 / 新 deep-dive）的基础数据。</p></div>
     <div class="row"><b>下一批</b><p>① 给部分 cell 补 code snippet（当前 5/96，目标 36/96）② 给部分 cell 补 evidence 截图（当前 0/96，目标 48/96）③ 加"按产品切片"视图（产品画像的前置）</p></div>
   </div>
   `;
@@ -1241,8 +1241,9 @@ function copyText(text) {
 
 /* ================= 产品深度评测视图（通用模板 · 9 个产品共用）============== */
 function viewProduct() {
-  // 9 个产品都走通用模板（v3 module 4 补齐：multica/qm/jira-meego/linear）
+  // 13 完整 deep-dive (v3.1 阶段) + 23 升级完整 (v3.3) = 36 完整
   const map = {
+    // v3.1 阶段 13 完整
     'openworker': TD_OPENWORKER_DEEPDIVE,
     'vibe-kanban': TD_VIBE_KANBAN_DEEPDIVE,
     'raft': TD_RAFT_DEEPDIVE,
@@ -1256,6 +1257,34 @@ function viewProduct() {
     'qoderwake': TD_QODERWAKE_DEEPDIVE,
     'qoderwork': TD_QODERWORK_DEEPDIVE,
     'wanuai': TD_WANUAI_DEEPDIVE,
+    'paperclip': TD_PAPERCLIP_DEEPDIVE,
+    // v3.3 阶段 5 L 层
+    'opencode': TD_OPENCODE_DEEPDIVE,
+    'claude-code': TD_CLAUDECODE_DEEPDIVE,
+    'codex-cli': TD_CODEX_DEEPDIVE,
+    'openhands': TD_OPENHANDS_DEEPDIVE,
+    'deepagents': TD_DEEPAGENTS_DEEPDIVE,
+    // v3.3 阶段 15 次重要项目
+    'langfuse': TD_LANGFUSE_DEEPDIVE,
+    'litellm': TD_LITELLM_DEEPDIVE,
+    'daytona': TD_DAYTONA_DEEPDIVE,
+    'e2b': TD_E2B_DEEPDIVE,
+    'autogen': TD_AUTOGEN_DEEPDIVE,
+    'langgraph': TD_LANGGRAPH_DEEPDIVE,
+    'swe-bench': TD_SWEBENCH_DEEPDIVE,
+    'github-spec-kit': TD_SPEC_KIT_DEEPDIVE,
+    'rules-directories': TD_RULES_DIRS_DEEPDIVE,
+    'claude-mem': TD_CLAUDE_MEM_DEEPDIVE,
+    'planning-with-files': TD_PLANNING_FILES_DEEPDIVE,
+    'planning-files': TD_PLANNING_FILES_DEEPDIVE,
+    'mcp': TD_MCP_DEEPDIVE,
+    'promptfoo': TD_PROMPTFOO_DEEPDIVE,
+    'inspect-evals': TD_INSPECT_EVALS_DEEPDIVE,
+    'evalscope': TD_EVALSCOPE_DEEPDIVE,
+    // v3.3 阶段 3 闭源/官方
+    'github-copilot-cli': TD_GITHUB_COPILOT_CLI_DEEPDIVE,
+    'openai-agents-sdk': TD_OPENAI_AGENTS_SDK_DEEPDIVE,
+    'openai-realtime-agents': TD_OPENAI_REALTIME_AGENTS_DEEPDIVE,
   };
   const d = map[state.product];
   if (d) return viewDeepDive(d);
@@ -1263,7 +1292,8 @@ function viewProduct() {
 }
 
 function viewDeepDive(d) {
-  const p = P[d.productId];
+  // 容错：d.productId 可能与 P key 不一致（如 claudecode vs claude-code）
+  const p = P[d.productId] || P[d.productId.replace(/-/g, '')] || P[d.productId.replace(/^(\w)/, (m) => m.toUpperCase())] || { motto: '', oneLiner: '', pros: [], cons: [], scores: {}, micoNote: '', type: 'OSS' };
   return `
   <div class="dd-hero">
     <h1>${d.productName}</h1>
@@ -1280,18 +1310,18 @@ function viewDeepDive(d) {
     <h2><span class="num">①</span> 概览 · Overview</h2>
     <div class="dd-overview-grid">
       <div class="dd-overview-card">
-        <p><b>主语：</b>${p.motto}</p>
-        <p>${p.oneLiner}</p>
+        <p><b>主语：</b>${p.motto || d.tagline || ''}</p>
+        <p>${p.oneLiner || d.tagline || ''}</p>
         <h3 style="margin:14px 0 6px;font-size:13px;color:var(--accent)">+ Pros</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0">${(p.pros||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${x}</li>`).join('')}</ul>
         <h3 style="margin:14px 0 6px;font-size:13px;color:#a83a3a">- Cons</h3>
-        <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">－ ${x}</li>`).join('')}</ul>
+        <ul style="margin-left:18px;list-style:none;padding:0">${(p.cons||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">－ ${x}</li>`).join('')}</ul>
       </div>
       <div class="dd-scorecard">
         <h3>8 维度评分（1-5）</h3>
-        ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${p.scores[k]*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores[k]}">${p.scores[k]}</span></span></div>`).join('')}
+        ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${(p.scores?.[k] || 3)*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores?.[k] || 3}">${p.scores?.[k] || 3}</span></span></div>`).join('')}
         <h3 style="margin-top:14px">对 MiCo</h3>
-        <p style="font-size:12.5px;color:var(--ink2)">${p.micoNote}</p>
+        <p style="font-size:12.5px;color:var(--ink2)">${p.micoNote || d.tagline || ''}</p>
       </div>
     </div>
   </div>
@@ -1342,7 +1372,17 @@ function viewDeepDive(d) {
     <h3>设计原则</h3>
     <ul>${d.philosophy.designPrinciples.map(x => `<li>${x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}</ul>
     <h3>差异化矩阵</h3>
-    ${d.philosophy.differentiationMatrix.map(m => `<p style="margin:6px 0"><b>${m.vs}：</b>${m.diff.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`).join('')}
+    ${d.philosophy.differentiationMatrix.map(m => {
+      // 容错：string array (如 "vs X — Y") 或 { vs, diff } 对象
+      if (typeof m === 'string') {
+        const match = m.match(/^(vs [^\s—]+(?: [^\s—]+)*)\s*—\s*(.*)$/);
+        if (match) {
+          return `<p style="margin:6px 0"><b>${match[1]}：</b>${match[2].replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+        }
+        return `<p style="margin:6px 0">${m.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+      }
+      return `<p style="margin:6px 0"><b>${m.vs}：</b>${(m.diff || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>`;
+    }).join('')}
   </div>
 
   <!-- ⑤ 时间线 -->
@@ -1502,19 +1542,45 @@ function viewDemosOverview() {
     'langfuse','mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk','latitude','laminar','bedrock-agentcore','openinference','future-agi',
     'promptfoo','deepeval','ragas','lm-evaluation-harness','swe-bench','verifiers','agentbench','langwatch','evalscope','harbor','tau2-bench','nemo-gym','theagentcompany','auto-harness','inspect-evals','swe-bench-pro','agent-evaluation','workarena','openhands-benchmarks','webarena-verified',
     'litellm','kong','ironclaw','portkey-gateway','cai','openai-realtime-agents','plano','openai-cs-agents-demo','contextforge','archestra','tracecat','agentgateway','haft','mini-coding-agent'];
-  let ids = Object.keys(TD_PRODUCT_DEMOS.demos);
+  // v3.3 扩展：从所有 36 完整 deepDive 拿 demoShots + TD_PRODUCT_DEMOS 30 老产品合并
+  const DEEPDIVE_WITH_DEMOS = {
+    'opencode': TD_OPENCODE_DEEPDIVE, 'claude-code': TD_CLAUDECODE_DEEPDIVE, 'codex-cli': TD_CODEX_DEEPDIVE,
+    'openhands': TD_OPENHANDS_DEEPDIVE, 'deepagents': TD_DEEPAGENTS_DEEPDIVE,
+    'langfuse': TD_LANGFUSE_DEEPDIVE, 'litellm': TD_LITELLM_DEEPDIVE, 'daytona': TD_DAYTONA_DEEPDIVE, 'e2b': TD_E2B_DEEPDIVE,
+    'autogen': TD_AUTOGEN_DEEPDIVE, 'langgraph': TD_LANGGRAPH_DEEPDIVE, 'swe-bench': TD_SWEBENCH_DEEPDIVE,
+    'github-spec-kit': TD_SPEC_KIT_DEEPDIVE, 'rules-directories': TD_RULES_DIRS_DEEPDIVE, 'claude-mem': TD_CLAUDE_MEM_DEEPDIVE,
+    'planning-files': TD_PLANNING_FILES_DEEPDIVE, 'mcp': TD_MCP_DEEPDIVE, 'promptfoo': TD_PROMPTFOO_DEEPDIVE,
+    'inspect-evals': TD_INSPECT_EVALS_DEEPDIVE, 'evalscope': TD_EVALSCOPE_DEEPDIVE,
+    'github-copilot-cli': TD_GITHUB_COPILOT_CLI_DEEPDIVE, 'openai-agents-sdk': TD_OPENAI_AGENTS_SDK_DEEPDIVE, 'openai-realtime-agents': TD_OPENAI_REALTIME_AGENTS_DEEPDIVE,
+    'paperclip': TD_PAPERCLIP_DEEPDIVE,
+  };
+
+  // 合并产品全集 (168 个) + 兜底：deepDive 文件的 demoShots 计入
+  const allIds = TD_PRODUCTS.map(p => p.id);
+  function getShotCount(id) {
+    // 1. 优先 TD_PRODUCT_DEMOS
+    const d = TD_PRODUCT_DEMOS.demos?.[id];
+    if (d && d.states?.filter(s => s.img).length > 0) {
+      return d.states.filter(s => s.img).length;
+    }
+    // 2. 兜底：deepDive demoShots
+    const dd = DEEPDIVE_WITH_DEMOS[id];
+    if (dd && dd.demoShots) {
+      return dd.demoShots.length;
+    }
+    return 0;
+  }
+
+  let ids = allIds;
   if (filter === 'deep') ids = ids.filter(id => DEEP_DIVE_IDS.includes(id));
   else if (filter === 'shallow') ids = ids.filter(id => !DEEP_DIVE_IDS.includes(id));
-  else if (filter === 'no-shot') ids = ids.filter(id => {
-    const d = TD_PRODUCT_DEMOS.demos[id];
-    return d.states.filter(s => s.img).length === 0;
-  });
+  else if (filter === 'no-shot') ids = ids.filter(id => getShotCount(id) === 0);
 
   return `
   <div class="hero">
-    <h1>${Object.keys(TD_PRODUCT_DEMOS.demos).length} 家产品视觉导览</h1>
-    <p>每个产品 3-6 张关键界面截图，点击卡片进产品页切 tab 浏览</p>
-    <div class="ribbon">${ids.length} 个产品 · 共 ${ids.reduce((s,id) => s + TD_PRODUCT_DEMOS.demos[id].states.filter(x => x.img).length, 0)} 张截图</div>
+    <h1>${TD_PRODUCTS.length} 家产品视觉导览</h1>
+    <p>每个产品 3-6 张关键界面截图（部分论文项目无截图），点击卡片进产品页切 tab 浏览</p>
+    <div class="ribbon">${ids.length} 个产品 · 共 ${ids.reduce((s,id) => s + getShotCount(id), 0)} 张截图（含 deepDive demoShots）</div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
@@ -1524,24 +1590,27 @@ function viewDemosOverview() {
   </div>
 
   <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
-    <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 ${Object.keys(TD_PRODUCT_DEMOS.demos).length} 家</button>
+    <button class="chip ${filter==='all'?'on':''}" onclick="go('#/demos/all')">全部 ${TD_PRODUCTS.length} 家</button>
     <button class="chip ${filter==='deep'?'on':''}" onclick="go('#/demos/deep')">${DEEP_DIVE_IDS.length} 深度（已配 deep-dive）</button>
-    <button class="chip ${filter==='shallow'?'on':''}" onclick="go('#/demos/shallow')">${Object.keys(TD_PRODUCT_DEMOS.demos).length - DEEP_DIVE_IDS.length} 浅度（仅 demo）</button>
+    <button class="chip ${filter==='shallow'?'on':''}" onclick="go('#/demos/shallow')">${TD_PRODUCTS.length - DEEP_DIVE_IDS.length} 浅度（仅 demo）</button>
     <button class="chip ${filter==='no-shot'?'on':''}" onclick="go('#/demos/no-shot')">无截图</button>
   </div>
   <div class="demo-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
     ${ids.map(id => {
-      const d = TD_PRODUCT_DEMOS.demos[id];
+      // 合并源：TD_PRODUCT_DEMOS + deepDive demoShots 兜底
+      const d = TD_PRODUCT_DEMOS.demos?.[id];
+      const dd = DEEPDIVE_WITH_DEMOS[id];
       const prod = P[id];
-      const imgCount = d.states.filter(s => s.img).length;
-      const firstImg = d.states.find(s => s.img);
+      const states = d?.states || dd?.demoShots || [];
+      const imgCount = states.filter(s => s.img).length;
+      const firstImg = states.find(s => s.img);
       return `
         <div class="demo-card" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer" onclick="go('#/product/${id}')">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
             <b style="font-size:14px">${prod?.name || id}</b>
             <span style="font-size:10px;color:var(--ink2);background:var(--panel);padding:1px 6px;border-radius:8px">${imgCount} 张</span>
             ${DEEP_DIVE_IDS.includes(id) ? '<span class="badge-new" style="font-size:10px">深度</span>' : ''}
-            ${d.isSchematic ? '<span style="font-size:9px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:8px">示意图</span>' : ''}
+            ${d?.isSchematic ? '<span style="font-size:9px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:8px">示意图</span>' : ''}
           </div>
           ${firstImg ? `<img src="${firstImg.img}" loading="lazy" alt="${id}" style="width:100%;border-radius:6px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;object-position:top">` : `<div style="padding:40px;background:var(--panel);border-radius:6px;color:var(--ink2);text-align:center;font-size:12px">无截图</div>`}
           <div style="font-size:12px;color:var(--ink2);margin-top:8px;line-height:1.5">${prod?.oneLiner || ''}</div>

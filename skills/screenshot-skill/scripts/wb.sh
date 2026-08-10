@@ -24,7 +24,12 @@ fi
 
 BODY="$1"
 SESS="${2:-default}"
-TMP=$(mktemp /tmp/wb-XXXXXX.json)
+TMP=$(mktemp -t wb.XXXXXX)
+
+# If the first arg is a file path, read its content as the body
+if [[ -f "$BODY" ]]; then
+  BODY=$(cat "$BODY")
+fi
 
 # Inject session key if not already present
 if ! echo "$BODY" | jq -e 'has("session")' >/dev/null 2>&1; then

@@ -450,7 +450,7 @@ function renderNav() {
     ${TD_LANES.map(l => `<button class="nav-item ${on(state.view === 'lane' && state.lane === l.id)}" onclick="go('#/lane/${l.id}')"><span class="ic">${l.icon}</span>${l.name.split(' ')[0]}</button>`).join('')}
     <div class="nav-sec">源码解剖</div>
     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
-    <button class="nav-item ${on(state.view == 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>9 维 × 152 家矩阵<span class="badge-new">v3.3</span></button>
+    <button class="nav-item ${on(state.view == 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>9 维 × ${TD_SOURCE_MATRIX.products.length} 家矩阵<span class="badge-new">v3.3</span></button>
     <div class="nav-sec">产品画像（36 家）</div>
     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
@@ -508,8 +508,8 @@ function viewHome() {
     ${TD_PRODUCTS.map(p => `
       <div class="card pcard ${['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai'].includes(p.id) ? 'new' : ''}" onclick="go('#/product/${p.id}')">
         <div class="top"><span class="name">${p.name}</span><span class="tag type-${p.type}">${p.type}</span></div>
-        <div class="motto">主语：${p.motto}</div>
-        <div class="desc">${p.oneLiner}</div>
+        <div class="motto">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
+        <div class="desc">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
       </div>`).join('')}
   </div>
@@ -517,6 +517,13 @@ function viewHome() {
 }
 
 /* ================= 板块对比 ================= */
+
+// 简易 markdown 渲染：**bold** → <b>bold</b>
+function md(s) {
+  if (typeof s !== 'string') return s || '';
+  return s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+}
+
 function viewLane() {
   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
   // 36 家重点产品（按 deep 顺序）
@@ -534,14 +541,14 @@ function viewLane() {
 
   return `
   <div class="lane-head"><span class="icon">${l.icon}</span><span class="h1">${l.name}</span></div>
-  <p class="lane-idea">${l.idea}</p>
+  <p class="lane-idea">${l.idea.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
 
   ${hasDecisions ? `
   <!-- 顶部：3 条产品决策（核心新增）-->
   <div class="lane-decisions" style="background:linear-gradient(135deg,var(--panel) 0%,var(--bg) 100%);border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:9px;padding:18px 20px;margin:18px 0">
     <h3 style="margin:0 0 10px;font-size:15px;color:var(--accent)">◉ 看完本 lane 后的 3 条产品决策</h3>
     <ol style="margin:0;padding-left:22px;font-size:13px;line-height:1.65">
-      ${l.decisions.map(d => `<li style="margin:6px 0"><b style="color:var(--ink)">${d.verdict}</b> —— ${d.why}</li>`).join('')}
+      ${l.decisions.map(d => `<li style="margin:6px 0"><b style="color:var(--ink)">${d.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</b> —— ${d.why.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</li>`).join('')}
     </ol>
   </div>
   ` : ''}
@@ -555,7 +562,7 @@ function viewLane() {
         <img src="${it.img}" loading="lazy" alt="${it.caption}">
         <div class="cap">${it.caption}${(it.hot && it.hot.length) ? ` <span class="tag">◉ ${it.hot.length} 处讲解</span>` : ''}</div>
         <div style="margin-top:6px;font-size:11.5px;padding:6px 8px;background:var(--bg);border-radius:4px;border-left:2px solid var(--accent)">
-          <b style="color:var(--accent)">→ MiCo：</b>${P[it.p]?.micoNote ? P[it.p].micoNote.slice(0, 60) + (P[it.p].micoNote.length > 60 ? '…' : '') : '查看产品画像'}
+          <b style="color:var(--accent)">→ MiCo：</b>${P[it.p]?.micoNote ? P[it.p].micoNote.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').slice(0, 60) + (P[it.p].micoNote.length > 60 ? '…' : '') : '查看产品画像'}
           <a href="#/profile/${it.p}" style="margin-left:6px;color:var(--accent);font-size:11px">画像 →</a>
         </div>
       </div>`).join('')}
@@ -578,9 +585,9 @@ function viewLane() {
 
   <div class="pm">
     <h3>◉ 产品经理怎么看「${l.name.split(' ')[0]}」</h3>
-    <div class="row"><b>页面逻辑</b><p>${l.logic}</p></div>
-    <div class="row"><b>判断</b><p>${l.verdict}</p></div>
-    <div class="row mico"><b>对 MiCo</b><p>${l.mico}</p></div>
+    <div class="row"><b>页面逻辑</b><p>${l.logic.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
+    <div class="row"><b>判断</b><p>${l.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
+    <div class="row mico"><b>对 MiCo</b><p>${l.mico.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p></div>
   </div>`;
 }
 
@@ -638,7 +645,7 @@ function viewLab() {
       ${r.scores.map(s => `<td><span class="sc sc${s}">${s}</span></td>`).join('')}
       <td class="note">${r.note}</td></tr>`).join('')}
   </table>
-  <div class="callout"><b>结论 · </b>${t.verdict}</div>`;
+  <div class="callout"><b>结论 · </b>${t.verdict.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>`;
 }
 
 /* ================= 8 维源码对比矩阵（v3 新增）================= */
@@ -862,10 +869,10 @@ function buildReportHTML() {
     <table><tr><th>产品</th>${TD_DIMS.map(([, n]) => `<th>${n}</th>`).join('')}</tr>
     ${ps.map(p => `<tr><td>${p.name}</td>${TD_DIMS.map(([k]) => `<td>${p.scores[k]}</td>`).join('')}</tr>`).join('')}</table>
     ${ps.map(p => `
-      <div class="pc"><h2>${p.name} <span class="tag type-${p.type}">${p.type}</span> <span class="tag">主语：${p.motto}</span></h2>
-      <p class="sub">${p.oneLiner}</p>
+      <div class="pc"><h2>${p.name} <span class="tag type-${p.type}">${p.type}</span> <span class="tag">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</span></h2>
+      <p class="sub">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
       <ul>${p.pros.map(x => `<li>＋ ${x}</li>`).join('')}${p.cons.map(x => `<li>－ ${x}</li>`).join('')}</ul>
-      <p class="sub"><b>对 MiCo：</b>${p.micoNote}</p></div>`).join('')}
+      <p class="sub"><b>对 MiCo：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</p></div>`).join('')}
   </div>`;
 }
 function downloadReport() {
@@ -877,7 +884,7 @@ function downloadReport() {
     md += `\n## ${p.name}（${p.type} · 主语：${p.motto}）\n\n${p.oneLiner}\n\n`;
     p.pros.forEach(x => md += `- ＋ ${x}\n`);
     p.cons.forEach(x => md += `- － ${x}\n`);
-    md += `\n**对 MiCo**：${p.micoNote}\n`;
+    md += `\n**对 MiCo**：${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}\n`;
   });
   const blob = new Blob([md], { type: 'text/markdown' });
   const a = document.createElement('a');
@@ -1084,7 +1091,7 @@ function viewPlaybook() {
   const pb = TD_PLAYBOOKS.find(x => x.id === state.playbook) || TD_PLAYBOOKS[0];
   return `
   <div class="h1"><span style="font-size:24px;margin-right:8px">${pb.icon}</span>${pb.name}</div>
-  <p class="sub" style="max-width:900px">${pb.why}</p>
+  <p class="sub" style="max-width:900px">${pb.why.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
 
   <div class="topic-tabs">
     ${TD_PLAYBOOKS.map(p => `<button class="chip ${p.id === pb.id ? 'on' : ''}" onclick="go('#/playbook/${p.id}')">${p.icon} ${p.name}</button>`).join('')}
@@ -1103,7 +1110,7 @@ function viewPlaybook() {
         ${s.cells.map(c => `
           <div class="cell" ${c.img ? `onclick="openLB('${c.img}', '${c.action.replace(/'/g, "\\'")}', [], '${(P[c.p]?.name || c.p).replace(/'/g, "\\'")}')"` : ''} style="${c.img ? 'cursor:zoom-in' : ''}">
             <div class="who"><span>${P[c.p]?.name || c.p}</span><span class="tag type-${P[c.p]?.type || '闭源'}">${P[c.p]?.type || ''}</span></div>
-            <div class="act">${c.action}</div>
+            <div class="act">${c.action.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
             ${c.img ? '<div style="font-size:11px;color:var(--ink3);margin-top:4px">◉ 点击放大</div>' : '<div style="font-size:11px;color:var(--ink3);margin-top:4px">文字描述（暂无截图）</div>'}
           </div>
         `).join('')}
@@ -1119,7 +1126,7 @@ function viewPlaybook() {
 
   <div class="pb-mico">
     <h3>◉ 对 MiCo</h3>
-    <p>${pb.mico}</p>
+    <p>${pb.mico.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
   </div>`;
 }
 
@@ -1321,7 +1328,7 @@ function viewDeepDive(d) {
         <h3>8 维度评分（1-5）</h3>
         ${TD_DIMS.map(([k, n]) => `<div class="sc-row"><span>${n}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${(p.scores?.[k] || 3)*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${p.scores?.[k] || 3}">${p.scores?.[k] || 3}</span></span></div>`).join('')}
         <h3 style="margin-top:14px">对 MiCo</h3>
-        <p style="font-size:12.5px;color:var(--ink2)">${p.micoNote || d.tagline || ''}</p>
+        <p style="font-size:12.5px;color:var(--ink2)">${(p.micoNote || d.tagline || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
       </div>
     </div>
   </div>
@@ -1416,8 +1423,8 @@ function viewProductGeneric(id) {
   return `
   <div class="hero">
     <h1>${p.name}</h1>
-    <p>${p.oneLiner}</p>
-    <div class="ribbon">主语：${p.motto} · ${p.type}</div>
+    <p>${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</p>
+    <div class="ribbon">主语：${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')} · ${p.type}</div>
   </div>
 
   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
@@ -1435,7 +1442,7 @@ function viewProductGeneric(id) {
   <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="margin:4px 0">＋ ${x}</li>`).join('')}</ul>
   <div class="h2">Cons</div>
   <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${x}</li>`).join('')}</ul>
-  <div class="callout"><b>对 MiCo：</b>${p.micoNote}</div>
+  <div class="callout"><b>对 MiCo：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</div>
   ${viewProductDemoSection(id)}
   <div class="pm" style="margin-top:20px">
     <h3>◉ 深度评测</h3>
@@ -1665,14 +1672,14 @@ function viewProductProfile(id) {
         const c = matrixCells[d.id];
         return c ? `<li><b>${d.name}：</b>${c.forMico}</li>` : '';
       }).join('')
-    : `<li>${p.micoNote}</li>`;
+    : `<li>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</li>`;
 
   return `
   <div class="dd-hero">
     <h1>${p.name} · 产品画像</h1>
-    <div class="dd-tagline">${p.oneLiner}</div>
+    <div class="dd-tagline">${p.oneLiner.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}</div>
     <div class="dd-meta">
-      <b>主语：</b>${p.motto}<br>
+      <b>主语：</b>${p.motto.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')}<br>
       <b>类型：</b>${p.type}<br>
     </div>
   </div>
@@ -1777,10 +1784,10 @@ function viewProductProfile(id) {
         <p class="summary" style="font-size:13.5px;line-height:1.6">综合 8 维源码分析，${p.name} 对 MiCo 的核心启示：</p>
         <ul style="margin-top:10px;padding-left:24px">${micoInsights}</ul>
         <p style="margin-top:14px;padding:10px 12px;background:var(--panel);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font-size:12.5px;line-height:1.55">
-          <b style="color:var(--accent)">原 micoNote：</b>${p.micoNote}
+          <b style="color:var(--accent)">原 micoNote：</b>${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}
         </p>
       ` : `
-        <p class="summary" style="font-size:13.5px;line-height:1.6">${p.micoNote}</p>
+        <p class="summary" style="font-size:13.5px;line-height:1.6">${p.micoNote.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</p>
       `}
     </div>
   </div>

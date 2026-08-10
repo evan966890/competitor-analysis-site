@@ -12,14 +12,14 @@
 
 | 维度 | 数量 | 说明 |
 |---|---|---|
-| **产品** | 168 | `data/products.js` |
+| **产品** | 168 | `data/products.js`（含 36 深度 / 123 论文骨架 / 9 历史） |
 | **完整深度评测** | 36 | `data/<x>DeepDive.js`（含 13 v3.1 + 5 L 层 + 15 次重要 + 3 闭源） |
-| **深度评测骨架** | 122 | 对标论文 138 项目（ETCLOVG 7 层） |
-| **源码对比矩阵** | 9 维 × 149 家 = 1341 单元（+1377 cells） | `data/sourceMatrix.js` |
+| **深度评测骨架** | 123 | 对标论文 138 项目（ETCLOVG 7 层 · 待深度阶段补全） |
+| **源码对比矩阵** | 9 维 × 153 cell 条目 = 1377 单元 | `data/sourceMatrix.js`（含 149 总览 + 4 paper-only） |
 | **截图库** | 102M / 485 张 | `assets/shots/<project>/` |
 | **纵切 lane** | 10 | `data/lanes.js`（编排 / 任务 / 会话 / 编制 / 定时 / 记忆 / 技能 / 安全 / 治理 / 市场） |
 | **工作流剧本** | 3 | `data/playbooks.js` |
-| **横切视图** | 4 | 总览 / 对比工作台 / 任务面板 / 工作流剧本 |
+| **横切视图** | 4 | 总览 / 对比报告 / 任务面板 / 工作流剧本 |
 | **视觉导览** | 168 家 × ~6 states | `data/productDemos.js` |
 
 ## 目录结构
@@ -31,12 +31,12 @@ competitor-analysis-site/
 ├── .gitignore
 ├── package.json
 ├── server.mjs                   ← 静态文件服务器
-├── index.html                   ← 单页应用（168 个产品 / 8 维评分 / 9 维矩阵 / 168 视觉导览）
+├── index.html                   ← 单页应用（168 个产品 / 9 维评分 / 9 维矩阵 / 168 视觉导览）
 │
 ├── data/                        ← 数据层
-│   ├── products.js              ← 168 产品 + 8 维度评分
+│   ├── products.js              ← 168 产品 + 9 维度评分
 │   ├── <x>DeepDive.js           ← 36 完整 deepDive（每个 ~5-13 KB，含 6 demo shots / 3 code / 4 prob / 5 designP / 5 diff / 8 timeline / 5 forMico）
-│   ├── sourceMatrix.js          ← 9 维 × 149 家 = 1341 单元
+│   ├── sourceMatrix.js          ← 9 维 × 153 cell 条目 = 1377 单元
 │   ├── lanes.js                 ← 10 个纵切 lane（每 lane 多 cell × 多产品）
 │   ├── playbooks.js             ← 3 个工作流剧本（多 step × 多 cell）
 │   ├── productDemos.js          ← 168 家 × 6 状态视觉导览
@@ -86,14 +86,14 @@ lsof -nP -iTCP:7100 -sTCP:LISTEN
 | Hash | 视图 | 数据来源 |
 |---|---|---|
 | `#/` | 总览（168 产品文字+评分） | `data/products.js` |
-| `#/bench` | 对比工作台（雷达图 + 矩阵） | `data/products.js` |
+| `#/demos/<filter>` | 168 家视觉导览 | `data/productDemos.js` |
+| `#/report` | 对比报告（雷达图 + 矩阵） | `data/products.js`（旧路由 `#/bench` 兼容跳转） |
 | `#/tasks` | 任务面板横向对比（4 维 × 4 产品） | `index.html` 内 `TASK_SHOTS` |
 | `#/playbook/<id>` | 工作流剧本（3 套） | `data/playbooks.js` |
 | `#/lane/<id>` | 纵切 lane（10 个） | `data/lanes.js` |
 | `#/lab/<id>` | 源码解制 | `data/sourceLab.js` |
-| `#/source-matrix` | 9 维 × 149 家矩阵 | `data/sourceMatrix.js` |
-| `#/profile/<pid>` | 单产品资料卡 | `data/<pid>DeepDive.js` |
-| `#/demos/<filter>` | 168 家视觉导览 | `data/productDemos.js` |
+| `#/source-matrix` | 9 维 × 153 cell 条目矩阵 | `data/sourceMatrix.js` |
+| `#/profile/<pid>` | 单产品画像 | `data/<pid>DeepDive.js` |
 | `#/ai-lens` | AI 帮你分析 | — |
 | `#/product/<pid>` | 单产品 deep-dive | `data/<pid>DeepDive.js` |
 
@@ -111,13 +111,12 @@ lsof -nP -iTCP:7100 -sTCP:LISTEN
 1. `data/lanes.js` 加一个 `{id, name, icon, cells: [...]}`。
 2. `index.html` 的 `TD_LANES.map(...)` 自动渲染 nav 按钮。
 
-### 跑 8 维 / 9 维评分校验
+### 跑 9 维评分 lint 校验
 
 ```bash
-node -e "
-  const data = await import('./data/products.js');  // 如果支持 import
-  // 或 window.TD_PRODUCTS 在浏览器里
-"
+node scripts/lint-md-wrapping.js
+# → 扫所有 ${X} 文本引用是否走 md()/md60()/mdCut()/esc() 包装
+# → 退出码 0 = 通过, 1 = 有违规
 ```
 
 ## 证据准入（v3.3 规则）
@@ -128,6 +127,13 @@ node -e "
 - ❌ **待补**：登录页、空态、404、失效页面或来源不明素材；不进入横向能力卡片。
 
 闭源产品（buzz/qoderwake/qoderwork/wanuai 等）deep-dive 内标"⚠️ 登录实操待用户登录"，本台实拍限于 GitHub README 公开内容。
+
+## Fork 提示
+
+- `_archive/` 和 `_bmad-output/` 是本台开发期草稿（**不**进 git）。Fork 后这两个目录是空的，正常——本台独立 git repo 已拆分。
+- 完整截图库（`assets/shots/`）较大（102 MB · 485 张），clone 完即可直接用，无需额外下载。
+- 没有 `node_modules`——所有 `.js` 数据文件是 vanilla JS 直接 `<script src="data/...">` 加载。
+- 改完数据后浏览器可能要硬刷新（Cmd+Shift+R）才能看到新内容（无 HMR）。
 
 ## screenshot-skill（仓库内全局 skill）
 
@@ -145,10 +151,10 @@ node -e "
 
 - **v1** (2026-07)：单页 Linear 卡片 + 30 张截图。
 - **v2** (2026-08-03)：+ OpenWorker 完整评测 + 4 个新增深度（Vibe Kanban/Raft/Ruflo/OpenAgents）。
-- **v3.0** (2026-08-04)：8 维源码对比矩阵 + 9 家产品 = 72 单元 + 9 个产品画像页 + 9 个 lane + 4 个新 deepDive。
-- **v3.1** (2026-08-04)：+ 3 评测（Buzz/QoderWake/QoderWork）= 12 家 × 8 维 = 96 cells。
-- **v3.2** (2026-08-10)：+ 万有无界 = 13 家 × 8 维 = 104 cells。
-- **v3.3** (2026-08-10)：全面对标论文 7 层 = 9 维 × 149 家 = 1341 单元 + 36 完整 deepDive + 5 L 层 + 15 次重要 + 3 闭源 + Paperclip 标杆 + screenshot-skill。
+- **v3.0** (2026-08-04)：9 维源码对比矩阵 + 9 家产品 = 72 单元 + 9 个产品画像页 + 9 个 lane + 4 个新 deepDive。
+- **v3.1** (2026-08-04)：+ 3 评测（Buzz/QoderWake/QoderWork）= 12 家 × 9 维 = 96 cells。
+- **v3.2** (2026-08-10)：+ 万有无界 = 13 家 × 9 维 = 104 cells。
+- **v3.3** (2026-08-10)：全面对标论文 7 层 = 9 维 × 153 cell 条目 = 1377 单元 + 36 完整 deepDive + 5 L 层 + 15 次重要 + 3 闭源 + Paperclip 标杆 + screenshot-skill。
 
 详细见 [v3-plan.md](v3-plan.md)。
 

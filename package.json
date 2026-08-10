@@ -4,7 +4,8 @@
   "private": true,
   "description": "Agent 平台竞品拆解台：板块对比 × 源码解剖 × 对比工作台",
   "scripts": {
-    "dev": "node server.mjs",
-    "start": "node server.mjs"
+    "dev": "node server.mjs --host 127.0.0.1 --port 7100",
+    "start": "node server.mjs --host 127.0.0.1 --port 7100",
+    "lint:md": "node scripts/lint-md-wrapping.js"
   }
 }

@@ -1016,8 +1016,16 @@ window.TD_PRODUCTS = [
 
 
 window.TD_DIMS = [
-  ['orch', '编排'], ['task', '任务'], ['im', '会话入口'], ['roster', '编制管理'],
-  ['cron', '定时'], ['memory', '记忆上下文'], ['skills', '技能生态'], ['gov', '安全治理'],
+  // [key, name, desc, source]  · 9 维评分（v3 论文对标 + v1 增补）
+  // 评分方法论：1=有 2=基础 3=可用 4=良好 5=领先（基于 2026-08 实机截图 + 源码 + 官方文档 综合评估）
+  ['orch', '编排', '多 agent 协调、依赖满足、并行/串行、调度策略', 'v1 基线 + v3 论文 Layer C'],
+  ['task', '任务', '任务建模、状态机、分配、验收、收口', 'v1 基线 + v3 论文 Layer B'],
+  ['im', '会话入口', 'IM 平台接入、webhook、对话回路、消息转换', 'v1 基线'],
+  ['roster', '编制管理', 'agent/角色注册、prompt 仓库、技能清单', 'v3 论文 Layer C'],
+  ['cron', '定时', 'cron/heartbeat/event-driven 触发器', 'v1 基线'],
+  ['memory', '记忆上下文', '长期记忆、上下文压缩、跨会话 recall', 'v3 论文 Layer D'],
+  ['skills', '技能生态', 'MCP / plugin / skill 生态、共享协议', 'v3 论文 Layer D'],
+  ['gov', '安全治理', 'sandbox / 权限 / 审计 / 合规', 'v3 论文 Layer E'],
 ];
 
 // 138 论文项目骨架（v3.3 论文附录 Table S1 收录）

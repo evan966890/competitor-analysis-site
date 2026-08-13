@@ -246,7 +246,9 @@ window.TD_PRODUCT_DEMOS = {
       productName: 'chatgpt-desktop',  // 由 view 端用 P[id].name 覆盖
       isSchematic: false,
       states: [
-        { id: "s1", label: "app", img: "assets/shots/chatgpt-desktop/01-app.png", note: "点击放大查看原图。chatgpt-desktop 产品的\"app\"界面。" }
+        { id: "s1", label: "app", img: "assets/shots/chatgpt-desktop/01-app.png", note: "点击放大查看原图。chatgpt-desktop 产品的\"app\"界面。" },
+        { id: "s2", label: "架构图（推断）", img: "assets/shots/chatgpt-desktop/02-arch-diagram.svg", note: "**架构图占位** —— 基于官网 + 公开 docs 推断。ChatGPT 桌面端核心：项目制上下文 + Codex 工作台 + 异步长任务（站点/拉取请求/已安排）。", evidence: "arch-inferred" },
+        { id: "s3", label: "CLI 启动", img: "assets/shots/chatgpt-desktop/03-cli-usage.svg", note: "**CLI 启动占位** —— ChatGPT 桌面端通过 Codex CLI 跑命令。", evidence: "cli-inferred" }
       ]
     },
     'mavis': {
@@ -276,7 +278,9 @@ window.TD_PRODUCT_DEMOS = {
       productName: 'claude-tag',  // 由 view 端用 P[id].name 覆盖
       isSchematic: false,
       states: [
-        { id: "s1", label: "解析HTML", img: "assets/shots/claude-tag/01-解析HTML.jpeg", note: "点击放大查看原图。claude-tag 产品的\"解析HTML\"界面。" }
+        { id: "s1", label: "解析HTML", img: "assets/shots/claude-tag/01-解析HTML.jpeg", note: "点击放大查看原图。claude-tag 产品的\"解析HTML\"界面。" },
+        { id: "s2", label: "架构图（推断）", img: "assets/shots/claude-tag/02-arch-diagram.svg", note: "**架构图占位** —— Claude Tag 是 Slack 频道里的组织级共享执行体。**核心抽象**：Agent Identity（组织工牌）+ 频道级预算审计 + 计费随场所。", evidence: "arch-inferred" },
+        { id: "s3", label: "CLI 启动", img: "assets/shots/claude-tag/03-cli-usage.svg", note: "**CLI 启动占位** —— Claude Tag 部署在 Slack 频道中，无独立 CLI。", evidence: "cli-inferred" }
       ]
     },
     'agent365': {

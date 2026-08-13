@@ -587,6 +587,7 @@ function route() {
   if (state.view === 'lab' && arg) state.topic = arg;
   if (state.view === 'product' && arg) state.product = arg;
   if (state.view === 'playbook' && arg) state.playbook = arg;
+  if (state.view === 'layers' && arg) state.layerFocus = arg;
   if (state.view === 'ai-lens' && arg) { state.aiLens.tab = arg; if (arg2) state.aiLens.item = arg2; }
   if (state.view === 'source-matrix' && arg) state.matrixDim = arg;
   if (state.view === 'profile' && arg) state.profile = arg;
@@ -600,11 +601,12 @@ function renderNav() {
   const nav = $('#sidenav');
   const on = (cond) => cond ? 'on' : '';
   nav.innerHTML = `
-    <div class="brand">竞品拆解台<small>Agent 平台 · 2026-08 · v2</small></div>
+    <div class="brand">竞品拆解台<small>Agent 平台 · 2026-08 · v3.4</small></div>
     <div class="nav-sec">视图</div>
     <button class="nav-item ${on(state.view === 'home')}" onclick="go('#/')"><span class="ic">⌂</span>总览</button>
     <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>168 家视觉导览<span class="badge-new">v3.3</span></button>
     <button class="nav-item ${on(state.view === 'report')}" onclick="go('#/report')"><span class="ic">◫</span>对比报告</button>
+    <button class="nav-item ${on(state.view === 'layers')}" onclick="go('#/layers')"><span class="ic">▦</span>按 Layer 评估<span class="badge-new">v3.4</span></button>
     <div class="nav-sec">横向比较</div>
     <button class="nav-item ${on(state.view === 'tasks')}" onclick="go('#/tasks')"><span class="ic">▤</span>任务面板<span class="badge-new">v3.3</span></button>
     <button class="nav-item ${on(state.view === 'playbook' || state.view === 'playbooks')}" onclick="go('#/playbook')"><span class="ic">▶</span>工作流剧本<span class="badge-new">v3.3</span></button>
@@ -871,7 +873,106 @@ function viewLab() {
   <div class="callout"><b>结论 · </b>${md(t.verdict)}</div>`;
 }
 
-/* ================= 9 维源码对比矩阵（v3 新增）================= */
+/* ================= 按 Layer 评估（聚合 137 论文项目）================= */
+function viewLayers() {
+  // 收集所有 paper 产品的 primaryLayer（从 deepDive 拿）
+  const allPaper = TD_PRODUCTS.filter(p => p.type === 'paper');
+  const layerOf = id => {
+    for (const k of Object.keys(window)) {
+      if (/^TD_\w+_DEEPDIVE$/.test(k) && window[k]?.productId === id) {
+        return window[k].primaryLayer?.split(' / ')[0] || '?';
+      }
+    }
+    return '?';
+  };
+  const paperLayers = allPaper.map(p => ({ p, layer: layerOf(p.id) }));
+
+  // 按 layer 分组 + 按 stars 排序
+  const byLayer = {};
+  for (const x of paperLayers) {
+    if (!byLayer[x.layer]) byLayer[x.layer] = [];
+    byLayer[x.layer].push(x);
+  }
+  // 解析 stars 数字（处理 k 后缀）
+  function parseStars(text) {
+    const m = text.match(/([\d.]+)(k?)\s*stars/);
+    if (!m) return 0;
+    return parseFloat(m[1]) * (m[2] === 'k' ? 1000 : 1);
+  }
+  for (const L of Object.keys(byLayer)) {
+    byLayer[L].sort((a, b) => parseStars(b.p.oneLiner) - parseStars(a.p.oneLiner));
+  }
+
+  const layerOrder = ['E', 'T', 'C', 'L', 'O', 'V', 'G'];
+  const focus = state.layerFocus; // 可选：'/layers/E' 聚焦一个 layer
+
+  return `
+  <div class="hero" style="padding-bottom:18px">
+    <h1>按论文 Layer 评估 · 137 论文项目全景</h1>
+    <p>v3.3 重构：把对标论文 <b>Agent Harness Engineering</b> 附录 Table S1 的 137 个项目，按 <b>7 个 Layer</b> 聚合呈现。点 layer 看该层所有项目 + Layer-aware 评估摘要。</p>
+    <div class="ribbon">${paperLayers.length} paper 项目 · 7 个 Layer · 来源：CMU/UAB 2026 论文 Appendix Table S1（2026-05-08 快照）</div>
+  </div>
+
+  <div class="callout" style="margin-bottom:18px">
+    <b>📚 怎么看：</b>每个 Layer 是一个能力象限（如 <b>L=学习与记忆</b>、<b>E=执行环境</b>、<b>G=治理与安全</b>）。Layer 内项目按 stars 排序——stars 高 = 社区关注度高 = 主流方案。点项目卡进入深度评测。
+  </div>
+
+  <!-- Layer 切换器 -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding:10px;background:var(--panel);border-radius:9px;border:1px solid var(--line)">
+    <span style="font-size:12px;color:var(--ink2);align-self:center;margin-right:6px">Layer：</span>
+    <button class="chip ${!focus ? 'on' : ''}" onclick="go('#/layers')">全部 (${paperLayers.length})</button>
+    ${layerOrder.map(L => {
+      const count = byLayer[L]?.length || 0;
+      const meta = PAPER_LAYERS[L];
+      return `<button class="chip ${focus === L ? 'on' : ''}" onclick="go('#/layers/${L}')">${L} · ${meta?.zh || '?'} (${count})</button>`;
+    }).join('')}
+  </div>
+
+  ${focus ? `
+    <div style="background:linear-gradient(135deg,${PAPER_LAYERS[focus]?.role ? '#f0f9ff' : '#f5f5f5'} 0%,#e0f2fe 100%);border:1px solid #7dd3fc;border-left:4px solid #0284c7;border-radius:9px;padding:14px 18px;margin-bottom:18px">
+      <b style="color:#0284c7">📚 Layer ${focus} · ${PAPER_LAYERS[focus]?.zh}</b>
+      <p style="margin:6px 0 0;font-size:13px;line-height:1.6">${md(PAPER_LAYERS[focus]?.role || '')}</p>
+    </div>
+  ` : ''}
+
+  ${(focus ? [focus] : layerOrder).map(L => {
+    const meta = PAPER_LAYERS[L];
+    const items = byLayer[L] || [];
+    if (items.length === 0) return '';
+    return `
+    <div class="h2" style="margin-top:30px">
+      <span style="display:inline-block;background:${meta?.role ? '#dbeafe' : '#f5f5f5'};color:#0284c7;padding:2px 10px;border-radius:10px;font-size:13px;margin-right:8px">${L}</span>
+      ${meta?.name || '?'} · ${meta?.zh || ''}
+      <span style="color:var(--ink2);font-size:13px;margin-left:6px">（${items.length} 个项目）</span>
+    </div>
+    <p class="sub" style="margin:0 0 12px;font-size:12.5px;color:var(--ink2)">${md(meta?.role || '')}</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:18px">
+      ${items.slice(0, focus ? items.length : 8).map(({ p }) => {
+        const starsMatch = p.oneLiner.match(/([\d.]+k?)\s*stars/);
+        const stars = starsMatch ? starsMatch[1] : '?';
+        const llMeta = PAPER_LAYERS[L];
+        return `
+        <div class="card" style="cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;display:flex;gap:10px;align-items:flex-start" onclick="go('#/product/${p.id}')">
+          <img src="assets/shots/paper/${p.id}/01-readme-hero.svg" loading="lazy" style="width:88px;height:50px;object-fit:cover;border-radius:4px;border:1px solid var(--line);flex-shrink:0">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <b style="font-size:13.5px">${md(p.name)}</b>
+              <span style="font-size:10.5px;color:var(--ink2);background:#f5f0e6;padding:1px 6px;border-radius:8px;flex-shrink:0">⭐ ${stars}</span>
+            </div>
+            <div style="font-size:11.5px;color:var(--ink2);line-height:1.45;margin-bottom:6px">${md(p.motto)}</div>
+            <div style="font-size:10.5px;color:var(--accent)">${llMeta ? llMeta.zh : '?'} · ${stars} stars</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    ${!focus && items.length > 8 ? `
+    <div style="text-align:center;margin-bottom:18px"><a href="#/layers/${L}" style="color:var(--accent);font-size:12.5px">→ 查看全部 ${items.length} 个 ${L} 层项目</a></div>
+    ` : ''}
+    `;
+  }).join('')}
+  `;
+}
 const matrixScoreClass = s => `sc sc${s}`;
 const matrixScoreColor = s => s >= 4 ? '#1d6b3a' : s >= 3 ? '#c69215' : s >= 2 ? '#c2571b' : '#a83a3a';
 
@@ -2487,6 +2588,7 @@ function render() {
   else if (state.view === 'source-matrix') m.innerHTML = viewSourceMatrix();
   else if (state.view === 'profile') m.innerHTML = viewProductProfile(state.profile);
   else if (state.view === 'demos') m.innerHTML = viewDemosOverview();
+  else if (state.view === 'layers') m.innerHTML = viewLayers();
   else m.innerHTML = viewHome();
 
   if (viewChanged) {

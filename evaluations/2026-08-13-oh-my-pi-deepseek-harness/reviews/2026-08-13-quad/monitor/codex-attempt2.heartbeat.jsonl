@@ -1,0 +1,16 @@
+{"ts": 1786630846.88011, "status": "RUNNING_ACTIVE", "pid": 31741, "pid_alive": true, "transcript_bytes": 55, "bytes_delta": 55, "idle_seconds": 5.98}
+{"ts": 1786630862.1275148, "status": "RUNNING_ACTIVE", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 1508, "idle_seconds": 6.12}
+{"ts": 1786630877.135365, "status": "RUNNING_ACTIVE", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 21.12}
+{"ts": 1786630892.775903, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 36.77}
+{"ts": 1786630908.06322, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 52.03}
+{"ts": 1786630923.103956, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 67.09}
+{"ts": 1786630938.2215521, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 82.21}
+{"ts": 1786630953.912858, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 97.9}
+{"ts": 1786630968.979126, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 112.97}
+{"ts": 1786630984.0124009, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 128.0}
+{"ts": 1786630999.0389419, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 143.03}
+{"ts": 1786631014.4894452, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 158.48}
+{"ts": 1786631029.8053372, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 173.8}
+{"ts": 1786631045.1115, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 189.1}
+{"ts": 1786631060.437412, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 204.43}
+{"ts": 1786631075.976971, "status": "RUNNING_SILENT", "pid": 31741, "pid_alive": true, "transcript_bytes": 1563, "bytes_delta": 0, "idle_seconds": 219.97}

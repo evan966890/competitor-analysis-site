@@ -1,0 +1,33 @@
+{
+  "provider": "claude",
+  "transport_type": "pty_runner",
+  "command_path": "/Users/evan/.local/bin/claude",
+  "launch_argv": [
+    "claude",
+    "--permission-mode",
+    "plan",
+    "--effort",
+    "max",
+    "--ax-screen-reader",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--strict-mcp-config",
+    "对抗式审查：请严格读取并执行此提示文件，完成后按其中 sentinel 协议输出，不得修改文件：@/Users/evan/code/competitor-analysis-site/evaluations/2026-08-13-oh-my-pi-deepseek-harness/reviews/2026-08-13-quad/prompts/claude.prompt.md"
+  ],
+  "cwd": "/Users/evan/code/competitor-analysis-site",
+  "prompt_path": "/Users/evan/code/competitor-analysis-site/evaluations/2026-08-13-oh-my-pi-deepseek-harness/reviews/2026-08-13-quad/prompts/claude.prompt.md",
+  "started_at": 1786630207.887585,
+  "stdin_isatty": true,
+  "stdout_isatty": true,
+  "env_home": "/Users/evan",
+  "env_term": "xterm-256color",
+  "pinned_model_via_launcher": false,
+  "pty_pid": 29206,
+  "status": "SKIPPED_TIMEOUT",
+  "ended_at": 1786630817.833958,
+  "duration_seconds": 609.95,
+  "provider_returncode": 124,
+  "reply_parse_status": "invalid_or_missing",
+  "transcript_path": "/Users/evan/code/competitor-analysis-site/evaluations/2026-08-13-oh-my-pi-deepseek-harness/reviews/2026-08-13-quad/replies/claude.transcript.txt",
+  "reply_path": ""
+}

@@ -1,0 +1,16 @@
+diff --git a/summarizeOrders.mjs b/summarizeOrders.mjs
+--- a/summarizeOrders.mjs
++++ b/summarizeOrders.mjs
+@@ -4,10 +4,10 @@ export function summarizePaidOrders(orders) {
+   for (const order of orders) {
+     if (order.status !== 'paid') continue;
+     const previous = totalsByCustomer.get(order.customer) ?? 0;
+-    totalsByCustomer.set(order.customer, previous + Math.round(order.amount));
++    totalsByCustomer.set(order.customer, previous + order.amount);
+   }
+ 
+   return [...totalsByCustomer.entries()]
+     .map(([customer, total]) => ({ customer, total }))
+-    .sort((left, right) => left.total - right.total);
++    .sort((left, right) => right.total - left.total || left.customer.localeCompare(right.customer));
+ }

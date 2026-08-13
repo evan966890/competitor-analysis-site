@@ -1,0 +1,526 @@
+diff --git a/README.md b/README.md
+index 6a89535..b1b0973 100644
+--- a/README.md
++++ b/README.md
+@@ -1,26 +1,26 @@
+ # 竞品拆解台（competitor-analysis-site）
+ 
+ > 以可追溯截图、源码片段和产品经理注解横向比较 Agent 平台的本地静态站点。
+-> 168 个 Agent 平台 / 36 个完整深度评测 / 9 维 × 149 家源码对比矩阵 / 168 家视觉导览 / 10 个 lane 纵切。
++> 169 条 Agent 产品记录 / 38 个完整深度评测 / 9 维 × 149 家源码对比矩阵 / 169 家视觉导览 / 10 个 lane 纵切。
+ > 对标论文 Agent Harness Engineering（ETCLOVG 7 层），独立 git repo，可单独打磨。
+ 
+ ## 一句话定位
+ 
+ 把每一个竞品拆成 4 层证据：**实机截图 → 官方文档图 → 源码精读 → 产品经理注解**。每一条断言都标证据路径，可复查、可反查、可重做。
+ 
+-## 当前规模（v3.3 · 2026-08-10）
++## 当前规模（v3.4 · 2026-08-13）
+ 
+ | 维度 | 数量 | 说明 |
+ |---|---|---|
+-| **产品** | 168 | `data/products.js`（含 36 深度 / 123 论文骨架 / 9 历史） |
+-| **完整深度评测** | 36 | `data/<x>DeepDive.js`（含 13 v3.1 + 5 L 层 + 15 次重要 + 3 闭源） |
+-| **深度评测骨架** | 123 | 对标论文 138 项目（ETCLOVG 7 层 · 待深度阶段补全） |
++| **产品记录** | 169 | `data/products.js`（运行时数组长度；含历史条目） |
++| **完整深度评测** | 38 | 新增 Oh My Pi / DeepSeek Harness 真实安装与同模型实测 |
++| **深度评测骨架** | 122 | Oh My Pi 已从论文骨架升级为完整实测 |
+ | **源码对比矩阵** | 9 维 × 153 cell 条目 = 1377 单元 | `data/sourceMatrix.js`（含 149 总览 + 4 paper-only） |
+-| **截图库** | 102M / 485 张 | `assets/shots/<project>/` |
++| **截图库** | 103M / 307 个文件 | `assets/shots/<project>/`（当前工作树实数） |
+ | **纵切 lane** | 10 | `data/lanes.js`（编排 / 任务 / 会话 / 编制 / 定时 / 记忆 / 技能 / 安全 / 治理 / 市场） |
+ | **工作流剧本** | 3 | `data/playbooks.js` |
+ | **横切视图** | 4 | 总览 / 对比报告 / 任务面板 / 工作流剧本 |
+-| **视觉导览** | 168 家 × ~6 states | `data/productDemos.js` |
++| **视觉导览** | 169 条产品记录 | `data/productDemos.js` + deepDive `demoShots` |
+ 
+ ## 目录结构
+ 
+@@ -31,30 +31,37 @@ competitor-analysis-site/
+ ├── .gitignore
+ ├── package.json
+ ├── server.mjs                   ← 静态文件服务器
+-├── index.html                   ← 单页应用（168 个产品 / 9 维评分 / 9 维矩阵 / 168 视觉导览）
++├── index.html                   ← 单页应用（169 条产品记录 / 9 维评分 / 9 维矩阵 / 169 视觉导览）
+ │
+ ├── data/                        ← 数据层
+-│   ├── products.js              ← 168 产品 + 9 维度评分
+-│   ├── <x>DeepDive.js           ← 36 完整 deepDive（每个 ~5-13 KB，含 6 demo shots / 3 code / 4 prob / 5 designP / 5 diff / 8 timeline / 5 forMico）
++│   ├── products.js              ← 169 条产品记录 + 9 维度评分
++│   ├── <x>DeepDive.js           ← 38 完整 deepDive（含 demo shots / code / philosophy / timeline / conclusion）
+ │   ├── sourceMatrix.js          ← 9 维 × 153 cell 条目 = 1377 单元
+ │   ├── lanes.js                 ← 10 个纵切 lane（每 lane 多 cell × 多产品）
+ │   ├── playbooks.js             ← 3 个工作流剧本（多 step × 多 cell）
+-│   ├── productDemos.js          ← 168 家 × 6 状态视觉导览
++│   ├── productDemos.js          ← 历史产品多状态视觉导览
++│   ├── oh-my-piDeepDive.js      ← OMP 17.3.0 + Mify/MiMo 真实评测
++│   ├── deepseek-harnessDeepDive.js ← DSH 0.1.0-rc.6 + Mify/MiMo 真实评测
+ │   ├── paperclipDeepDive.js     ← Paperclip 标杆深度（5 抽象：role/heartbeat/skills/cost/board）
+ │   ├── wanuaiDeepDive.js        ← 万有无界深度评测
+-│   └── ... (共 165 个 .js)
++│   └── ... (共 166 个 .js)
+ │
+ ├── assets/
+-│   └── shots/                   ← 截图库（485 张，102 MB）
++│   └── shots/                   ← 截图库（307 个文件，103 MB）
+ │       ├── mico/                ← 自家产品 15 张
+ │       ├── multica/  linear/  paperclip/  buzz/  ... (主评测 ~32 个项目)
+ │       ├── wanuai/  qm/  ruflo/  vibe-kanban/  raft/  jira-meego/  openworker/
+ │       ├── l5-deep/             ← 5 L 层项目 GitHub README 截图 (opencode/claudecode/codex/openhands/deepagents)
+ │       ├── l2-mid/              ← 15 次重要项目 GitHub README 截图 (langfuse/litellm/daytona/...)
+ │       ├── closed-3/            ← 3 闭源/官方 (github-copilot-cli/openai-agents-sdk/openai-realtime-agents)
++│       ├── oh-my-pi/            ← OMP 真实 session export 实拍
++│       ├── deepseek-harness/     ← DSH 首页 / 结果 / trajectory / 模型设置实拍
+ │       ├── workbuddy/  workbuddy-ent/  chatgpt-desktop/  claude-tag/  ... (其它收录产品)
+ │       └── ... (共 36 个项目目录)
+ │
++├── evaluations/
++│   └── 2026-08-13-oh-my-pi-deepseek-harness/ ← 固定题、prompt、机器结果与原始 session 工件
++│
+ └── skills/                      ← 仓库内可复用 skill
+     └── screenshot-skill/        ← 完整截图闭环（kimi-webbridge + 8 步 audit + 5 原因诊断树）
+         ├── SKILL.md
+@@ -85,8 +92,8 @@ lsof -nP -iTCP:7100 -sTCP:LISTEN
+ 
+ | Hash | 视图 | 数据来源 |
+ |---|---|---|
+-| `#/` | 总览（168 产品文字+评分） | `data/products.js` |
+-| `#/demos/<filter>` | 168 家视觉导览 | `data/productDemos.js` |
++| `#/` | 总览（169 条产品记录文字+评分） | `data/products.js` |
++| `#/demos/<filter>` | 169 条产品记录视觉导览 | `data/productDemos.js` + deepDive |
+ | `#/report` | 对比报告（雷达图 + 矩阵） | `data/products.js`（旧路由 `#/bench` 兼容跳转） |
+ | `#/tasks` | 任务面板横向对比（4 维 × 4 产品） | `index.html` 内 `TASK_SHOTS` |
+ | `#/playbook/<id>` | 工作流剧本（3 套） | `data/playbooks.js` |
+@@ -131,7 +138,7 @@ node scripts/lint-md-wrapping.js
+ ## Fork 提示
+ 
+ - `_archive/` 和 `_bmad-output/` 是本台开发期草稿（**不**进 git）。Fork 后这两个目录是空的，正常——本台独立 git repo 已拆分。
+-- 完整截图库（`assets/shots/`）较大（102 MB · 485 张），clone 完即可直接用，无需额外下载。
++- 完整截图库（`assets/shots/`）较大（当前 103 MB · 307 个文件），clone 完即可直接用，无需额外下载。
+ - 没有 `node_modules`——所有 `.js` 数据文件是 vanilla JS 直接 `<script src="data/...">` 加载。
+ - 改完数据后浏览器可能要硬刷新（Cmd+Shift+R）才能看到新内容（无 HMR）。
+ 
+@@ -155,6 +162,7 @@ node scripts/lint-md-wrapping.js
+ - **v3.1** (2026-08-04)：+ 3 评测（Buzz/QoderWake/QoderWork）= 12 家 × 9 维 = 96 cells。
+ - **v3.2** (2026-08-10)：+ 万有无界 = 13 家 × 9 维 = 104 cells。
+ - **v3.3** (2026-08-10)：全面对标论文 7 层 = 9 维 × 153 cell 条目 = 1377 单元 + 36 完整 deepDive + 5 L 层 + 15 次重要 + 3 闭源 + Paperclip 标杆 + screenshot-skill。
++- **v3.4** (2026-08-13)：安装 Oh My Pi 17.3.0 与 DeepSeek Harness 0.1.0-rc.6；用同一 Mify/MiMo 模型跑固定题；保存原始 session、6 张真实截图与受限结论；新增/升级 2 个完整 deepDive。
+ 
+ 详细见 [v3-plan.md](v3-plan.md)。
+ 
+diff --git a/data/oh-my-piDeepDive.js b/data/oh-my-piDeepDive.js
+index 600b11b..059ad8b 100644
+--- a/data/oh-my-piDeepDive.js
++++ b/data/oh-my-piDeepDive.js
+@@ -1,63 +1,119 @@
+-// oh-my-pi 深度评测（v3 骨架入库 · 2026-08-10）
+-// 来源：Agent Harness Engineering 论文 Appendix Table S1（2026-05-08 快照）
+-// 标注：骨架入库 — 仅含 meta + score + 简介；完整 deep-dive（demo×6 / code×3 / philosophy / timeline / conclusion）留给深度阶段
++// Oh My Pi 完整深度评测（真实安装 + MiMo 同题实测 · 2026-08-13）
+ window.TD_OH_MY_PI_DEEPDIVE = {
+   productId: 'oh-my-pi',
+-  productName: 'oh-my-pi',
+-  tagline: 'terminal + LSP + subagents',
+-  dateAdded: '2026-08-10',
+-  isRealScreenshot: false,
+-  source: 'Agent Harness Engineering: A Survey (Junjie Li et al., CMU/UAB 2026) · Appendix Table S1 (2026-05-08 快照) · https://github.com/can1357/oh-my-pi · 4.0k stars',
+-  author: '本台研究团队（基于论文附录骨架 + GitHub 元数据）',
++  productName: 'Oh My Pi (OMP)',
++  tagline: '把 IDE、原生工具、子代理与可导出的会话压进一个 coding-agent surface',
++  dateAdded: '2026-08-13',
++  isRealScreenshot: true,
++  source: 'github.com/can1357/oh-my-pi @ 326d24bd · omp 17.3.0 · 本台 MiMo 实测与 session export',
++  author: '本台研究团队（源码 + 本机真实运行 + 固定题对照）',
+   primaryLayer: 'L',
+-  deployment: 'OSS',
++  deployment: 'OSS / local',
+ 
+-  // ============ ① DEMO（占位，深度阶段补）============
+   demoShots: [
+     {
+-      id: 'placeholder',
+-      caption: 'oh-my-pi 主页（占位，深度阶段补实拍）',
+-      img: 'assets/shots/placeholder.jpg',
+-      note: '本图为骨架占位。深度阶段将通过 本地部署 + kimi-webbridge 截图 补全 6-9 张实拍。',
+-    }
++      id: 'session-tools',
++      caption: '真实 session：Mify / MiMo V2.5 Pro、工具轨迹与 token 统计',
++      img: 'assets/shots/oh-my-pi/01-live-session-model-tools.jpg',
++      note: '**不是官网宣传图**：由本次真实 OMP session 导出。页面绑定模型 `mify/xiaomi/mimo-v2.5-pro`，展示 7 次工具调用，以及非缓存输入、缓存读取、输出 token。',
++    },
++    {
++      id: 'eval-result',
++      caption: '固定题结果：同一生产代码补丁，npm test 2/2',
++      img: 'assets/shots/oh-my-pi/02-live-eval-result.jpg',
++      note: 'OMP 先读实现与测试，再修改 `summarizeOrders.mjs` 并运行测试。最终只改生产代码，2 个测试全部通过；独立复核也为 2/2。',
++    },
+   ],
+ 
+-  // ============ ② CODE（占位，深度阶段补）============
+   codeSnippets: [
+     {
+-      title: 'oh-my-pi 核心抽象（占位）',
+-      file: 'oh-my-pi/...（深度阶段补）',
+-      code: '// 论文附录骨架入库 — 完整 code snippet 留给深度阶段',
+-      points: ['论文定位：Harness Architecture & Orchestration', '本台收录：v3 骨架入库（4.0k）', '完整 deep-dive 留给深度阶段']
+-    }
++      title: '模型自适应编辑：Hashline 默认开启，但 MiMo 自动回退 replace',
++      file: 'packages/coding-agent/src/utils/edit-mode.ts @ 326d24bd',
++      code: `export const DEFAULT_EDIT_MODE: EditMode = "hashline";
++
++const HASHLINE_EXCLUDED_MODEL_MODES = [
++  { pattern: "kimi", mode: "replace" },
++  { pattern: "mimo", mode: "replace" },
++  { pattern: "deepseek-v4-flash", mode: "replace" },
++];`,
++      points: [
++        '**工具协议按模型适配**，不是要求所有模型学习同一种 patch 方言。',
++        '本次 MiMo 运行实际走 replace edit，避免把 Hashline 的宣传优势错误归因到这次结果。',
++        '对 MiCo：模型路由不只选 endpoint，也应携带最适合该模型的工具协议与 edit dialect。',
++      ],
++    },
++    {
++      title: 'OpenAI-compatible 自定义 provider：Mify 不需要改 OMP 源码',
++      file: '~/.omp/profiles/competitor-eval/agent/models.yml（密钥已脱敏）',
++      code: `providers:
++  mify:
++    baseUrl: https://api.llm.mioffice.cn/v1
++    api: openai-completions
++    apiKey: "!read-from-existing-secret-file"
++    models:
++      - id: xiaomi/mimo-v2.5-pro
++        contextWindow: 1048576
++        maxTokens: 131072`,
++      points: [
++        '**Provider extension 是配置面**：安装完成后即可接 Mify/MiMo。',
++        '独立 profile 避免污染 OMP 的默认全局模型选择。',
++        '密钥没有落到评测仓库，也没有复制出第二份明文。',
++      ],
++    },
++    {
++      title: '固定题补丁：移除逐行取整，并提供稳定降序 tie-break',
++      file: 'evaluations/2026-08-13-oh-my-pi-deepseek-harness/fixture/summarizeOrders.mjs',
++      code: `const previous = totalsByCustomer.get(order.customer) ?? 0;
++totalsByCustomer.set(order.customer, previous + order.amount);
++
++return [...totalsByCustomer.entries()]
++  .map(([customer, total]) => ({ customer, total }))
++  .sort((left, right) => right.total - left.total
++    || left.customer.localeCompare(right.customer));`,
++      points: [
++        'OMP 与 DSH 最终补丁一致，功能正确性没有分出胜负。',
++        'OMP 在本次单样本用时 **25.16 秒**，6 个模型步骤、7 次工具调用。',
++        '会话原文和自包含 HTML 都已随评测工件保存。',
++      ],
++    },
+   ],
+ 
+-  // ============ ③ PHILOSOPHY（基于论文定位的简要）============
+   philosophy: {
+-    coreQuestion: 'oh-my-pi 在 Harness Architecture & Orchestration 的核心定位是什么？',
+-    answer: '**oh-my-pi** ——terminal + LSP + subagents。**4.0k stars**（2026-05-08 快照）。**论文分类**：L 层（Harness Architecture & Orchestration）。**部署形态**：OSS。',
++    coreQuestion: '如何把“模型会写代码”提升成“模型能稳定使用完整工程环境”？',
++    answer: 'OMP 的答案是把 **LSP / DAP / 内建 search/bash / edit dialect / subagents / memory / session export** 统一成一套 coding surface；provider 与模型角色通过配置注入。',
+     problemDiagnosis: [
+-      '**论文定位**：terminal + LSP + subagents',
+-      '**对 MiCo 价值**：作为 Harness Architecture & Orchestration 的代表项目，对标 MiCo 的 编制化/编排 维度。'
++      '普通 agent 的瓶颈常在工具协议、编辑失败与上下文重复，而不只在模型权重。',
++      '工具多并不等于可用；关键是让 read/edit/LSP/session 共享同一份文件与状态语义。',
++      '模型差异真实存在，因此编辑协议需要按模型回退与调优。',
++      '本次实测证明 Mify/MiMo 可接入并完成任务，但没有覆盖 LSP、DAP、subagent 等高阶能力。',
++    ],
++    designPrinciples: [
++      '**Coding-first surface**：围绕真实代码库而不是通用聊天构建。',
++      '**模型适配工具协议**：路由配置包含模型与 edit dialect 的关系。',
++      '**原生能力内聚**：search、bash、LSP、DAP、session 都在同一 harness。',
++      '**会话可复核**：JSONL 和 HTML export 把正式结果与轨迹一起交付。',
++      '**配置式 provider**：OpenAI-compatible 网关无需 fork。',
+     ],
+-    designPrinciples: ['**terminal + LSP + subagents**'],
+     differentiationMatrix: [
+-      { vs: 'MiCo', diff: '**oh-my-pi** 是 Harness Architecture & Orchestration 代表项目（4.0k）。MiCo 在该层的差异点需深度阶段补。' }
++      { vs: 'DeepSeek Harness', diff: 'OMP 更像高度打磨的成品 coding surface；本次更快、模型步骤更少，但处理 token 更多，浏览器端轨迹分析不如 DSH 细。' },
++      { vs: 'Codex / Claude Code', diff: 'OMP 更强调多 provider、模型特定 edit 与大量内建工程工具，同时保留本地开源可改性。' },
++      { vs: 'MiCo', diff: 'OMP 强在单个 coding worker 的深工具面；MiCo 强项应留在任务、编制、验收与跨 worker 治理，不宜重复造 IDE 工具栈。' },
+     ],
+   },
+ 
+-  // ============ 时间线（基于公开信息）============
+   timeline: [
+-    { date: '2026-05-08', event: '本台骨架入库（论文附录 Table S1 4.0k 快照）' },
++    { date: '2026-08-13', event: 'Homebrew 安装 omp 17.3.0；源码冻结到 326d24bd。' },
++    { date: '2026-08-13', event: '建立 competitor-eval 独立 profile，接入 Mify / MiMo V2.5 Pro。' },
++    { date: '2026-08-13', event: '固定题从 0/2 修到 2/2，保存 JSONL、HTML export 与实拍截图。' },
+   ],
+ 
+-  // ============ 评测结论 ============
+   conclusion: {
+-    summary: '**oh-my-pi** 是论文 Harness Architecture & Orchestration 的 4.0k 项目。骨架入库——完整 deep-dive（含实拍截图 + 源码 + 评分）留待深度阶段。',
++    summary: '**结论：可用且成熟度高。** OMP 已在本机真实安装并通过 Mify/MiMo 完成固定编码任务。本次单样本比 DSH 快 14.75 秒，但不能外推成总体性能排名。它对 MiCo 最有价值的是“把模型差异下沉为工具协议配置”和“会话可复核交付”。',
+     forMico: [
+-      '**oh-my-pi** 作为 L 层代表——深度阶段补完整评测。',
+-      '**论文定位**：terminal + LSP + subagents（4.0k）',
+-      '**骨架入库时间**：2026-08-10（与本台 v3 全面重构同步）'
++      '把模型 role、provider、edit dialect 做成同一份可审计路由配置。',
++      '不要复制 OMP 的所有 IDE 工具；优先把它当可替换 worker 接入 MiCo 的任务/验收层。',
++      '借鉴 session JSONL + 自包含 HTML 的双交付：一份机器证据，一份人类复核界面。',
++      '下一轮补长任务、子代理 fan-out、失败恢复与权限提示，才足以判断生产适配度。',
+     ],
+   },
+ };
+diff --git a/data/products.js b/data/products.js
+index e301797..75bb587 100644
+--- a/data/products.js
++++ b/data/products.js
+@@ -656,12 +656,12 @@ window.TD_PRODUCTS = [
+     pros: ['**论文定位**：Harness Architecture & Orchestration（L 层）', '**4.2k stars**（2026-05-08 快照）', '**OSS** 部署形态', '**完整 deep-dive 留给深度阶段**'],
+     cons: ['骨架入库 — 实拍截图 + 完整 code 留待深度阶段', '**论文未给详细评测**，本台仅按论文定位 + GitHub 元数据入档'],
+     micoNote: '**mini-swe-agent** 是论文 L 层代表项目（4.2k）。骨架入库——深度阶段补完整评测。当前显示位置：板块对比 + 源码横切矩阵（论文附录骨架）。' },
+-  { id: 'oh-my-pi', name: 'oh-my-pi', type: 'paper', motto: 'Harness Architecture & Orchestration代表',
+-    oneLiner: 'terminal + LSP + subagents（4.0k stars · 论文 L 层）',
+-    scores: {"orch":5,"task":5,"im":4,"roster":4,"cron":3,"memory":3,"skills":4,"gov":3},
+-    pros: ['**论文定位**：Harness Architecture & Orchestration（L 层）', '**4.0k stars**（2026-05-08 快照）', '**OSS** 部署形态', '**完整 deep-dive 留给深度阶段**'],
+-    cons: ['骨架入库 — 实拍截图 + 完整 code 留待深度阶段', '**论文未给详细评测**，本台仅按论文定位 + GitHub 元数据入档'],
+-    micoNote: '**oh-my-pi** 是论文 L 层代表项目（4.0k）。骨架入库——深度阶段补完整评测。当前显示位置：板块对比 + 源码横切矩阵（论文附录骨架）。' },
++  { id: 'oh-my-pi', name: 'Oh My Pi', type: '开源', motto: 'IDE-wired coding surface',
++    oneLiner: '多 provider coding agent：内建 LSP/DAP、模型适配 edit、子代理、记忆与可复核 session export。',
++    scores: {"orch":4,"task":4,"im":2,"roster":4,"cron":3,"memory":4,"skills":5,"gov":3},
++    pros: ['**真实接入 Mify/MiMo 并完成 2/2 固定题**', '模型特定 edit dialect + LSP/DAP 工具面完整', 'JSONL + 自包含 HTML session 双交付'],
++    cons: ['单 worker 工具面很深，但公司级任务/编制/租户治理不是主目标', '本次 MiMo 自动回退 replace，未验证 Hashline 宣传收益', '当前只完成一个小题单样本，不能外推总体性能'],
++    micoNote: '**可作为 MiCo coding worker，而非取代任务平台。** 最值得抄的是模型路由同时绑定工具协议，以及机器证据 + 人类复核页面的会话交付。' },
+   { id: 'tinyagi', name: 'TinyAGI', type: 'paper', motto: 'Harness Architecture & Orchestration代表',
+     oneLiner: 'team-orchestration + autonomous + workflows（3.6k stars · 论文 L 层）',
+     scores: {"orch":5,"task":5,"im":4,"roster":4,"cron":3,"memory":3,"skills":4,"gov":3},
+@@ -1010,6 +1010,12 @@ window.TD_PRODUCTS = [
+     pros: ['**论文定位**：Guardrails, Security & Governance（G 层）', '**807 stars**（2026-05-08 快照）', '**OSS** 部署形态', '**完整 deep-dive 留给深度阶段**'],
+     cons: ['骨架入库 — 实拍截图 + 完整 code 留待深度阶段', '**论文未给详细评测**，本台仅按论文定位 + GitHub 元数据入档'],
+     micoNote: '**mini-coding-agent** 是论文 G 层代表项目（807）。骨架入库——深度阶段补完整评测。当前显示位置：板块对比 + 源码横切矩阵（论文附录骨架）。' },
++  { id: 'deepseek-harness', name: 'DeepSeek Harness', type: '开源', motto: 'Everything is a plugin',
++    oneLiner: 'DeepSeek 开源的 Cordis 插件化 agent harness：模型、session、sandbox、工具、Web UI 与 trajectory 均可组合。',
++    scores: {"orch":4,"task":3,"im":4,"roster":3,"cron":2,"memory":3,"skills":5,"gov":4},
++    pros: ['**真实接入 Mify/MiMo 并完成 2/2 固定题**', 'Cordis 插件边界覆盖后端能力与前端视图', '原生 Web trajectory + 统一 sandbox policy'],
++    cons: ['官方明确为 **developer preview**，存在破坏兼容性变更', '本次单样本 39.91 秒、步骤多于 OMP，不能外推总体性能', '生态与稳定性仍需长期验证'],
++    micoNote: '**最值得作为 MiCo worker runtime 架构样本。** 借鉴 profile patch、credential reference、event trajectory；若生产采用必须冻结 npm 版本与源码 SHA，并设兼容性 Gate。' },
+ ];
+ 
+ 
+@@ -1504,12 +1510,12 @@ window.TD_PRODUCTS_PAPER = [
+     pros: ['**论文定位**：Harness Architecture & Orchestration（L 层）', '**4.2k stars**（2026-05-08 快照）', '**OSS** 部署形态', '**完整 deep-dive 留给深度阶段**'],
+     cons: ['骨架入库 — 实拍截图 + 完整 code 留待深度阶段', '**论文未给详细评测**，本台仅按论文定位 + GitHub 元数据入档'],
+     micoNote: '**mini-swe-agent** 是论文 L 层代表项目（4.2k）。骨架入库——深度阶段补完整评测。当前显示位置：板块对比 + 源码横切矩阵（论文附录骨架）。' },
+-  { id: 'oh-my-pi', name: 'oh-my-pi', type: 'paper', motto: 'Harness Architecture & Orchestration代表',
+-    oneLiner: 'terminal + LSP + subagents（4.0k stars · 论文 L 层）',
+-    scores: {"orch":5,"task":5,"im":4,"roster":4,"cron":3,"memory":3,"skills":4,"gov":3},
+-    pros: ['**论文定位**：Harness Architecture & Orchestration（L 层）', '**4.0k stars**（2026-05-08 快照）', '**OSS** 部署形态', '**完整 deep-dive 留给深度阶段**'],
+-    cons: ['骨架入库 — 实拍截图 + 完整 code 留待深度阶段', '**论文未给详细评测**，本台仅按论文定位 + GitHub 元数据入档'],
+-    micoNote: '**oh-my-pi** 是论文 L 层代表项目（4.0k）。骨架入库——深度阶段补完整评测。当前显示位置：板块对比 + 源码横切矩阵（论文附录骨架）。' },
++  { id: 'oh-my-pi', name: 'Oh My Pi', type: '开源', motto: 'IDE-wired coding surface',
++    oneLiner: '多 provider coding agent：内建 LSP/DAP、模型适配 edit、子代理、记忆与可复核 session export。',
++    scores: {"orch":4,"task":4,"im":2,"roster":4,"cron":3,"memory":4,"skills":5,"gov":3},
++    pros: ['**真实接入 Mify/MiMo 并完成 2/2 固定题**', '模型特定 edit dialect + LSP/DAP 工具面完整', 'JSONL + 自包含 HTML session 双交付'],
++    cons: ['单 worker 工具面很深，但公司级任务/编制/租户治理不是主目标', '本次 MiMo 自动回退 replace，未验证 Hashline 宣传收益', '当前只完成一个小题单样本，不能外推总体性能'],
++    micoNote: '**可作为 MiCo coding worker，而非取代任务平台。** 最值得抄的是模型路由同时绑定工具协议，以及机器证据 + 人类复核页面的会话交付。' },
+   { id: 'tinyagi', name: 'TinyAGI', type: 'paper', motto: 'Harness Architecture & Orchestration代表',
+     oneLiner: 'team-orchestration + autonomous + workflows（3.6k stars · 论文 L 层）',
+     scores: {"orch":5,"task":5,"im":4,"roster":4,"cron":3,"memory":3,"skills":4,"gov":3},
+diff --git a/index.html b/index.html
+index 9a80adf..a648ccc 100644
+--- a/index.html
++++ b/index.html
+@@ -354,6 +354,8 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
+ <script src="data/github-copilot-cliDeepDive.js"></script>
+ <script src="data/openai-agents-sdkDeepDive.js"></script>
+ <script src="data/openai-realtime-agentsDeepDive.js"></script>
++<script src="data/oh-my-piDeepDive.js"></script>
++<script src="data/deepseek-harnessDeepDive.js"></script>
+ <script>
+ (() => {
+   const files = [
+@@ -371,7 +373,7 @@ code, pre, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monosp
+     'agno','claude-code-plugins','semantic-kernel','openai-agents-sdk','qwen-code','archon','devika',
+     'google-adk','swe-agent','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive',
+     'microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw',
+-    'mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion',
++    'mini-swe-agent','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion',
+     'deepagentsjs','hankweave',
+     // O (15)
+     'langfuse','mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk',
+@@ -444,7 +446,7 @@ function renderNav() {
+     <div class="brand">竞品拆解台<small>Agent 平台 · 2026-08 · v2</small></div>
+     <div class="nav-sec">视图</div>
+     <button class="nav-item ${on(state.view === 'home')}" onclick="go('#/')"><span class="ic">⌂</span>总览</button>
+-    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>168 家视觉导览<span class="badge-new">v3.3</span></button>
++    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')"><span class="ic">⊞</span>169 家视觉导览<span class="badge-new">v3.4</span></button>
+     <button class="nav-item ${on(state.view === 'report')}" onclick="go('#/report')"><span class="ic">◫</span>对比报告</button>
+     <div class="nav-sec">横向比较</div>
+     <button class="nav-item ${on(state.view === 'tasks')}" onclick="go('#/tasks')"><span class="ic">▤</span>任务面板<span class="badge-new">v3.3</span></button>
+@@ -454,14 +456,16 @@ function renderNav() {
+     <div class="nav-sec">源码解剖</div>
+     ${TD_SOURCELAB.map(t => `<button class="nav-item ${on(state.view === 'lab' && state.topic === t.id)}" onclick="go('#/lab/${t.id}')"><span class="ic">⌗</span>${t.name.split(' ')[0]}</button>`).join('')}
+     <button class="nav-item ${on(state.view == 'source-matrix')}" onclick="go('#/source-matrix')"><span class="ic">▦</span>9 维 × ${TD_SOURCE_MATRIX.products.length} 家矩阵<span class="badge-new">v3.3</span></button>
+-    <div class="nav-sec">产品画像（36 家）</div>
++    <div class="nav-sec">重点产品画像</div>
+     ${['multica', 'qm', 'paperclip', 'vibe-kanban', 'ruflo', 'raft', 'jira-meego', 'linear', 'openworker', 'buzz', 'qoderwake', 'qoderwork', 'wanuai'].map(pid => `
+       <button class="nav-item ${on(state.view === 'profile' && state.profile === pid)}" onclick="go('#/profile/${pid}')" style="font-size:13px;padding-left:24px"><span class="ic">·</span>${P[pid]?.name || pid}</button>
+     `).join('')}
+-    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')" style="display:none"><span class="ic">⊞</span>168 家视觉导览<span class="badge-new">v3.3</span></button>
++    <button class="nav-item ${on(state.view === 'demos')}" onclick="go('#/demos/all')" style="display:none"><span class="ic">⊞</span>169 家视觉导览<span class="badge-new">v3.4</span></button>
+     <div class="nav-sec">AI 视角</div>
+     <button class="nav-item ${on(state.view === 'ai-lens')}" onclick="go('#/ai-lens')"><span class="ic">✦</span>让 AI 帮你分析<span class="badge-new">v3.3</span></button>
+     <div class="nav-sec">产品深度评测</div>
++    <button class="nav-item ${on(state.view === 'product' && state.product === 'oh-my-pi')}" onclick="go('#/product/oh-my-pi')"><span class="ic">π</span>Oh My Pi<span class="badge-new">v3.4</span></button>
++    <button class="nav-item ${on(state.view === 'product' && state.product === 'deepseek-harness')}" onclick="go('#/product/deepseek-harness')"><span class="ic">◆</span>DeepSeek Harness<span class="badge-new">v3.4</span></button>
+     <button class="nav-item ${on(state.view === 'product' && state.product === 'openworker')}" onclick="go('#/product/openworker')"><span class="ic">⚐</span>OpenWorker (吴恩达)<span class="badge-new">v3.3</span></button>
+     <button class="nav-item ${on(state.view === 'product' && state.product === 'vibe-kanban')}" onclick="go('#/product/vibe-kanban')"><span class="ic">▦</span>Vibe Kanban<span class="badge-new">v3.3</span></button>
+     <button class="nav-item ${on(state.view === 'product' && state.product === 'raft')}" onclick="go('#/product/raft')"><span class="ic">⚏</span>Raft (Slock)<span class="badge-new">v3.3</span></button>
+@@ -489,8 +493,8 @@ function viewHome() {
+   return `
+   <div class="hero">
+     <h1>${total} 个 Agent 平台 · 全景对比</h1>
+-    <p>v3.3 · 4 层决策支持系统：广度 168 + 深度 36 + 骨架 123 + 横切 9 维 × ${TD_SOURCE_MATRIX.products.length} 家 + 纵切 10 个 lane + 168 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
+-    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-09 扩容（+Buzz/QoderWake/QoderWork）· 2026-08-10 收万有无界 · 2026-08-10 全面重构对标论文 138 骨架 · 2026-08-10 深度 5 L 层 + 15 次重要 + 3 闭源</div>
++    <p>v3.4 · 4 层决策支持系统：广度 169 + 深度 38 + 骨架 122 + 横切 9 维 × ${TD_SOURCE_MATRIX.products.length} 家 + 纵切 10 个 lane + 169 家 demo tour · 论文 ETCLOVG 7 层对齐</p>
++    <div class="ribbon">v3 · 2026-08-04 收官 · 2026-08-10 全面重构对标论文 · 2026-08-13 Oh My Pi + DeepSeek Harness 同模型实测入库</div>
+     <div class="stats">
+       <div><b>${total}</b><span>产品</span></div>
+       <div><b>${laneCount}</b><span>能力板块</span></div>
+@@ -502,7 +506,7 @@ function viewHome() {
+   </div>
+ 
+   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:13px">
+-    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 168 个产品（36 深度 + 123 论文骨架 + 9 历史），每个带 motto/oneLiner/4 维评分
++    <b>📊 本视图：</b>产品索引（文字+评分）—— 快速扫一眼 169 条产品记录（38 个完整 deep-dive），每个带 motto/oneLiner/4 维评分
+     &nbsp;·&nbsp;
+     <a href="#/demos/all" style="color:var(--accent)">→ 切到「视觉导览」</a>（带 134 张截图 + 3 家文字 placeholder）
+   </div>
+@@ -516,7 +520,7 @@ function viewHome() {
+         <div class="scores">${TD_DIMS.slice(0, 4).map(([k, n]) => `<i>${n} ${p.scores[k]}</i>`).join('')}</div>
+       </div>`).join('')}
+   </div>
+-  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：9 维评分 + 168 家 demo 缩略图 / 画像页：9 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
++  <p class="sub" style="margin-top:16px">点任意产品卡 → 进入产品页（基本页：9 维评分 + 169 家 demo 缩略图 / 画像页：9 维源码横切 / 深度页：6 段结构评测）。评分来自 2026-08 的实机截图、源码与官方资料综合评估（非厂商数据）。</p>`;
+ }
+ 
+ /* ================= 板块对比 ================= */
+@@ -590,7 +594,7 @@ function mdCut(s, n) {
+ 
+ function viewLane() {
+   const l = TD_LANES.find(x => x.id === state.lane) || TD_LANES[0];
+-  // 36 家重点产品（按 deep 顺序）
++  // 38 家重点产品（按 deep 顺序）
+   const DEEP_DIVE_IDS_LANE = ['multica','qm','paperclip','vibe-kanban','ruflo','raft','jira-meego','linear','openworker','buzz','qoderwake','qoderwork','wanuai',
+     // v3.3 深度 5 L 层 + 15 次重要项目
+     'opencode','claude-code','codex-cli','openhands','deepagents',
+@@ -598,7 +602,8 @@ function viewLane() {
+     'swe-bench','github-spec-kit','rules-directories','claude-mem','planning-with-files',
+     'mcp','promptfoo','inspect-evals','evalscope',
+     // v3.3 闭源/官方 3 个（GitHub README 公开，闭源 SaaS 实操待用户登录）
+-    'github-copilot-cli','openai-agents-sdk','openai-realtime-agents'];
++    'github-copilot-cli','openai-agents-sdk','openai-realtime-agents',
++    'oh-my-pi','deepseek-harness'];
+   const deepItems = l.items.filter(it => DEEP_DIVE_IDS_LANE.includes(it.p));
+   const otherItems = l.items.filter(it => !DEEP_DIVE_IDS_LANE.includes(it.p));
+   const hasDecisions = l.decisions && l.decisions.length > 0;
+@@ -617,8 +622,8 @@ function viewLane() {
+   </div>
+   ` : ''}
+ 
+-  <!-- 中部：33 家深度产品对比（按 deep 33 顺序）-->
+-  <div class="h2">36 家深度产品横向对比</div>
++  <!-- 中部：38 家深度产品对比 -->
++  <div class="h2">38 家深度产品横向对比</div>
+   <div class="rail">
+     ${deepItems.map((it, i) => `
+       <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
+@@ -635,7 +640,7 @@ function viewLane() {
+   ${otherItems.length > 0 ? `
+   <!-- 其他产品（背景参考）-->
+   <details style="margin-top:18px">
+-    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 36 家深度）</summary>
++    <summary style="cursor:pointer;font-size:13px;color:var(--ink2);padding:6px 0;user-select:none">▦ 其他 ${otherItems.length} 家产品（背景参考，非 38 家深度）</summary>
+     <div class="rail" style="margin-top:8px">
+       ${otherItems.map(it => `
+         <div class="card shot" onclick='openLB(${JSON.stringify(it.img)}, ${JSON.stringify(it.caption)}, ${JSON.stringify(it.hot || [])}, ${JSON.stringify(P[it.p]?.name || it.p)})'>
+@@ -1316,9 +1321,9 @@ function copyText(text) {
+   }
+ }
+ 
+-/* ================= 产品深度评测视图（通用模板 · 9 个产品共用）============== */
++/* ================= 产品深度评测视图（通用模板）============== */
+ function viewProduct() {
+-  // 13 完整 deep-dive (v3.1 阶段) + 23 升级完整 (v3.3) = 36 完整
++  // 38 个完整 deep-dive（含 2026-08-13 新增的 OMP / DeepSeek Harness 实测）
+   const map = {
+     // v3.1 阶段 13 完整
+     'openworker': TD_OPENWORKER_DEEPDIVE,
+@@ -1362,6 +1367,8 @@ function viewProduct() {
+     'github-copilot-cli': TD_GITHUB_COPILOT_CLI_DEEPDIVE,
+     'openai-agents-sdk': TD_OPENAI_AGENTS_SDK_DEEPDIVE,
+     'openai-realtime-agents': TD_OPENAI_REALTIME_AGENTS_DEEPDIVE,
++    'oh-my-pi': TD_OH_MY_PI_DEEPDIVE,
++    'deepseek-harness': TD_DEEPSEEK_HARNESS_DEEPDIVE,
+   };
+   const d = map[state.product];
+   if (d) return viewDeepDive(d);
+@@ -1429,7 +1436,7 @@ function viewDeepDive(d) {
+   <!-- ② Demo -->
+   <div class="dd-section">
+     <h2><span class="num">②</span> Demo · ${d.isRealScreenshot ? '实机截图' : '产品形态示意图'}</h2>
+-    <p class="sub" style="margin-bottom:14px">${d.isRealScreenshot ? '以下 6 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。' : '以下 6 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。'}</p>
++    <p class="sub" style="margin-bottom:14px">${d.isRealScreenshot ? `以下 ${esc(String(d.demoShots.length))} 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。` : `以下 ${esc(String(d.demoShots.length))} 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。`}</p>
+     <div class="dd-shot-grid">
+       ${d.demoShots.map(s => {
+         const evidenceTag = s.evidence || (d.isRealScreenshot ? '实机截图' : '合成示意图');
+@@ -1537,7 +1544,7 @@ function viewProductGeneric(id) {
+   ` : ''}
+ 
+   <div style="background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12.5px">
+-    <b>📄 本视图：</b>产品基本页（基础信息 + 9 维评分 + 168 家 demo 缩略图）
++    <b>📄 本视图：</b>产品基本页（基础信息 + 9 维评分 + 169 家 demo 缩略图）
+     &nbsp;·&nbsp;
+     <a href="#/profile/${id}" style="color:var(--accent)">→ 切到「产品画像」</a>（9 维源码横切 + lane 摘要）
+   </div>
+@@ -1578,6 +1585,8 @@ function viewProductDemoSection(id) {
+     'qoderwake': TD_QODERWAKE_DEEPDIVE,
+     'qoderwork': TD_QODERWORK_DEEPDIVE,
+     'wanuai': TD_WANUAI_DEEPDIVE,
++    'oh-my-pi': TD_OH_MY_PI_DEEPDIVE,
++    'deepseek-harness': TD_DEEPSEEK_HARNESS_DEEPDIVE,
+   };
+ 
+   let states = [];
+@@ -1646,7 +1655,7 @@ window.setDemoIdx = (i) => { state.demoIdx = i; render(); };
+ window.demoPrev = () => { if (state.demoIdx > 0) { state.demoIdx--; render(); } };
+ window.demoNext = () => { state.demoIdx++; render(); };
+ 
+-/* ================= 30 家 demo 总览（v3 module 5）============== */
++/* ================= 产品 demo 总览（v3 module 5）============== */
+ function viewDemosOverview() {
+   const filter = state.demoFilter || 'all';
+   const DEEP_DIVE_IDS = ['openworker','vibe-kanban','raft','ruflo','openagents','multica','qm','jira-meego','linear','buzz','qoderwake','qoderwork','wanuai',
+@@ -1654,11 +1663,11 @@ function viewDemosOverview() {
+     'daytona','nanoclaw','cmux','cua','e2b','browser-harness','opensandbox','agent-infra-sandbox','judge0','agent-sandbox-k8s','stakpak-agent','oss-fuzz-gen','e2b-desktop','tensorlake','arrakis','agentscope-runtime','swe-rex','sandboxed-sh','capsule','terminal-bench-env',
+     'github-spec-kit','mcp-servers','cli-anything','agents-md','mcp','rules-directories','langchain-mcp-adapters','microsoft-mcp-servers','acpx','microsoft-learn-mcp','ibm-mcp','agent-md',
+     'claude-mem','superclaude','planning-with-files','agent-skills-ctx-eng','ccpm','trellis','osaurus','holaos','context-space',
+-    'opencode','claude-code','gemini-cli','codex-cli','openhands','deerflow','autogen','openmanus','pi','aider','agno','claude-code-plugins','langgraph','semantic-kernel','openai-agents-sdk','qwen-code','deepagents','archon','devika','google-adk','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive','microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw','mini-swe-agent','oh-my-pi','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion','deepagentsjs','hankweave',
++    'opencode','claude-code','gemini-cli','codex-cli','openhands','deerflow','autogen','openmanus','pi','aider','agno','claude-code-plugins','langgraph','semantic-kernel','openai-agents-sdk','qwen-code','deepagents','archon','devika','google-adk','pydantic-ai','aperant','eigent','openharness','superset','github-copilot-cli','hive','microsoft-agent-framework','open-swe','voltagent','mcp-agent','yao','paseo','1code','cloudflare-agents','hiclaw','mini-swe-agent','oh-my-pi','deepseek-harness','tinyagi','devon','open-claude-cowork','docker-agent','nemo-agent-toolkit','scion','deepagentsjs','hankweave',
+     'langfuse','mlflow','opik','ragaai-catalyst','tensorzero','arize-phoenix','openllmetry','helicone','agentops-sdk','latitude','laminar','bedrock-agentcore','openinference','future-agi',
+     'promptfoo','deepeval','ragas','lm-evaluation-harness','swe-bench','verifiers','agentbench','langwatch','evalscope','harbor','tau2-bench','nemo-gym','theagentcompany','auto-harness','inspect-evals','swe-bench-pro','agent-evaluation','workarena','openhands-benchmarks','webarena-verified',
+     'litellm','kong','ironclaw','portkey-gateway','cai','openai-realtime-agents','plano','openai-cs-agents-demo','contextforge','archestra','tracecat','agentgateway','haft','mini-coding-agent'];
+-  // v3.3 扩展：从所有 36 完整 deepDive 拿 demoShots + TD_PRODUCT_DEMOS 30 老产品合并
++  // 从所有完整 deepDive 拿 demoShots + TD_PRODUCT_DEMOS 老产品合并
+   const DEEPDIVE_WITH_DEMOS = {
+     'opencode': TD_OPENCODE_DEEPDIVE, 'claude-code': TD_CLAUDECODE_DEEPDIVE, 'codex-cli': TD_CODEX_DEEPDIVE,
+     'openhands': TD_OPENHANDS_DEEPDIVE, 'deepagents': TD_DEEPAGENTS_DEEPDIVE,
+@@ -1669,9 +1678,10 @@ function viewDemosOverview() {
+     'inspect-evals': TD_INSPECT_EVALS_DEEPDIVE, 'evalscope': TD_EVALSCOPE_DEEPDIVE,
+     'github-copilot-cli': TD_GITHUB_COPILOT_CLI_DEEPDIVE, 'openai-agents-sdk': TD_OPENAI_AGENTS_SDK_DEEPDIVE, 'openai-realtime-agents': TD_OPENAI_REALTIME_AGENTS_DEEPDIVE,
+     'paperclip': TD_PAPERCLIP_DEEPDIVE,
++    'oh-my-pi': TD_OH_MY_PI_DEEPDIVE, 'deepseek-harness': TD_DEEPSEEK_HARNESS_DEEPDIVE,
+   };
+ 
+-  // 合并产品全集 (168 个) + 兜底：deepDive 文件的 demoShots 计入
++  // 合并产品全集 (169 个) + 兜底：deepDive 文件的 demoShots 计入
+   const allIds = TD_PRODUCTS.map(p => p.id);
+   function getShotCount(id) {
+     // 1. 优先 TD_PRODUCT_DEMOS

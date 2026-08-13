@@ -1,0 +1,13 @@
+[?2026$p[?2027$p[?25l[?5W[?2004h[>4;2m[=1;1u[?u[J[>4m[=0;1u[?1049h[?25l[>4;2m[=1;1u[?u[H[2J[9B[J[2;5H[1K ▄▀▀▄[K
+    ▀▀▀▀▀▀[K
+   ▀▀▀▀▀▀▀▀[K
+  ▄▀▀    ▀▀▄[K
+ ▄▀▀      ▀▀▄[K
+[K
+ Welcome to the Antigravity CLI. You are currently not signed in.[K
+[K
+ ⣾  Signing in...[K ⣷  ⣯  ⣟  ⡿  ⢿  ⣻  ⣽  ⣾  Select login method:
+ > 1. Google OAuth
+[4G2. Use a Google Cloud project
+
+ [Use arrow keys to navigate, Enter to select][>4m[=0;1u[50d[?1049l[?25h[?2004l

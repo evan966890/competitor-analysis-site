@@ -1,0 +1,59 @@
+{
+  "date": "2026-08-13",
+  "method": "single controlled same-model coding fixture",
+  "model": {
+    "provider": "Mify",
+    "wireModel": "xiaomi/mimo-v2.5-pro",
+    "reasoning": "low",
+    "credentialHandling": "external credential reference; secret not copied into the evaluation repository"
+  },
+  "fixture": {
+    "prompt": "prompt.md",
+    "source": "fixture/",
+    "baselineTests": "0/2",
+    "acceptanceTests": "2/2",
+    "constraints": [
+      "production code only",
+      "no test edits",
+      "no dependency additions"
+    ]
+  },
+  "results": {
+    "ohMyPi": {
+      "installedVersion": "17.3.0",
+      "sourceCommit": "326d24bd40d9858e24e1036ae739c27c72eeb543",
+      "wallSeconds": 25.16,
+      "modelSteps": 6,
+      "toolCalls": 7,
+      "tests": "2/2",
+      "tokens": {
+        "inputNonCached": 31829,
+        "cacheRead": 154880,
+        "output": 616,
+        "totalProcessed": 187325
+      },
+      "session": "artifacts/omp-session.jsonl",
+      "htmlExport": "artifacts/omp-session.html"
+    },
+    "deepseekHarness": {
+      "installedVersion": "0.1.0-rc.6",
+      "sourceCommit": "47f943859bef60e4160492346772ded9b24f765a",
+      "wallSeconds": 39.91,
+      "modelSteps": 8,
+      "toolCalls": 9,
+      "tests": "2/2",
+      "tokens": {
+        "inputNonCached": 10532,
+        "cacheRead": 112448,
+        "output": 1002,
+        "totalProcessed": 123982
+      },
+      "session": "artifacts/dsh-session.jsonl.zstd"
+    }
+  },
+  "comparison": {
+    "sameCorrectPatch": true,
+    "observed": "OMP was faster in this one run; DSH processed fewer tokens and exposed a richer browser trajectory.",
+    "limitation": "This is one tiny deterministic fixture, not a statistically powered benchmark and not evidence of general model quality."
+  }
+}

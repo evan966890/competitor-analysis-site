@@ -1,0 +1,11 @@
+]0;grok[?1000h[?1002h[?1003h[?1015h[?1006h[?1004h[?2004h[?25l[6n[50S[1;1H]9;4;0;0[?2026l]112[?1000l[?1002l[?1003l[?1015l[?1006l[?2004l[?1004l[50;1H[?25h
+Couldn't start Grok: startup timed out after 32s.
+
+  The longest step was loading your account settings. Check your network
+  connection, then start Grok again.
+
+  Mode:    local agent
+  Version: 1.0.3 (1a29d5bc12d4)
+  Steps:   load_config=2.2s, managed_policy=118ms, bootstrap=26.4s,
+           model_catalog=282ms, spawn_worker=1.0s, acp_initialize=1.6s+
+  Log:     /Users/evan/.grok/logs/unified.jsonl

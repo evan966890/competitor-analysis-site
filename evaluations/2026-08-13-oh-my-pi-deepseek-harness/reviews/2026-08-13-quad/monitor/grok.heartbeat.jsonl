@@ -1,0 +1,4 @@
+{"ts": 1786630215.520117, "status": "RUNNING_ACTIVE", "pid": 29204, "pid_alive": true, "transcript_bytes": 0, "bytes_delta": 0, "idle_seconds": 6.45}
+{"ts": 1786630230.886009, "status": "RUNNING_ACTIVE", "pid": 29204, "pid_alive": true, "transcript_bytes": 0, "bytes_delta": 0, "idle_seconds": 21.82}
+{"ts": 1786630246.7958279, "status": "RUNNING_ACTIVE", "pid": 29204, "pid_alive": true, "transcript_bytes": 86, "bytes_delta": 86, "idle_seconds": 13.08}
+{"ts": 1786630261.88236, "status": "RUNNING_ACTIVE", "pid": 29204, "pid_alive": true, "transcript_bytes": 86, "bytes_delta": 0, "idle_seconds": 28.17}

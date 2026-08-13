@@ -1,0 +1,56 @@
+{
+  "final": "NEEDS_MORE_EVIDENCE",
+  "reason": "quad_review_infrastructure_did_not_converge",
+  "baseline_head": "47817afbbc9874c51039e8a6a4e717dcf564400b",
+  "lanes": {
+    "claude": {
+      "status": "SKIPPED_TIMEOUT",
+      "binding": false,
+      "evidence": "replies/claude.metadata.json"
+    },
+    "codex": {
+      "status": "INTERACTIVE_SUBMISSION_FAILED_AND_ADVISORY_SCHEMA_FAILED",
+      "binding": false,
+      "evidence": "replies/codex-attempt1.metadata.json; replies/codex-attempt2.metadata.json; replies/codex-advisory.transcript.txt"
+    },
+    "grok": {
+      "status": "STARTUP_TIMEOUT",
+      "binding": false,
+      "evidence": "replies/grok.metadata.json"
+    },
+    "agy": {
+      "status": "CURRENT_TTY_AUTH_MISSING",
+      "binding": false,
+      "evidence": "replies/agy.metadata.json"
+    }
+  },
+  "must_fix_findings": [],
+  "advisory_findings": [
+    {
+      "id": "INFRA-1",
+      "severity": "P2",
+      "description": "Codex 0.147 interactive launch reached the TUI without reliably submitting the prompt after the trust gate. The canonical PTY driver needs a version-aware submission path."
+    },
+    {
+      "id": "INFRA-2",
+      "severity": "P2",
+      "description": "The first Codex advisory schema omitted strict additionalProperties=false constraints. The schema was repaired, but the lane was not rerun to a valid reply because the provider path also hit certificate/network failures."
+    },
+    {
+      "id": "DATA-1",
+      "severity": "P2",
+      "description": "TD_PRODUCTS has 169 records but 168 unique ids because OpenCode is duplicated historically. User-facing copy now says records and documents the duplicate instead of claiming 169 unique products."
+    }
+  ],
+  "mechanical_verification": {
+    "result_replay": "PASS",
+    "session_recalculation": "PASS",
+    "site_routes_and_images": "PASS",
+    "secret_content_match": "PASS_NO_MATCH"
+  },
+  "notes": [
+    "No reviewer lane is represented as PASS.",
+    "No reviewer emitted a P0/P1 finding before its infrastructure failure.",
+    "Mechanical verification does not replace the four independent binding reviews."
+  ]
+}

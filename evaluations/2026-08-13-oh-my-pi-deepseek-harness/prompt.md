@@ -1,0 +1,1 @@
+Work in the current repository. Fix production code only; do not edit tests and do not add dependencies. Make `npm test` pass, run the tests, and finish with one concise line reporting the result and test command. Inspect the repository before editing.

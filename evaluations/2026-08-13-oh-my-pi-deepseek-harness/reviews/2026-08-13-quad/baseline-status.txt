@@ -1,0 +1,8 @@
+ M README.md
+ M data/oh-my-piDeepDive.js
+ M data/products.js
+ M index.html
+?? assets/shots/deepseek-harness/
+?? assets/shots/oh-my-pi/
+?? data/deepseek-harnessDeepDive.js
+?? evaluations/

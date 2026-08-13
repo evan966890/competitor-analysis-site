@@ -1975,11 +1975,11 @@ function enrichSkeleton(d) {
 
 function viewDeepDive(d) {
   // 骨架升级：让 120 论文骨架 deepDive 在渲染时变成 Layer-aware 实质内容
-  d = enrichSkeleton(d);
+  let dd = enrichSkeleton(d);
 
-  // 容错：d.productId 可能与 P key 不一致（如 claudecode vs claude-code、codex vs codex-cli）
+  // 容错：dd.productId 可能与 P key 不一致（如 claudecode vs claude-code、codex vs codex-cli）
   // 6 个 case 已知：claudecode / codex / planning-files / rules-dirs / spec-kit / swebench
-  const pid = d.productId;
+  const pid = dd.productId;
   const noHyphen = pid.replace(/-/g, '');
   // 尝试：exact → 无 hyphen → 加常见 suffix → P key 的去 hyphen 形式等于/包含 pid
   const fuzzyMatch = Object.keys(P).find(k => {
@@ -1996,24 +1996,24 @@ function viewDeepDive(d) {
   <div style="background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 100%);border:1px solid #f59e0b;border-left:4px solid #f59e0b;border-radius:9px;padding:14px 18px;margin-bottom:18px;font-size:13px">
     <b>⚠️ 闭源/SaaS 项目：</b>深度评测基于 GitHub README + 官方文档 + 公开 demo，<b>实机操作需你登录订阅</b>。
     如能贡献实拍截图 / 内部架构 / 私有 skill 列表，本台会替换示意截图为实拍，并按贡献者署名入库。
-    联系：<a href="https://github.com/evan966890/competitor-analysis-site/issues" style="color:#9a4f00;text-decoration:underline">→ GitHub Issue 提交「${d.productName} 贡献」</a>
+    联系：<a href="https://github.com/evan966890/competitor-analysis-site/issues" style="color:#9a4f00;text-decoration:underline">→ GitHub Issue 提交「${dd.productName} 贡献」</a>
   </div>
   ` : ''}
-  ${d._paperLayer ? `
+  ${dd._paperLayer ? `
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
-    <span style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:1px solid #7dd3fc;color:#0284c7;padding:4px 12px;border-radius:14px;font-size:12px;font-weight:600">📚 论文 Layer ${d._paperLayer} · ${d._paperLayerMeta.zh}</span>
-    <span style="background:var(--panel);color:var(--ink2);padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid var(--line)">${d._paperLayerMeta.name}</span>
+    <span style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:1px solid #7dd3fc;color:#0284c7;padding:4px 12px;border-radius:14px;font-size:12px;font-weight:600">📚 论文 Layer ${dd._paperLayer} · ${dd._paperLayerMeta.zh}</span>
+    <span style="background:var(--panel);color:var(--ink2);padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid var(--line)">${dd._paperLayerMeta.name}</span>
     <span style="background:${p.type === 'paper' ? '#dbeafe' : '#d1f0dd'};color:${p.type === 'paper' ? '#1e40af' : '#1d6b3a'};padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid ${p.type === 'paper' ? '#93c5fd' : '#a3d9b1'}">${p.type || 'OSS'}</span>
-    ${d._isEnriched ? '<span style="background:#fff3cd;color:#856404;padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid #ffc107">🪄 Layer-aware 升级</span>' : ''}
+    ${dd._isEnriched ? '<span style="background:#fff3cd;color:#856404;padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid #ffc107">🪄 Layer-aware 升级</span>' : ''}
   </div>
   ` : ''}
   <div class="dd-hero">
-    <h1>${d.productName}</h1>
-    <div class="dd-tagline">${md(d.tagline)}</div>
+    <h1>${dd.productName}</h1>
+    <div class="dd-tagline">${md(dd.tagline)}</div>
     <div class="dd-meta">
-      <b>数据来源：</b>${md(d.source)}<br>
-      <b>评测人：</b>${md(d.author)}<br>
-      <b>入库时间：</b>${d.dateAdded}
+      <b>数据来源：</b>${md(dd.source)}<br>
+      <b>评测人：</b>${md(dd.author)}<br>
+      <b>入库时间：</b>${dd.dateAdded}
     </div>
   </div>
 
@@ -2022,8 +2022,8 @@ function viewDeepDive(d) {
     <h2><span class="num">①</span> 概览 · Overview</h2>
     <div class="dd-overview-grid">
       <div class="dd-overview-card">
-        <p><b>主语：</b>${md(p.motto || d.tagline || '')}</p>
-        <p>${md(p.oneLiner || d.tagline || '')}</p>
+        <p><b>主语：</b>${md(p.motto || dd.tagline || '')}</p>
+        <p>${md(p.oneLiner || dd.tagline || '')}</p>
         <h3 style="margin:14px 0 6px;font-size:13px;color:var(--accent)">+ Pros</h3>
         <ul style="margin-left:18px;list-style:none;padding:0">${(p.pros||[]).map(x => `<li style="font-size:12.5px;color:var(--ink2);margin:3px 0">＋ ${md(x)}</li>`).join('')}</ul>
         <h3 style="margin:14px 0 6px;font-size:13px;color:#a83a3a">- Cons</h3>
@@ -2037,28 +2037,28 @@ function viewDeepDive(d) {
           return `<div class="sc-row" title="${esc(desc || '')}"><span>${n}${partial}</span><div style="height:6px;background:var(--bg);border-radius:3px"><div style="width:${s*20}%;height:100%;background:var(--accent);border-radius:3px"></div></div><span><span class="sc sc${s}">${s}</span></span></div>`;
         }).join('')}
         <h3 style="margin-top:14px">对 MiCo</h3>
-        <p style="font-size:12.5px;color:var(--ink2)">${md(p.micoNote || d.tagline || '')}</p>
+        <p style="font-size:12.5px;color:var(--ink2)">${md(p.micoNote || dd.tagline || '')}</p>
       </div>
     </div>
   </div>
 
   <!-- ② Demo -->
   <div class="dd-section">
-    <h2><span class="num">②</span> Demo · ${d.isRealScreenshot ? '实机截图' : '产品形态示意图'}</h2>
-    <p class="sub" style="margin-bottom:14px">${d.isRealScreenshot ? `以下 ${d.demoShots.length} 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。` : `以下 ${d.demoShots.length} 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。`}</p>
+    <h2><span class="num">②</span> Demo · ${dd.isRealScreenshot ? '实机截图' : '产品形态示意图'}</h2>
+    <p class="sub" style="margin-bottom:14px">${dd.isRealScreenshot ? `以下 ${dd.demoShots.length} 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。` : `以下 ${dd.demoShots.length} 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。`}</p>
     <div class="dd-shot-grid">
-      ${d.demoShots.map(s => {
-        const evidenceTag = s.evidence || (d.isRealScreenshot ? '实机截图' : '合成示意图');
-        const sourceTip = s.source ? `来源：${s.source}` : (d.isRealScreenshot ? '基于自托管部署/官网/官方文档' : '基于官方发布物料合成');
+      ${dd.demoShots.map(s => {
+        const evidenceTag = s.evidence || (dd.isRealScreenshot ? '实机截图' : '合成示意图');
+        const sourceTip = s.source ? `来源：${s.source}` : (dd.isRealScreenshot ? '基于自托管部署/官网/官方文档' : '基于官方发布物料合成');
         const sCapSafe = typeof s.caption === 'string' ? s.caption.replace(/'/g, "\\'") : '';
         return `
         <div class="dd-shot" title="${esc(sourceTip)}">
-          <img src="${s.img}" loading="lazy" alt="${esc(s.caption)}" onclick="openLB('${s.img}', '${sCapSafe}', [], '${esc(d.productName)}')" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22><rect fill=%22%23f5f0e6%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 text-anchor=%22middle%22 fill=%22%23a89786%22 font-family=%22sans-serif%22 font-size=%2220%22>🖼 screenshot pending</text></svg>'" style="cursor:zoom-in">
+          <img src="${s.img}" loading="lazy" alt="${esc(s.caption)}" onclick="openLB('${s.img}', '${sCapSafe}', [], '${esc(dd.productName)}')" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22><rect fill=%22%23f5f0e6%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 text-anchor=%22middle%22 fill=%22%23a89786%22 font-family=%22sans-serif%22 font-size=%2220%22>🖼 screenshot pending</text></svg>'" style="cursor:zoom-in">
           <div class="dd-shot-body">
             <div class="dd-shot-cap">${md(s.caption)}</div>
             <div class="dd-shot-note">${md(s.note)}</div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px">
-              <span class="dd-shot-tag" style="background:${d.isRealScreenshot ? '#d1f0dd' : '#fff3cd'};color:${d.isRealScreenshot ? '#1d6b3a' : '#856404'};border:1px solid ${d.isRealScreenshot ? '#a3d9b1' : '#ffc107'}">${d.isRealScreenshot ? '✅' : '⚠️'} ${esc(evidenceTag)}</span>
+              <span class="dd-shot-tag" style="background:${dd.isRealScreenshot ? '#d1f0dd' : '#fff3cd'};color:${dd.isRealScreenshot ? '#1d6b3a' : '#856404'};border:1px solid ${dd.isRealScreenshot ? '#a3d9b1' : '#ffc107'}">${dd.isRealScreenshot ? '✅' : '⚠️'} ${esc(evidenceTag)}</span>
               ${s.sourceUrl ? `<a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener" style="font-size:10.5px;color:var(--accent);text-decoration:none">🔗 来源</a>` : ''}
               ${s.contributor ? `<span style="font-size:10px;color:var(--ink2)">👤 ${esc(s.contributor)}</span>` : ''}
             </div>
@@ -2072,7 +2072,7 @@ function viewDeepDive(d) {
   <div class="dd-section">
     <h2><span class="num">③</span> Code · 关键实现</h2>
     <p class="sub" style="margin-bottom:14px">仓库结构、启动脚本、推断的核心代码。代码片段为基于官方描述构造的演示代码，非实机 git blame。</p>
-    ${d.codeSnippets.map((c, i) => `
+    ${dd.codeSnippets.map((c, i) => `
       <div class="dd-code-block">
         <div class="dd-code-head">
           <span class="t">${c.title}</span>
@@ -2088,15 +2088,15 @@ function viewDeepDive(d) {
   <div class="dd-section dd-philosophy">
     <h2><span class="num">④</span> Philosophy · 产品理念</h2>
     <h3>核心问题</h3>
-    <p>${md(d.philosophy.coreQuestion)}</p>
+    <p>${md(dd.philosophy.coreQuestion)}</p>
     <h3>产品方的回答</h3>
-    <p>${md(d.philosophy.answer)}</p>
+    <p>${md(dd.philosophy.answer)}</p>
     <h3>问题诊断</h3>
-    <ul>${d.philosophy.problemDiagnosis.map(x => `<li>${md(x)}</li>`).join('')}</ul>
+    <ul>${dd.philosophy.problemDiagnosis.map(x => `<li>${md(x)}</li>`).join('')}</ul>
     <h3>设计原则</h3>
-    <ul>${d.philosophy.designPrinciples.map(x => `<li>${md(x)}</li>`).join('')}</ul>
+    <ul>${dd.philosophy.designPrinciples.map(x => `<li>${md(x)}</li>`).join('')}</ul>
     <h3>差异化矩阵</h3>
-    ${d.philosophy.differentiationMatrix.map(m => {
+    ${dd.philosophy.differentiationMatrix.map(m => {
       // 容错：string array (如 "vs X — Y") 或 { vs, diff } 对象
       if (typeof m === 'string') {
         const match = m.match(/^(vs [^\s—]+(?: [^\s—]+)*)\s*—\s*(.*)$/);
@@ -2113,7 +2113,7 @@ function viewDeepDive(d) {
   <div class="dd-section">
     <h2><span class="num">⑤</span> 时间线 · Timeline</h2>
     <div class="dd-timeline">
-      ${d.timeline.map(t => `<div class="tl-item"><b>${t.date}</b>${md(t.event)}</div>`).join('')}
+      ${dd.timeline.map(t => `<div class="tl-item"><b>${t.date}</b>${md(t.event)}</div>`).join('')}
     </div>
   </div>
 
@@ -2121,9 +2121,9 @@ function viewDeepDive(d) {
   <div class="dd-section">
     <h2><span class="num">⑥</span> 结论 · Verdict</h2>
     <div class="dd-conclusion">
-      <p class="summary">${md(d.conclusion.summary)}</p>
+      <p class="summary">${md(dd.conclusion.summary)}</p>
       <h3 style="margin:14px 0 8px;font-size:14px;color:var(--accent)">对 MiCo 的启示</h3>
-      <ul>${d.conclusion.forMico.map(x => `<li><b>→</b> ${md(x)}</li>`).join('')}</ul>
+      <ul>${dd.conclusion.forMico.map(x => `<li><b>→</b> ${md(x)}</li>`).join('')}</ul>
     </div>
   </div>
 

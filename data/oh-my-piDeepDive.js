@@ -38,7 +38,6 @@ window.TD_OH_MY_PI_DEEPDIVE = {
       note: 'OMP 先读实现与测试，再修改 `summarizeOrders.mjs` 并运行测试。最终只改生产代码，2 个测试全部通过；独立复核也为 2/2。',
     },
   ],
-  ],
 
   codeSnippets: [
     {

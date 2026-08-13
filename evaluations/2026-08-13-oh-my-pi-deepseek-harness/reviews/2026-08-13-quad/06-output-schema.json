@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reviewer",
+    "review_layer",
+    "model_requested",
+    "model_observed",
+    "model_observation_source",
+    "thinking_requested",
+    "thinking_observed",
+    "session_is_fresh",
+    "adversarial_review_keyword_present",
+    "outcome",
+    "must_fix_findings",
+    "minor_findings",
+    "verifications",
+    "attestation"
+  ],
+  "properties": {
+    "reviewer": { "type": "string" },
+    "review_layer": { "enum": ["L2", "L3", "advisory"] },
+    "model_requested": { "type": "string" },
+    "model_observed": { "type": "string" },
+    "model_observation_source": { "type": "string" },
+    "thinking_requested": { "type": "string" },
+    "thinking_observed": { "type": "string" },
+    "session_is_fresh": { "const": true },
+    "adversarial_review_keyword_present": { "const": true },
+    "outcome": { "enum": ["PASS", "PASS_WITH_MINOR", "FAIL", "BLOCKED", "NEEDS_MORE_EVIDENCE"] },
+    "must_fix_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "file", "line_or_section", "description", "required_fix"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "enum": ["P0", "P1", "P2"] },
+          "file": { "type": "string" },
+          "line_or_section": { "type": "string" },
+          "description": { "type": "string" },
+          "required_fix": { "type": "string" }
+        }
+      }
+    },
+    "minor_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "file", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "enum": ["P3", "informational"] },
+          "file": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "verifications": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_obeyed", "no_forbidden_write", "claims_have_evidence", "baseline_used_not_live_tree"],
+      "properties": {
+        "scope_obeyed": { "type": "boolean" },
+        "no_forbidden_write": { "type": "boolean" },
+        "claims_have_evidence": { "type": "boolean" },
+        "baseline_used_not_live_tree": { "type": "boolean" }
+      }
+    },
+    "attestation": { "type": "string" }
+  }
+}

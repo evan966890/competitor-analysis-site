@@ -2037,6 +2037,12 @@ function viewProductGeneric(id) {
   const p = P[id];
   if (!p) return `<div class="callout"><b>未找到产品：</b>${id}</div>`;
   const isPaper = p.type === 'paper';
+  // 找这个 paper 的 deepDive（看 primaryLayer + Layer meta）
+  const ddVar = Object.keys(window).find(k => /^TD_\w+_DEEPDIVE$/.test(k) && window[k]?.productId === id);
+  const dd = ddVar ? window[ddVar] : null;
+  const layer = dd?.primaryLayer?.split(' / ')[0];
+  const layerMeta = layer ? PAPER_LAYERS[layer] : null;
+  const searchUrl = `https://github.com/search?q=${encodeURIComponent(id)}&type=repositories`;
   return `
   <div class="hero">
     <h1>${p.name}</h1>
@@ -2045,9 +2051,18 @@ function viewProductGeneric(id) {
   </div>
 
   ${isPaper ? `
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+    ${layerMeta ? `<span style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:1px solid #7dd3fc;color:#0284c7;padding:4px 12px;border-radius:14px;font-size:12px;font-weight:600">📚 论文 Layer ${layer} · ${layerMeta.zh}</span>` : ''}
+    ${layerMeta ? `<span style="background:var(--panel);color:var(--ink2);padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid var(--line)">${layerMeta.name}</span>` : ''}
+    <span style="background:#dbeafe;color:#1e40af;padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid #93c5fd">paper</span>
+    <a href="${searchUrl}" target="_blank" rel="noopener" style="background:#fff3cd;color:#856404;padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid #ffc107;text-decoration:none">🔗 GitHub 搜索</a>
+    ${dd ? '<a href="#/product/' + id + '" style="background:#d1f0dd;color:#1d6b3a;padding:4px 12px;border-radius:14px;font-size:11.5px;border:1px solid #a3d9b1;text-decoration:none">📋 深度评测页</a>' : ''}
+  </div>
+
   <div style="background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);border:1px solid #7dd3fc;border-left:4px solid #0284c7;border-radius:9px;padding:14px 18px;margin-bottom:18px;font-size:13px">
-    <b style="color:#0284c7">📦 论文骨架入库</b> · ${p.name} 已收录在论文附录的 <b>${Object.entries(TD_SOURCE_MATRIX?.cells?.[id] || {}).length} 个源码维度</b>（看 <a href="#/source-matrix" style="color:#0284c7">9 维矩阵</a> / <a href="#/profile/${id}" style="color:#0284c7">产品画像</a>）。本台暂未补完整 deep-dive（含实拍截图 + 源码）。
-    <br><span style="font-size:11.5px;color:#0369a1">完整 deep-dive 留待深度阶段（实操需你登录 / 自部署 / 跑通）。贡献入口：<a href="https://github.com/evan966890/competitor-analysis-site/issues" style="color:#0369a1;text-decoration:underline">→ GitHub Issue 提交「${p.name} 贡献」</a></span>
+    <b style="color:#0284c7">📦 论文骨架入库</b> · ${p.name} 已收录在论文 Appendix Table S1（2026-05-08 快照），源码对比矩阵收 <b>${Object.entries(TD_SOURCE_MATRIX?.cells?.[id] || {}).length} 个维度</b>。
+    ${layerMeta ? `<br><span style="font-size:12.5px;color:#075985">本台评估定位：<b>${layerMeta.name}</b>——${layerMeta.role}。</span>` : ''}
+    <br><span style="font-size:11.5px;color:#0369a1">完整 deep-dive 留待深度阶段（需你登录 / 自部署 / 跑通）。贡献入口：<a href="https://github.com/evan966890/competitor-analysis-site/issues" style="color:#0369a1;text-decoration:underline">→ GitHub Issue 提交「${p.name} 贡献」</a></span>
   </div>
   ` : ''}
 
@@ -2066,7 +2081,16 @@ function viewProductGeneric(id) {
   <ul style="margin-left:18px;list-style:none;padding:0">${p.pros.map(x => `<li style="margin:4px 0">＋ ${md(x)}</li>`).join('')}</ul>
   <div class="h2">Cons</div>
   <ul style="margin-left:18px;list-style:none;padding:0">${p.cons.map(x => `<li style="margin:4px 0">－ ${md(x)}</li>`).join('')}</ul>
-  <div class="callout"><b>对 MiCo：</b>${md(p.micoNote)}</div>
+  <div class="callout"><b>对 MiCo：</b>${md(p.micoNote)}
+    ${isPaper && layerMeta ? `
+    <div style="margin-top:10px;padding-top:10px;border-top:1px dashed #bae6fd">
+      <b style="color:#0284c7;font-size:12px">🪄 Layer-aware 评估：</b>
+      <ul style="margin:6px 0 0;padding-left:22px;font-size:12.5px;line-height:1.6">
+        ${layerMeta.forMico({ productName: p.name, tagline: p.oneLiner, deployment: dd?.deployment || 'OSS' }).map(x => `<li>${md(x)}</li>`).join('')}
+      </ul>
+    </div>
+    ` : ''}
+  </div>
   ${viewProductDemoSection(id)}
   <div class="pm" style="margin-top:20px">
     <h3>◉ 深度评测</h3>

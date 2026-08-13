@@ -1689,6 +1689,22 @@ class ExecutionSubstrate {
       '**E 层共有启示**：agent 跑长任务时，VM 级隔离 + 亚秒冷启动 + checkpoint restore 是必备能力',
       `**对 MiCo 选型建议**：开源优先（Firecracker / Kata / gVisor），cloud-only 作为 SaaS 选项`,
     ],
+    // paper 项目兜底：升级 pros / cons / motto / oneLiner / 8 维评分
+    mottoZh: 'AI-first sandbox · 隔离 × 启动 × 快照',
+    oneLinerZh: '为 agent 提供 sub-second 冷启动 + VM 级隔离 + snapshot/restore 的执行后端',
+    deepPros: d => [
+      `**Layer E 代表**：执行环境与沙箱的工程实现（**E 层 20 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：sub-second 冷启动 + VM 级隔离 + snapshot/restore`,
+      `**对 MiCo 价值**：执行后端候选——决定长任务能否保活`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未测冷启动 / 资源占用 / 多租户隔离** 三大指标`,
+      `**未对比同层 19 个项目** 的具体差异`,
+    ],
+    layerScores: { orch: 2, task: 2, im: 2, roster: 2, cron: 2, memory: 2, skills: 2, gov: 5 },
   },
   T: {
     name: 'Task Decomposition & Allocation',
@@ -1730,6 +1746,21 @@ class TaskPlanner {
       `**${d.productName}** 的核心是 T 层"分解粒度 + 调度策略 + 失败恢复"——可对标 MiCo 任务卡的 backend`,
       '**T 层共有启示**：任务粒度决定 agent 协作质量（太大→单 agent 锁，太小→协调成本高）',
     ],
+    mottoZh: '任务分解 + 调度 + 失败恢复',
+    oneLinerZh: '把高层目标拆成 DAG（依赖图）+ 分配给 agent + 处理依赖 / 失败传播',
+    deepPros: d => [
+      `**Layer T 代表**：任务分解与分配的工程实现（**T 层 12 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：DAG 规划 + 智能调度 + 失败恢复`,
+      `**对 MiCo 价值**：任务卡的 backend 抽象——决定多步任务能否可靠收口`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未跑通"目标→子任务→分配→执行"全链路**`,
+      `**未对比同层 11 个项目** 的分解粒度与依赖模型差异`,
+    ],
+    layerScores: { orch: 4, task: 5, im: 2, roster: 3, cron: 3, memory: 2, skills: 2, gov: 2 },
   },
   C: {
     name: 'Communication & Coordination',
@@ -1770,6 +1801,21 @@ class AgentCommBus {
       `**${d.productName}** 的传输 + 拓扑选择可对标 MiCo 的"上下文 OS"实现`,
       '**C 层共有启示**：agent 数 > 10 时，mesh 拓扑比 hub-spoke 更稳',
     ],
+    mottoZh: '多 agent 通信 + 状态共享',
+    oneLinerZh: '传输（inproc / ZMQ / NATS / Kafka）+ 拓扑（hub-spoke / mesh / DAG）+ 持久化',
+    deepPros: d => [
+      `**Layer C 代表**：通信与协作的工程实现（**C 层 9 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：消息顺序保证 + 背压处理 + 状态一致性`,
+      `**对 MiCo 价值**：上下文 OS 的传输层实现——决定多 agent 协作规模`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未测多 agent 场景下的吞吐 / 延迟 / 一致性**`,
+      `**未对比同层 8 个项目** 的传输层 + 拓扑 + 持久化差异`,
+    ],
+    layerScores: { orch: 3, task: 2, im: 4, roster: 3, cron: 2, memory: 2, skills: 2, gov: 2 },
   },
   L: {
     name: 'Learning & Memory',
@@ -1811,6 +1857,21 @@ class AgentMemory {
       `**${d.productName}** 的核心抽象（存储 + embedding + retrieval）可被 MiCo 直接复用`,
       '**L 层共有启示**：hybrid retrieval（向量+关键词）比纯向量准确度高 15-30%',
     ],
+    mottoZh: '跨会话 recall + 上下文压缩',
+    oneLinerZh: '存储（inmem / SQLite-vec / pgvector / Qdrant / Weaviate）+ embedding + 检索策略',
+    deepPros: d => [
+      `**Layer L 代表**：学习与记忆的工程实现（**L 层 43 个项目** · 论文骨架最多）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：长期记忆 + 上下文压缩 + 跨会话 recall + 元数据索引`,
+      `**对 MiCo 价值**：上下文 OS 的核心抽象——可被 MiCo 直接复用`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未测 recall 准确度 / 压缩比 / 多 session 隔离**`,
+      `**未对比同层 42 个项目** 的存储 / embedding / 检索策略差异`,
+    ],
+    layerScores: { orch: 2, task: 2, im: 2, roster: 2, cron: 2, memory: 5, skills: 3, gov: 2 },
   },
   O: {
     name: 'Orchestration & Scheduling',
@@ -1852,6 +1913,21 @@ class Orchestrator {
       `**${d.productName}** 的 runtime 模型可作为 MiCo playbook 后端候选`,
       '**O 层共有启示**：工作流 > 50 步时，state-machine 比 DAG 更好调试',
     ],
+    mottoZh: '多 agent 编排 + 调度 + 失败恢复',
+    oneLinerZh: '拓扑（DAG / Star / Pipeline / State-machine）+ 并行度 + 错误策略',
+    deepPros: d => [
+      `**Layer O 代表**：编排与调度的工程实现（**O 层 15 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：DAG 编排 + 并行执行 + 状态恢复 + 失败补偿`,
+      `**对 MiCo 价值**：playbook 后端 runtime 候选——决定长工作流可观测性`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未跑通"长工作流 + 暂停/恢复 + 失败补偿"全流程**`,
+      `**未对比同层 14 个项目** 的拓扑 + 错误策略 + 状态恢复差异`,
+    ],
+    layerScores: { orch: 5, task: 4, im: 2, roster: 2, cron: 2, memory: 2, skills: 2, gov: 2 },
   },
   V: {
     name: 'Verification & Evaluation',
@@ -1892,6 +1968,21 @@ class AgentVerifier {
       `**${d.productName}** 的 judge 模式可被 MiCo 内部回归测试复用`,
       '**V 层共有启示**：LLM-as-judge 偏差 ~15-20%，rule-based 仍是 ground truth',
     ],
+    mottoZh: '验证 + 评测 + 报告生成',
+    oneLinerZh: 'Judge 类型（rule / LLM / Hybrid / Human）+ 指标（pass_rate / score / latency / cost）+ 数据集',
+    deepPros: d => [
+      `**Layer V 代表**：验证与评测的工程实现（**V 层 21 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：benchmark 执行 + LLM-as-judge + 报告生成`,
+      `**对 MiCo 价值**：内部回归测试 + 版本对比的评测底座`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未跑通一个完整 benchmark + 看报告是否可定制**`,
+      `**未对比同层 20 个项目** 的 judge 类型 + 指标 + 数据集差异`,
+    ],
+    layerScores: { orch: 2, task: 2, im: 2, roster: 2, cron: 2, memory: 2, skills: 2, gov: 3 },
   },
   G: {
     name: 'Guardrails, Security & Governance',
@@ -1933,6 +2024,21 @@ class GovernanceLayer {
       `**${d.productName}** 的策略模型可对标 MiCo 的"公司级权限 + 审计"需求`,
       '**G 层共有启示**：ABAC 比 RBAC 更适合"agent 协作"场景（基于属性而非角色）',
     ],
+    mottoZh: '权限 + 策略 + 审计 + 合规',
+    oneLinerZh: '认证（RBAC / ABAC / OAuth）+ 策略引擎（OPA / Cedar / Custom）+ 审计（inmem / SIEM / 区块链）',
+    deepPros: d => [
+      `**Layer G 代表**：治理与安全的工程实现（**G 层 14 个项目之一**）`,
+      `**${d._stars || '?'} stars**（2026-05-08 论文快照）`,
+      `**${d.deployment || 'OSS'}** 部署形态`,
+      `**核心能力**：权限控制 + 策略引擎 + 审计日志 + 合规模板`,
+      `**对 MiCo 价值**：公司级权限（CEO/CTO/员工/Agent）的 backend 候选`,
+    ],
+    deepCons: d => [
+      `**未实机部署**：仅基于论文 Appendix Table S1 元数据入档`,
+      `**未验证权限粒度 / 审计完整性 / 合规模板**`,
+      `**未对比同层 13 个项目** 的认证模型 + 策略引擎 + 审计实现差异`,
+    ],
+    layerScores: { orch: 2, task: 2, im: 2, roster: 2, cron: 2, memory: 2, skills: 2, gov: 5 },
   },
 };
 
@@ -1946,10 +2052,47 @@ function enrichSkeleton(d) {
   const searchUrl = `https://github.com/search?q=${encodeURIComponent(d.productId)}&type=repositories`;
   return {
     ...d,
+    isRealScreenshot: false, // 骨架默认 false；如果有真实 README 截图就升级
     demoShots: [
-      { id: 'readme-hero', caption: `${meta.zh}代表项目 · GitHub README 主页`, img: `assets/shots/paper/${d.productId}/01-readme-hero.svg`, note: `${meta.name}。本台按论文 Appendix Table S1（2026-05-08 快照）入档。${meta.role}。`, evidence: 'github-readme', source: `https://github.com/${d.productId}`, sourceUrl: searchUrl },
-      { id: 'arch-diagram', caption: `架构图（基于 README 描述推断）`, img: `assets/shots/paper/${d.productId}/02-arch-diagram.svg`, note: `**${meta.name}** 的典型架构形态。骨架入库——深度阶段将实拍 + 画图补全。`, evidence: 'arch-inferred' },
-      { id: 'cli-usage', caption: `CLI 启动 / 启动脚本`, img: `assets/shots/paper/${d.productId}/03-cli-usage.svg`, note: `**${meta.zh}** 项目典型启动流程。骨架入库——深度阶段实拍启动日志。`, evidence: 'cli-inferred' },
+      // 真实 README 截图（如 01-readme-hero.jpg 存在）优先；否则用 SVG 占位
+      (function(){
+        const jpgPath = `assets/shots/paper/${d.productId}/01-readme-hero.jpg`;
+        const svgPath = `assets/shots/paper/${d.productId}/01-readme-hero.svg`;
+        return { id: 'readme-hero', caption: `${meta.zh}代表项目 · GitHub README 主页`, img: jpgPath, fallback: svgPath, note: `${meta.name}。本台按论文 Appendix Table S1（2026-05-08 快照）入档。${meta.role}。`, evidence: 'github-readme', source: `https://github.com/${d.productId}`, sourceUrl: searchUrl };
+      })(),
+      (function(){
+        const jpgPath = `assets/shots/paper/${d.productId}/02-arch-diagram.jpg`;
+        const svgPath = `assets/shots/paper/${d.productId}/02-arch-diagram.svg`;
+        return { id: 'arch-diagram', caption: `架构图（基于 README 描述推断）`, img: jpgPath, fallback: svgPath, note: `**${meta.name}** 的典型架构形态。骨架入库——深度阶段将实拍 + 画图补全。`, evidence: 'paper-svg' };
+      })(),
+      (function(){
+        const jpgPath = `assets/shots/paper/${d.productId}/03-cli-usage.jpg`;
+        const svgPath = `assets/shots/paper/${d.productId}/03-cli-usage.svg`;
+        return { id: 'cli-usage', caption: `CLI 启动 / 启动脚本`, img: jpgPath, fallback: svgPath, note: `**${meta.zh}** 项目典型启动流程。骨架入库——深度阶段实拍启动日志。`, evidence: 'paper-svg' };
+      })(),
+    ],
+    codeSnippets: [
+      {
+        title: `${meta.zh} 核心抽象：基于 ${layer} 层定位`,
+        file: `${d.productId}/core/*.{ts,py,go,rs} (论文定位)`,
+        code: meta.code,
+        points: meta.codePoints,
+      },
+      {
+        title: `${d.productName} 典型 trade-off：基于论文 Appendix Table S1`,
+        file: `${d.productId}/<runtime>/*（基于论文）`,
+        code: `// ${d.productName} 典型 trade-off（基于论文 Appendix Table S1）
+// Layer ${layer}：${meta.name}
+// 论文定位：${d.tagline}
+// 部署形态：${d.deployment || 'OSS'}
+
+${meta.codePoints.map(pt => `// - ${pt.replace(/\*\*/g, '')}`).join('\n')}`,
+        points: [
+          `**Layer ${layer} 定位**：${meta.name} 的工程实现（**${meta.zh}**）`,
+          `**论文元数据**：${d.tagline} · ${d.deployment || 'OSS'} · 2026-05-08 快照`,
+          `**深度阶段待补**：本地部署 + 跑通核心场景 + 对比同层其他项目`,
+        ],
+      },
     ],
     philosophy: {
       coreQuestion: meta.coreQuestion(d),
@@ -1965,6 +2108,7 @@ function enrichSkeleton(d) {
     timeline: [
       { date: '2026-05-08', event: `论文 Appendix Table S1 快照 — stars 计数入档` },
       { date: '2026-08-10', event: `本台 v3 全面重构 — 137 论文项目骨架入库` },
+      { date: '2026-08-13', event: `v3.4 Layer-aware 升级 — codeSnippets + philosophy + 8 维评分` },
     ],
     source: `${d.source} · <a href="${searchUrl}" target="_blank" rel="noopener">→ GitHub 搜索</a>`,
     _paperLayer: layer,
@@ -1976,6 +2120,12 @@ function enrichSkeleton(d) {
 function viewDeepDive(d) {
   // 骨架升级：让 120 论文骨架 deepDive 在渲染时变成 Layer-aware 实质内容
   let dd = enrichSkeleton(d);
+
+  // 提取 stars 计数（注入 dd._stars 给 deepPros 等模板用）
+  // 来源优先级：d.tagline > d.source
+  const starsMatch = (d.tagline || '').match(/(\d+\.?\d*k?)\s*stars?/i)
+    || (d.source || '').match(/(\d+\.?\d*k?)\s*stars?/i);
+  dd._stars = starsMatch ? starsMatch[1] : '?';
 
   // 容错：dd.productId 可能与 P key 不一致（如 claudecode vs claude-code、codex vs codex-cli）
   // 6 个 case 已知：claudecode / codex / planning-files / rules-dirs / spec-kit / swebench
@@ -1989,7 +2139,23 @@ function viewDeepDive(d) {
       || (noHyphen.length >= 4 && kStrip.includes(noHyphen))
       || (kStrip.length >= 4 && noHyphen.startsWith(kStrip));
   });
-  const p = P[pid] || P[noHyphen] || P[fuzzyMatch] || { motto: '', oneLiner: '', pros: [], cons: [], scores: {}, micoNote: '', type: 'OSS' };
+  let p = P[pid] || P[noHyphen] || P[fuzzyMatch] || { motto: '', oneLiner: '', pros: [], cons: [], scores: {}, micoNote: '', type: 'OSS' };
+
+  // paper 项目 Layer-aware 升级：pros / cons / motto / oneLiner / 8 维评分
+  // 137 paper 全部用模板化的"骨架入库" pros/cons + partial=2 评分 —— 升级为 Layer-aware 实质内容
+  if (p.type === 'paper' && dd._isEnriched && dd._paperLayerMeta) {
+    const meta = dd._paperLayerMeta;
+    p = {
+      ...p,
+      motto: meta.mottoZh,
+      oneLiner: meta.oneLinerZh,
+      pros: meta.deepPros(dd),
+      cons: meta.deepCons(dd),
+      scores: { ...(p.scores || {}), ...meta.layerScores },
+      micoNote: meta.forMico(dd).map(x => x.replace(/\*\*/g, '')).join(' · '),
+    };
+  }
+
   const isClosed = p.type === '闭源' || p.type === '官方' || /copilot|realtime|openai-agents/.test(pid);
   return `
   ${isClosed ? `
@@ -2048,17 +2214,38 @@ function viewDeepDive(d) {
     <p class="sub" style="margin-bottom:14px">${dd.isRealScreenshot ? `以下 ${dd.demoShots.length} 张均为实机截图（自托管部署/官网/官方文档）。点击放大查看。` : `以下 ${dd.demoShots.length} 张为基于官方发布物料合成的"产品形态示意图"（非实机截图）。点击放大查看。`}</p>
     <div class="dd-shot-grid">
       ${dd.demoShots.map(s => {
-        const evidenceTag = s.evidence || (dd.isRealScreenshot ? '实机截图' : '合成示意图');
+        // evidence 翻译：'paper-svg' → 'paper 占位'，'github-readme' → 'github 截图'，'arch-inferred' → '架构推断'，'cli-inferred' → 'cli 推断'
+        const evidenceMap = {
+          'paper-svg': 'paper 占位',
+          'github-readme': 'github 截图',
+          'arch-inferred': '架构推断',
+          'cli-inferred': 'cli 推断',
+          '实机截图': '实机截图',
+        };
+        // 路径推断：jpg/png 真实图 → github-readme；svg 占位 → paper-svg
+        const pathEvidence = (s.img || '').match(/\.(jpe?g|png)$/i) ? 'github-readme'
+          : (s.img || '').endsWith('.svg') ? 'paper-svg'
+          : null;
+        const finalEvidence = pathEvidence || s.evidence;
+        const evidenceTag = evidenceMap[finalEvidence] || s.evidence || (dd.isRealScreenshot ? '实机截图' : '合成示意图');
+        const isPaperSvg = finalEvidence === 'paper-svg';
+        const isRealImg = finalEvidence === 'github-readme' || finalEvidence === '实机截图';
+        const tagBg = isRealImg ? '#d1f0dd' : (isPaperSvg ? '#e0e7ff' : '#fff3cd');
+        const tagColor = isRealImg ? '#1d6b3a' : (isPaperSvg ? '#3730a3' : '#856404');
+        const tagBorder = isRealImg ? '#a3d9b1' : (isPaperSvg ? '#a5b4fc' : '#ffc107');
+        const tagEmoji = isRealImg ? '✅' : (isPaperSvg ? '📦' : '⚠️');
         const sourceTip = s.source ? `来源：${s.source}` : (dd.isRealScreenshot ? '基于自托管部署/官网/官方文档' : '基于官方发布物料合成');
         const sCapSafe = typeof s.caption === 'string' ? s.caption.replace(/'/g, "\\'") : '';
+        // fallback: 如果主图加载失败 (404)，切到 fallback 字段（如 svg 占位）
+        const fallbackAttr = s.fallback ? `onerror="if(this.dataset.fb){this.onerror=null;}else{this.dataset.fb=1;this.src='${s.fallback.replace(/'/g, "\\'")}';}"` : `onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22><rect fill=%22%23f5f0e6%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 text-anchor=%22middle%22 fill=%22%23a89786%22 font-family=%22sans-serif%22 font-size=%2220%22>🖼 screenshot pending</text></svg>'"`;
         return `
         <div class="dd-shot" title="${esc(sourceTip)}">
-          <img src="${s.img}" loading="lazy" alt="${esc(s.caption)}" onclick="openLB('${s.img}', '${sCapSafe}', [], '${esc(dd.productName)}')" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22800%22 height=%22450%22><rect fill=%22%23f5f0e6%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 text-anchor=%22middle%22 fill=%22%23a89786%22 font-family=%22sans-serif%22 font-size=%2220%22>🖼 screenshot pending</text></svg>'" style="cursor:zoom-in">
+          <img src="${s.img}" loading="lazy" alt="${esc(s.caption)}" onclick="openLB('${s.img}', '${sCapSafe}', [], '${esc(dd.productName)}')" ${fallbackAttr} style="cursor:zoom-in">
           <div class="dd-shot-body">
             <div class="dd-shot-cap">${md(s.caption)}</div>
             <div class="dd-shot-note">${md(s.note)}</div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px">
-              <span class="dd-shot-tag" style="background:${dd.isRealScreenshot ? '#d1f0dd' : '#fff3cd'};color:${dd.isRealScreenshot ? '#1d6b3a' : '#856404'};border:1px solid ${dd.isRealScreenshot ? '#a3d9b1' : '#ffc107'}">${dd.isRealScreenshot ? '✅' : '⚠️'} ${esc(evidenceTag)}</span>
+              <span class="dd-shot-tag" style="background:${tagBg};color:${tagColor};border:1px solid ${tagBorder}">${tagEmoji} ${esc(evidenceTag)}</span>
               ${s.sourceUrl ? `<a href="${esc(s.sourceUrl)}" target="_blank" rel="noopener" style="font-size:10.5px;color:var(--accent);text-decoration:none">🔗 来源</a>` : ''}
               ${s.contributor ? `<span style="font-size:10px;color:var(--ink2)">👤 ${esc(s.contributor)}</span>` : ''}
             </div>

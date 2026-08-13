@@ -1846,9 +1846,9 @@ function enrichSkeleton(d) {
   return {
     ...d,
     demoShots: [
-      { id: 'readme-hero', caption: `${meta.zh}代表项目 · GitHub README 主页`, img: `assets/shots/paper/${d.productId}/01-readme-hero.jpg`, note: `${meta.name}。本台按论文 Appendix Table S1（2026-05-08 快照）入档。${meta.role}。`, evidence: 'github-readme', source: `https://github.com/${d.productId}`, sourceUrl: searchUrl },
-      { id: 'arch-diagram', caption: `架构图（基于 README 描述推断）`, img: `assets/shots/paper/${d.productId}/02-arch-diagram.jpg`, note: `**${meta.name}** 的典型架构形态。骨架入库——深度阶段将实拍 + 画图补全。`, evidence: 'arch-inferred' },
-      { id: 'cli-usage', caption: `CLI 启动 / 启动脚本`, img: `assets/shots/paper/${d.productId}/03-cli-usage.jpg`, note: `**${meta.zh}** 项目典型启动流程。骨架入库——深度阶段实拍启动日志。`, evidence: 'cli-inferred' },
+      { id: 'readme-hero', caption: `${meta.zh}代表项目 · GitHub README 主页`, img: `assets/shots/paper/${d.productId}/01-readme-hero.svg`, note: `${meta.name}。本台按论文 Appendix Table S1（2026-05-08 快照）入档。${meta.role}。`, evidence: 'github-readme', source: `https://github.com/${d.productId}`, sourceUrl: searchUrl },
+      { id: 'arch-diagram', caption: `架构图（基于 README 描述推断）`, img: `assets/shots/paper/${d.productId}/02-arch-diagram.svg`, note: `**${meta.name}** 的典型架构形态。骨架入库——深度阶段将实拍 + 画图补全。`, evidence: 'arch-inferred' },
+      { id: 'cli-usage', caption: `CLI 启动 / 启动脚本`, img: `assets/shots/paper/${d.productId}/03-cli-usage.svg`, note: `**${meta.zh}** 项目典型启动流程。骨架入库——深度阶段实拍启动日志。`, evidence: 'cli-inferred' },
     ],
     philosophy: {
       coreQuestion: meta.coreQuestion(d),

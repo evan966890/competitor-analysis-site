@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="1000" height="500">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#f5f0e6"/>
+<stop offset="100%" stop-color="#ebe5d8"/>
+</linearGradient>
+</defs>
+<rect width="800" height="450" fill="url(#bg)"/>
+<rect x="0" y="0" width="800" height="56" fill="#1a1a1a"/>
+<text x="40" y="36" font-family="-apple-system, sans-serif" font-size="18" fill="#ffffff" font-weight="600">github.com/<tspan fill="#7dd3fc">semantic-kernel</tspan></text>
+<text x="960" y="36" font-family="-apple-system, sans-serif" font-size="13" fill="#888" text-anchor="end">Public</text>
+<rect x="40" y="78" width="200" height="28" rx="14" fill="#a855f7" opacity="0.15"/>
+<rect x="40" y="78" width="200" height="28" rx="14" fill="none" stroke="#a855f7" stroke-width="1.5"/>
+<text x="140" y="97" font-family="-apple-system, sans-serif" font-size="13" fill="#a855f7" font-weight="700" text-anchor="middle">Layer L · 学习与记忆</text>
+<rect x="250" y="78" width="84" height="28" rx="14" fill="#1e40af" opacity="0.12"/>
+<rect x="250" y="78" width="84" height="28" rx="14" fill="none" stroke="#1e40af" stroke-width="1.5"/>
+<text x="292" y="97" font-family="-apple-system, sans-serif" font-size="12" fill="#1e40af" font-weight="600" text-anchor="middle">论文附录</text>
+<text x="40" y="148" font-family="-apple-system, sans-serif" font-size="32" fill="#1a1a1a" font-weight="700">Semantic Kernel</text>
+<foreignObject x="40" y="170" width="720" height="60">
+<div xmlns="http://www.w3.org/1999/xhtml" style="font-family:-apple-system,sans-serif;font-size:14px;color:#444;line-height:1.55">Microsoft enterprise orchestration + plugins（27.8k stars · 论文 L 层）</div>
+</foreignObject>
+<line x1="40" y1="260" x2="960" y2="260" stroke="#d4ccbf" stroke-width="1"/>
+<g transform="translate(40, 340)">
+<g>
+<path d="M0 6 L2 11 L7 12 L3 16 L4 21 L0 18 L-4 21 L-3 16 L-7 12 L-2 11 Z" fill="#f59e0b" transform="translate(0, -6) scale(0.9)"/>
+<text x="22" y="10" font-family="-apple-system, sans-serif" font-size="16" fill="#1a1a1a" font-weight="600">27.8k</text>
+<text x="22" y="28" font-family="-apple-system, sans-serif" font-size="11" fill="#888">stars (2026-05-08)</text>
+</g>
+<g transform="translate(180, 0)">
+<circle cx="0" cy="0" r="6" fill="#00ADD8"/>
+<text x="14" y="5" font-family="-apple-system, sans-serif" font-size="14" fill="#1a1a1a" font-weight="500">Go</text>
+<text x="0" y="28" font-family="-apple-system, sans-serif" font-size="11" fill="#888">primary lang</text>
+</g>
+<g transform="translate(360, 0)">
+<rect x="-2" y="-6" width="12" height="12" rx="6" fill="#10b981"/>
+<text x="18" y="4" font-family="-apple-system, sans-serif" font-size="14" fill="#1a1a1a" font-weight="500">OSS</text>
+<text x="0" y="28" font-family="-apple-system, sans-serif" font-size="11" fill="#888">deployment</text>
+</g>
+<g transform="translate(660, 0)">
+<text x="0" y="4" font-family="-apple-system, sans-serif" font-size="14" fill="#1a1a1a" font-weight="500">~ partial</text>
+<text x="0" y="28" font-family="-apple-system, sans-serif" font-size="11" fill="#888">本台评估</text>
+</g>
+</g>
+<rect x="0" y="470" width="1000" height="30" fill="#1a1a1a" opacity="0.85"/>
+<text x="40" y="440" font-family="-apple-system, sans-serif" font-size="11" fill="#cccccc">Source: Agent Harness Engineering 论文 Appendix Table S1 (2026-05-08 快照) · 本台基于论文定位 + GitHub 元数据入档</text>
+<text x="960" y="487" font-family="-apple-system, sans-serif" font-size="11" fill="#7dd3fc" text-anchor="end">Layer-aware card · 2026-08-13</text>
+</svg>

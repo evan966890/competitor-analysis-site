@@ -44,11 +44,15 @@ const templateRe = /\$\{([^}]+?)\}/g;
 let m;
 while ((m = templateRe.exec(text)) !== null) {
   const expr = m[1];
+  // 跳过不完整匹配（嵌套模板字符串 — regex 不支持嵌套）
+  if (expr.includes('`') || expr.endsWith('${') || /^[\w?.()[\]\s]+\$\{/.test(expr)) continue;
   // 跳过已经 md()/md60()/mdCut()/esc() 包裹的
   if (/^md\(/.test(expr) || /^md60\(/.test(expr) || /^mdCut\(/.test(expr) || /^esc\(/.test(expr)) continue;
   // 跳过结构字段（不在 TEXT_FIELDS 里）
   const isText = TEXT_FIELDS.some(f => expr.includes(f));
   if (!isText) continue;
+  // 三元里全是数字 + 中文描述（无 .field 文本字段访问）— 视为条件文案
+  if (/\?/.test(expr) && /:/.test(expr) && !/\.(motto|oneLiner|micoNote|verdict|why|obs|note|tagline|headline|summary|action|caption|idea|logic|problemDiagnosis|designPrinciples|forMico|answer|coreQuestion|pros|cons|engine|file|title)\b/.test(expr)) continue;
   // 跳过纯数字/常量
   if (/^['"\d\s+\-*/.()]+$/.test(expr)) continue;
   // 跳过 onxxx / JSON.stringify
@@ -56,6 +60,7 @@ while ((m = templateRe.exec(text)) !== null) {
   // 排除常见 false positive
   if (/\.length\s*[?!]/.test(expr)) continue;             // .length > 50
   if (/\.length\s*[+\-*/]/.test(expr)) continue;          // .length - 1
+  if (/\.length\b/.test(expr) && !/['"`]/.test(expr)) continue;  // 纯 .length 数字（不算文本字段）
   if (/\.slice\(/.test(expr)) continue;                  // .slice(0, 50)
   if (/\.map\(/.test(expr)) continue;                    // .map(x => ...)
   if (/\.filter\(/.test(expr)) continue;                  // .filter(...)
@@ -79,6 +84,8 @@ while ((m = templateRe.exec(text)) !== null) {
     if (/^\s*[\w?.()[\].\s]+\?/.test(expr)) continue;
     // 三元里任一分支已经包装（md/esc/mdCut）
     if (/(md|esc|md60|mdCut|JSON\.stringify)\(/.test(expr)) continue;
+    // 三元里只有数字/纯字段（.length, 字符串字面量）— 视为条件显示，不是文本字段
+    if (/^[\w?.()[\].\s`'"]+\.length\s*\?\s*`/.test(expr)) continue;
   }
   // 兜底：表达式里包含 md(.../esc(.../JSON.stringify( 任何一个，视为已包装
   if (/(md|esc|md60|mdCut|JSON\.stringify)\(/.test(expr)) continue;
